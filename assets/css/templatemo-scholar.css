@@ -389,7 +389,7 @@ Header Style
 .header-area .main-nav ul.nav {
   border-radius: 0px 0px 25px 25px;
   flex-basis: 100%;
-  margin-right: 0px;
+  margin-right: -30px;
   justify-content: right;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
@@ -426,7 +426,7 @@ Header Style
   -o-transition: all 0.4s ease 0s;
   transition: all 0.4s ease 0s;
   border: transparent;
-  letter-spacing: .25px;
+  letter-spacing: 0.40px;
 }
 
 .background-header .main-nav .nav {margin-top: 20px;}
