@@ -62,7 +62,7 @@
 
                 <!-- ***** Menu Start ***** -->
                 <ul class="nav">
-                  <li class="scroll-to-section"><a href="#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
+                  <li class="scroll-to-section"><a href="./index.php" style="font-weight: 600;">COMEÇAR JÁ</a></li>
                   <li class="scroll-to-section"><a href="./login.php" style="font-weight: 600;">ENTRAR</a></li>
                 </ul>   
                 <a class='menu-trigger'>
