@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="assets/css/templatemo-scholar.css">
     <link rel="stylesheet" href="assets/css/owl.css">
     <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 	
 	<!-- TemplateMo 586 Scholar https://templatemo.com/tm-586-scholar -->
   </head>
@@ -62,7 +62,7 @@
 
                 <!-- ***** Menu Start ***** -->
                 <ul class="nav">
-                  <li class="scroll-to-section"><a href="#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
+                  <li class="scroll-to-section"><a href="./index.php" style="font-weight: 600;">COMEÇAR JÁ</a></li>
                   <li class="scroll-to-section"><a href="./login.php" style="font-weight: 600;">ENTRAR</a></li>
                 </ul>   
                 <a class='menu-trigger'>
