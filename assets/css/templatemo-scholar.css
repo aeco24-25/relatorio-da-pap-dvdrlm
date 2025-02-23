@@ -336,6 +336,7 @@ Header Style
 }
 
 .header-area .main-nav .logo {
+  margin-top: -5px;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
@@ -428,6 +429,12 @@ Header Style
   border: transparent;
   letter-spacing: 0.40px;
 }
+
+.header-area.header-sticky .main-nav .nav {
+  margin-top: -3px;}
+
+.header-area.header-sticky.background-header .main-nav .nav {
+  margin-top: 24px;}
 
 .background-header .main-nav .nav {
   margin-top: 24px;}

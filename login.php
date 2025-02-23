@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="assets/images/logo.png">
 	  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <title>DTeaches</title>
+    <title>DTeaches - Login</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -35,7 +35,7 @@
   </div>
   <!-- ***** Preloader End ***** -->
 
-  <style>
+<style>
   .header-area.header-sticky .header-image {
       margin-top: -29px;
       width: 165px;
@@ -64,12 +64,12 @@
                 <img src="assets/images/logo.png" class="header-image" alt="DTeaches Logo" onclick="window.location.href='index.php';">
                 <!-- ***** Logo End ***** -->
                 <a href="index.php" class="logo">
-                  <h1>DTeaches</h1>
+                  <h1>D<span style="color: #ffffffb0;">Teaches</span></h1>
                 </a>
-                
+
                 <!-- ***** Menu Start ***** -->
                 <ul class="nav">
-                  <li class="scroll-to-section"><a href="./index.php" style="font-weight: 600;">COMEÇAR JÁ</a></li>
+                  <li class="scroll-to-section"><a href="./index.php#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
                   <li class="scroll-to-section"><a href="./login.php" style="font-weight: 600;">ENTRAR</a></li>
                 </ul>
                 <!-- ***** Menu End ***** -->

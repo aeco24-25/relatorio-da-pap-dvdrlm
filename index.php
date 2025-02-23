@@ -64,7 +64,7 @@
                 <img src="assets/images/logo.png" class="header-image" alt="DTeaches Logo" onclick="window.location.href='index.php';">
                 <!-- ***** Logo End ***** -->
                 <a href="index.php" class="logo">
-                  <h1>DTeaches</h1>
+                  <h1>D<span style="color: #ffffffb0;">Teaches</span></h1>
                 </a>
 
                 <!-- ***** Menu Start ***** -->
@@ -178,12 +178,12 @@
               <div class="row">
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type="name" name="username" id="username" placeholder="Nome" autocomplete="on" required>
+                    <input type="text" name="username" id="username" placeholder="Nome" autocomplete="on" required>
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="E-mail" required="">
+                    <input type="email" name="email" id="email" placeholder="E-mail" required="">
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
