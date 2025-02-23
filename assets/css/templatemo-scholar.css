@@ -305,7 +305,7 @@ Header Style
 .background-header {
   background-color: #7a6ad8 !important;
   border-radius: 0px 0px 25px 25px;
-  height: 80px!important;
+  height: 90px!important;
   position: fixed!important;
   top: 0!important;
   left: 0;
@@ -355,7 +355,7 @@ Header Style
 
 .background-header .main-nav .logo,
 .background-header .main-nav #search {
-  margin-top: 18px;
+  margin-top: 22px;
 }
 
 .header-area .main-nav #search {
@@ -429,7 +429,8 @@ Header Style
   letter-spacing: 0.40px;
 }
 
-.background-header .main-nav .nav {margin-top: 20px;}
+.background-header .main-nav .nav {
+  margin-top: 24px;}
 
 .background-header .main-nav .nav li {
   height: 80px;

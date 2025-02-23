@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="assets/images/logo.png">
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+	  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <title>DTeaches</title>
 
@@ -35,13 +35,21 @@
   </div>
   <!-- ***** Preloader End ***** -->
 
-<style>
+  <style>
   .header-area.header-sticky .header-image {
       margin-top: -29px;
+      width: 165px;
+      margin-left: 45px;
+      margin-right: 19px;
+      object-fit: contain;
   }
 
   .header-area.header-sticky.background-header .header-image {
-      margin-top: -22px;
+      margin-top: -12px;
+      width: 165px;
+      margin-left: 45px;
+      margin-right: 19px;
+      object-fit: contain;
   }
 </style>
 
@@ -53,21 +61,17 @@
                 <nav class="main-nav">
 
                 <!-- ***** Logo Start ***** -->
-                <img src="assets/images/logo.png" class="header-image" style=" margin-left: 45px; width: 165px; margin-right: 13px; object-fit: contain; "alt="DTeaches Logo" onclick="window.location.href='index.php';" 
-                >
+                <img src="assets/images/logo.png" class="header-image" alt="DTeaches Logo" onclick="window.location.href='index.php';">
+                <!-- ***** Logo End ***** -->
                 <a href="index.php" class="logo">
                   <h1>DTeaches</h1>
                 </a>
-                <!-- ***** Logo End ***** -->
-
+                
                 <!-- ***** Menu Start ***** -->
                 <ul class="nav">
                   <li class="scroll-to-section"><a href="./index.php" style="font-weight: 600;">COMEÇAR JÁ</a></li>
                   <li class="scroll-to-section"><a href="./login.php" style="font-weight: 600;">ENTRAR</a></li>
-                </ul>   
-                <a class='menu-trigger'>
-                  <span>Menu</span>
-                </a>
+                </ul>
                 <!-- ***** Menu End ***** -->
                 </nav>
             </div>
