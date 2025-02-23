@@ -174,11 +174,11 @@
         </div>
         <div class="col-lg-6">
           <div class="contact-us-content">
-            <form id="contact-form" action="" method="post">
+            <form id="contact-form" action="processar_registo.php" method="post">
               <div class="row">
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type="name" name="name" id="name" placeholder="Nome" autocomplete="on" required>
+                    <input type="name" name="username" id="username" placeholder="Nome" autocomplete="on" required>
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
@@ -188,11 +188,12 @@
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type="password" name="password" id="password" placeholder="Password" required="">
+                    <input type="password" name="pass" id="pass" placeholder="Password" required="">
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
+                    <input type='hidden' name='data_criacao' value='$data_criacao'>
                     <button type="submit" id="form-submit" class="orange-button">Crie o seu perfil</button>
                   </fieldset>
                 </div>
