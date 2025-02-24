@@ -1572,7 +1572,7 @@ Contact Style
 }
 
 #contact-form input {
-  width: 100%;
+  width: 80%;
   height: 50px;
   border-radius: 25px;
   background-color: rgba(249, 235, 255, 0.15);
@@ -1612,11 +1612,12 @@ Contact Style
 }
 
 #contact-form button {
+  width: 80%;
   display: block; 
   margin: 0 auto; 
   border: none;
-  height: 50px;
-  font-size: 14px;
+  height: 55px;
+  font-size: 16px;
   font-weight: 600;
   background-color: #fff;
   padding: 0px 25px;

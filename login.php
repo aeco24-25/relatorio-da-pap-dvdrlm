@@ -51,6 +51,16 @@
       margin-right: 19px;
       object-fit: contain;
   }
+
+  .main-banner {
+    height: 80vh;
+  }
+
+  .container {
+    text-align: center;
+    display: flex; 
+    justify-content: center;
+  }
 </style>
 
   <!-- ***** Header Area Start ***** -->
@@ -82,25 +92,15 @@
   <!-- ***** Header Area End ***** -->
 
   <div class="main-banner">
-  <div class="contact-us section" id="contact">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6  align-self-center">
+        <div class="col-lg-6 align-self-center">
           <div class="section-heading">
             <h6>COMEÇAR JÁ</h6>
-            <h2>Criar Conta</h2>
-            <p>Ao entrar no DTeaches, você concorda com os Termos e Política de Privacidade.</p>
+            <h1 style="margin-top: -35px;" >Entrar</h1>
           </div>
-        </div>
-        <div class="col-lg-6">
           <div class="contact-us-content">
-            <form id="contact-form" action="processar_registo.php" method="post">
+            <form style="margin-top: -30px;" id="contact-form" action="processar_login.php" method="post">
               <div class="row">
-                <div class="col-lg-12">
-                  <fieldset>
-                    <input type="text" name="username" id="username" placeholder="Nome" autocomplete="on" required="">
-                  </fieldset>
-                </div>
                 <div class="col-lg-12">
                   <fieldset>
                     <input type="email" name="email" id="email" placeholder="E-mail" required="">
@@ -109,12 +109,13 @@
                 <div class="col-lg-12">
                   <fieldset>
                     <input type="password" name="pass" id="pass" placeholder="Password" required="">
+                    <p style="margin-top: -10px;" >Não tem uma conta? <a style="color: #ffffffb0;" href="./index.php#contact">Registe-se aqui</a></p>
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
                     <input type="hidden" name="data_criacao" value="$data_criacao">
-                    <button type="submit" id="form-submit" class="orange-button">Crie o seu perfil</button>
+                      <button style="margin-top: 25px;" type="submit" class="btn">ENTRAR</button>
                   </fieldset>
                 </div>
               </div>
@@ -124,52 +125,6 @@
       </div>
     </div>
   </div>
-    <!-- <div class="col-lg-6">
-      <div class="form-login">
-        <h2>Entrar</h2>
-          <form id="contact-form" action="processar_login.php" method="post">
-            <div class="row">
-              <div class="col-lg-12">
-                <fieldset>
-                  <input type="email" name="email" id="email" placeholder="E-mail" required="">
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <input type="password" name="pass" id="pass" placeholder="Password" required="">
-                </fieldset>
-              </div>
-              <p>Não tem uma conta? <a href="./index.php#contact">Registe-se aqui</a></p>
-              <div class="col-lg-12">
-                <fieldset>
-                  <button type="submit" class="btn">Entrar</button>
-                </fieldset>
-              </div>
-            </div>
-          </form>
-      </div>
-    </div> -->
-  </div>
-
-  <!-- <div class="main-banner">
-    <div class="container">
-        <div class="login-form">
-            <h2>Entrar</h2>
-            <form action="processar_login.php" method="POST">
-                <div class="form-group">
-                  <input type="email" name="email" id="email" placeholder="E-mail" required="">
-                </div>
-                <div class="form-group">
-                  <input type="password" name="pass" id="pass" placeholder="Password" required="">
-                </div>
-                <div class="form-group">
-                  <button type="submit" class="btn">Entrar</button>
-                </div>
-            </form>
-            <p>Não tem uma conta? <a href="./index.php#contact">Registe-se aqui</a></p>
-        </div>
-    </div>
-  </div> -->
 
   <footer>
     <div class="container">

@@ -5,7 +5,7 @@
 	if (empty($_POST['username']))
 	{
 		echo "Preencha os campos de formulário!";
-		header ("Refresh: 3; URL = index.php");
+		header ("Refresh: 1; URL = index.php");
 	}
 	else
 	{
