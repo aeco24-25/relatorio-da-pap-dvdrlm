@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="assets/images/logo.png">
+	  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>DTeaches</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link rel="stylesheet" href="assets/css/templatemo-scholar.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+	
+	<!-- TemplateMo 586 Scholar https://templatemo.com/tm-586-scholar -->
+  </head>
+
+<body>
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+<style>
+  .header-area.header-sticky .header-image {
+      margin-top: -29px;
+      width: 165px;
+      margin-left: 45px;
+      margin-right: 19px;
+      object-fit: contain;
+  }
+
+  .header-area.header-sticky.background-header .header-image {
+      margin-top: -12px;
+      width: 165px;
+      margin-left: 45px;
+      margin-right: 19px;
+      object-fit: contain;
+  }
+</style>
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky" >
+    <?php
+      include ("menu.inc");
+    ?>
+  </header>
+
+  <!-- ***** Header Area End ***** -->
+
+  <div class="main-banner" id="top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="owl-carousel owl-banner">
+            <div class="item item-1">
+              <div class="header-text">
+                <span class="category">uihbfwuiiuwj</span>
+                <h2>fwefwf</h2>
+                <p>fewfwef</p>
+              </div>
+            </div>
+            <div class="item item-2">
+              <div class="header-text">
+                <span class="category">fwefwfwfw</span>
+                <h2>hdwhbdwbdjk</h2>
+                <p>jfwiohuiwihufh</p>
+              </div>
+            </div>
+            <div class="item item-3">
+              <div class="header-text">
+                <span class="category">dbwuhjdjwbj</span>
+                <h2>fwefwfwfwfw</h2>
+                <p>fwefwfwfewfw</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="services section" id="services">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item">
+            <div class="icon">
+              <img src="assets/images/service-01.png" alt="online degrees">
+            </div>
+            <div class="main-content">
+              <h4>fewfwfwf</h4>
+              <p>fwefwfwefw</p>
+              <div class="main-button">
+                <a href="#">fwfwfwfwf</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item">
+            <div class="icon">
+              <img src="assets/images/service-02.png" alt="short courses">
+            </div>
+            <div class="main-content">
+              <h4>rfwfwfwf</h4>
+              <p>fwefwfwefw</p>
+              <div class="main-button">
+                <a href="#">fwefwhuifhwne</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-item">
+            <div class="icon">
+              <img src="assets/images/service-03.png" alt="web experts">
+            </div>
+            <div class="main-content">
+              <h4>fwefguywejbf</h4>
+              <p>fwfguywjhbfwe</p>
+              <div class="main-button">
+                <a href="#">fwhfuiwjfn</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-us section" id="contact">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6  align-self-center">
+          <div class="section-heading">
+            <h6>COMEÇAR JÁ</h6>
+            <h2>Criar Conta</h2>
+            <p>Ao entrar no DTeaches, você concorda com os Termos e Política de Privacidade.</p>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="contact-us-content">
+            <form id="contact-form" action="processar_registo.php" method="post">
+              <div class="row">
+                <div class="col-lg-12">
+                  <fieldset>
+                    <input style="width: 100%;" type="text" name="username" id="username" placeholder="Nome" autocomplete="on" required>
+                  </fieldset>
+                </div>
+                <div class="col-lg-12">
+                  <fieldset>
+                    <input style="width: 100%;" type="email" name="email" id="email" placeholder="E-mail" required="">
+                  </fieldset>
+                </div>
+                <div class="col-lg-12">
+                  <fieldset>
+                    <input style="width: 100%;" type="password" name="pass" id="pass" placeholder="Password" required="">
+                  </fieldset>
+                </div>
+                <div class="col-lg-12">
+                  <fieldset>
+                    <input type='hidden' name='data_criacao' value='$data_criacao'>
+                    <button style="width: 100%;" type="submit" id="form-submit" class="orange-button">Crie o seu perfil</button>
+                  </fieldset>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>wiaufbuiabfuafabjf</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="assets/js/isotope.min.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/counter.js"></script>
+  <script src="assets/js/custom.js"></script>
+
+  </body>
+</html>
