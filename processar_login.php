@@ -17,9 +17,9 @@
 	if ($contar == 1){
 		session_start();
 		$_SESSION["email"] = $email;
-		header("Location: ./user/indexuser.php"); exit;
+		header("Location: indexuser.php"); exit;
 	}
 	else{
-		header("Location: index.php"); exit;
+		header("Location: login.php"); exit;
 	}
 ?>

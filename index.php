@@ -55,28 +55,9 @@
 
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky" >
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-
-                <!-- ***** Logo Start ***** -->
-                <img src="assets/images/logo.png" class="header-image" alt="DTeaches Logo" onclick="window.location.href='index.php';">
-                <!-- ***** Logo End ***** -->
-                <a href="index.php" class="logo">
-                  <h1>D<span style="color: #ffffffb0;">Teaches</span></h1>
-                </a>
-
-                <!-- ***** Menu Start ***** -->
-                <ul class="nav">
-                  <li class="scroll-to-section"><a href="#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
-                  <li class="scroll-to-section"><a href="./login.php" style="font-weight: 600;">LOGIN</a></li>
-                </ul>
-                <!-- ***** Menu End ***** -->
-                </nav>
-            </div>
-        </div>
-    </div>
+    <?php
+      include ("menu.inc");
+    ?>
   </header>
 
   <!-- ***** Header Area End ***** -->
@@ -178,23 +159,23 @@
               <div class="row">
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type="text" name="username" id="username" placeholder="Nome" autocomplete="on" required>
+                    <input style="width: 100%;" type="text" name="username" id="username" placeholder="Nome" autocomplete="on" required>
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type="email" name="email" id="email" placeholder="E-mail" required="">
+                    <input style="width: 100%;" type="email" name="email" id="email" placeholder="E-mail" required="">
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type="password" name="pass" id="pass" placeholder="Password" required="">
+                    <input style="width: 100%;" type="password" name="pass" id="pass" placeholder="Password" required="">
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
                     <input type='hidden' name='data_criacao' value='$data_criacao'>
-                    <button type="submit" id="form-submit" class="orange-button">Crie o seu perfil</button>
+                    <button style="width: 100%;" type="submit" id="form-submit" class="orange-button">Crie o seu perfil</button>
                   </fieldset>
                 </div>
               </div>
