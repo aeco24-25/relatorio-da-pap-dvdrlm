@@ -80,7 +80,7 @@
                 <!-- ***** Menu Start ***** -->
                 <ul class="nav">
                   <li class="scroll-to-section"><a href="./index.php#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
-                  <li class="scroll-to-section"><a href="./login.php" style="font-weight: 600;">ENTRAR</a></li>
+                  <li class="scroll-to-section"><a href="./login.php" style="font-weight: 600;">LOGIN</a></li>
                 </ul>
                 <!-- ***** Menu End ***** -->
                 </nav>
@@ -96,7 +96,7 @@
         <div class="col-lg-6 align-self-center">
           <div class="section-heading">
             <h6>COMEÇAR JÁ</h6>
-            <h1 style="margin-top: -35px;" >Entrar</h1>
+            <h1 style="margin-top: -35px;" >LOGIN</h1>
           </div>
           <div class="contact-us-content">
             <form style="margin-top: -30px;" id="contact-form" action="processar_login.php" method="post">
@@ -109,7 +109,7 @@
                 <div class="col-lg-12">
                   <fieldset>
                     <input type="password" name="pass" id="pass" placeholder="Password" required="">
-                    <p style="margin-top: -10px;" >Não tem uma conta? <a style="color: #ffffffb0;" href="./index.php#contact">Registe-se aqui</a></p>
+                    <p style="margin-top: -10px; color" >Não tem uma conta? <a style="color: #ffffffb0;" href="./index.php#contact">Registe-se aqui</a></p>
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
