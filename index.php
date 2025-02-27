@@ -189,7 +189,7 @@
   <footer>
     <div class="container">
       <div class="col-lg-12">
-        <p>wiaufbuiabfuafabjf</a></p>
+        <p>© 2025 DTeaches. Todos os direitos reservados.</a></p>
       </div>
     </div>
   </footer>

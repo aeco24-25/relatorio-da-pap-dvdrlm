@@ -58,7 +58,6 @@
 
   .container {
     text-align: center;
-    display: flex; 
     justify-content: center;
   }
 </style>
@@ -92,7 +91,7 @@
   <!-- ***** Header Area End ***** -->
 
   <div class="main-banner">
-    <div class="container">
+    <div class="container" style="display: flex;">
         <div class="col-lg-6 align-self-center">
           <div class="section-heading">
             <h1 style="margin-top: -26px;" >LOGIN</h1>
@@ -122,16 +121,15 @@
           </div>
         </div>
       </div>
+        <footer>
+          <div class="container">
+            <div class="col-lg-12">
+              <p>© 2025 DTeaches. Todos os direitos reservados.</a></p>
+            </div>
+          </div>
+        </footer>
     </div>
   </div>
-
-  <footer>
-    <div class="container">
-      <div class="col-lg-12">
-        <p>wiaufbuiabfuafabjf</a></p>
-      </div>
-    </div>
-  </footer>
 
   <!-- Scripts -->
   <!-- Bootstrap core JavaScript -->
