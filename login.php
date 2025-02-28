@@ -124,7 +124,7 @@
         <footer>
           <div class="container">
             <div class="col-lg-12">
-              <p>© 2025 DTeaches. Todos os direitos reservados.</a></p>
+              <p>© 2024-2025 DTeaches. Todos os direitos reservados.</a></p>
             </div>
           </div>
         </footer>

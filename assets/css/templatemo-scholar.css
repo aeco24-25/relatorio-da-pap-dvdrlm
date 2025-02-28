@@ -99,7 +99,7 @@ ul {
 }
 
 p {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 28px;
   color: #1c1c1c;
 }
@@ -700,7 +700,7 @@ Banner Style
 }
 
 .main-banner .item-1 {
-  background-image: url(../images/banner-item-01.jpg);
+  background-image: url(https://smartlinks.pt/wp-content/uploads/2022/01/marketing-dig-ital-para-hoteis.png);
 }
 
 .main-banner .item-2 {
@@ -742,7 +742,7 @@ Banner Style
 
 .main-banner .item p {
   color: #fff;
-  width: 65%;
+  width: 45%;
 }
 
 .main-banner .item .buttons {

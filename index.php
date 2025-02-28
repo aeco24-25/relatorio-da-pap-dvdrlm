@@ -67,25 +67,24 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="owl-carousel owl-banner">
-            <div class="item item-1">
-              <div class="header-text">
-                <span class="category">uihbfwuiiuwj</span>
-                <h2>fwefwf</h2>
-                <p>fewfwef</p>
+            <div class="item item-1" style="background-position: right; background-size: contain;">
+              <div class="header-text" style="margin-left: -180px">
+                <h2>O nosso objetivo</h2>
+                  <p style="width:47%;">Aprender algumas expressões básicas pode fazer uma grande diferença na sua experiência de viagem. Desde pedir comida a solicitar direções, conhecendo o básico do idioma local torna a sua experiência mais rica e agradável.</p>
               </div>
             </div>
             <div class="item item-2">
               <div class="header-text">
-                <span class="category">fwefwfwfw</span>
-                <h2>hdwhbdwbdjk</h2>
-                <p>jfwiohuiwihufh</p>
+                <h2>Grátis e divertido!</h2>
+                  <p>Estudar com o DTeaches é mais divertido! Com lições rápidas e interativas onde não precisa de pagar para aprender.</p>
+                <span style="opacity: 0;"class="category">s</span>
               </div>
             </div>
             <div class="item item-3">
               <div class="header-text">
-                <span class="category">dbwuhjdjwbj</span>
                 <h2>fwefwfwfwfw</h2>
-                <p>fwefwfwfewfw</p>
+                  <p>fwefwfwfewfw</p>
+                    <span style="opacity: 0;"class="category">s</span>
               </div>
             </div>
           </div>
@@ -189,7 +188,7 @@
   <footer>
     <div class="container">
       <div class="col-lg-12">
-        <p>© 2025 DTeaches. Todos os direitos reservados.</a></p>
+        <p>© 2024-2025 DTeaches. Todos os direitos reservados.</a></p>
       </div>
     </div>
   </footer>
