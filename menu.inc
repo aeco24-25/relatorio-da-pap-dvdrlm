@@ -7,7 +7,7 @@
             <img src="assets/images/logo.png" class="header-image" alt="DTeaches Logo" onclick="window.location.href='index.php';">
             <!-- ***** Logo End ***** -->
             <a href="index.php" class="logo">
-                <h1>D<span style="color: #ffffffb0;">Teaches</span></h1>
+                <h1>D<span style="color:rgba(255, 255, 255, 0.75);">Teaches</span></h1>
             </a>
 
             <!-- ***** Menu Start ***** -->

@@ -19,7 +19,7 @@
 
 		if ($verificar->fetch(PDO::FETCH_ASSOC)) {
 			echo "O email já está registado";
-			header("Refresh: 4; URL = index.php");
+			header("Refresh: 3; URL = index.php#contact");
 		}
 		else{
 			//Inserir dados na BD
@@ -30,7 +30,7 @@
 			$sqlU= "INSERT INTO users (username, email, pass, data_criacao ) VALUES ('$username', '$email', '$pass', NOW())";
 			$ligacao -> exec($sqlU);
 			
-			header ("Refresh: 4; URL = login.php");
+			header ("Refresh: 1; URL = login.php");
 		}
 	}	
 ?>

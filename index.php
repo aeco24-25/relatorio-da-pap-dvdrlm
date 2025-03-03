@@ -63,28 +63,26 @@
   <!-- ***** Header Area End ***** -->
 
   <div class="main-banner" id="top">
-    <div class="container">
+    <div class="container" style="max-width:1200px; margin-top: -20px;">
       <div class="row">
         <div class="col-lg-12">
           <div class="owl-carousel owl-banner">
-            <div class="item item-1" style="background-position: right; background-size: contain;">
-              <div class="header-text" style="margin-left: -180px">
-                <h2>O nosso objetivo</h2>
-                  <p style="width:47%;">Aprender algumas expressões básicas pode fazer uma grande diferença na sua experiência de viagem. Desde pedir comida a solicitar direções, conhecendo o básico do idioma local torna a sua experiência mais rica e agradável.</p>
+            <div class="item item-1" style="margin-right: -25px; background-position: right; background-size: contain;">
+              <div class="header-text" style="margin-left: -155px; margin-top: -30px;">
+                <h2 style="width:55%;">Enriqueça a sua Viagem</h2>
+                  <p style="width:47%; margin-top:-10px;">Aprender algumas expressões básicas pode fazer uma grande diferença na sua experiência de viagem. Desde pedir comida a solicitar direções, conhecer o básico do idioma local torna a sua experiência mais rica e agradável.</p>
               </div>
             </div>
-            <div class="item item-2">
-              <div class="header-text">
-                <h2>Grátis e divertido!</h2>
-                  <p>Estudar com o DTeaches é mais divertido! Com lições rápidas e interativas onde não precisa de pagar para aprender.</p>
-                <span style="opacity: 0;"class="category">s</span>
+            <div class="item item-2" style="margin-top: 10px; margin-right: 110px; background-position: right; background-size: contain;">
+              <div class="header-text" style="margin-left: -120px; margin-top: -25px;">
+                <h2 style="width:55%;">Grátis e Divertido!</h2>
+                  <p style="width:42%; margin-top:-10px;">Estudar é mais divertido com lições rápidas e interativas — e melhor ainda, não precisa de pagar nada para aprender.</p>
               </div>
             </div>
-            <div class="item item-3">
-              <div class="header-text">
-                <h2>fwefwfwfwfw</h2>
-                  <p>fwefwfwfewfw</p>
-                    <span style="opacity: 0;"class="category">s</span>
+            <div class="item item-3" style="margin-top: 10px; margin-right: 110px; background-position: right; background-size: contain;">
+              <div class="header-text" style="margin-left: -120px; margin-top: -25px;">
+                <h2 style="width:55%;">aaaaa</h2>
+                  <p style="width:42%; margin-top:-10px;">aaaaa</p>
               </div>
             </div>
           </div>
@@ -99,41 +97,33 @@
         <div class="col-lg-4 col-md-6">
           <div class="service-item">
             <div class="icon">
-              <img src="assets/images/service-01.png" alt="online degrees">
+              <img src="assets/images/dialogo.png" alt="online degrees" style="max-width:98px;">
             </div>
             <div class="main-content">
-              <h4>fewfwfwf</h4>
-              <p>fwefwfwefw</p>
-              <div class="main-button">
-                <a href="#">fwfwfwfwf</a>
-              </div>
+              <h4>aaaaa</h4>
+              <p>aaaaa</p>
             </div>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
           <div class="service-item">
             <div class="icon">
-              <img src="assets/images/service-02.png" alt="short courses">
+              <img src="assets/images/aviao.png" alt="short courses" style="max-width:120px;">
             </div>
             <div class="main-content">
-              <h4>rfwfwfwf</h4>
-              <p>fwefwfwefw</p>
-              <div class="main-button">
-                <a href="#">fwefwhuifhwne</a>
-              </div>
+              <h4>aaaaa</h4>
+              <p>aaaaa</p>
             </div>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
           <div class="service-item">
             <div class="icon">
-              <img src="assets/images/service-03.png" alt="web experts">
+              <img src="assets/images/lapis.png" alt="web experts" style="margin-top:-5px;">
             </div>
             <div class="main-content">
-              <h4>fwefguywejbf</h4>
-              <p>fwfguywjhbfwe</p>
-              <div class="main-button">
-                <a href="#">fwhfuiwjfn</a>
+              <h4>aaaaa</h4>
+              <p>aaaaa</p>
               </div>
             </div>
           </div>
@@ -149,7 +139,7 @@
           <div class="section-heading">
             <h6>COMEÇAR JÁ</h6>
             <h2>Criar Conta</h2>
-            <p>Ao entrar no DTeaches, você concorda com os Termos e Política de Privacidade.</p>
+            <p>Ao entrar no DTeaches, concorda com os Termos e Política de Privacidade.</p>
           </div>
         </div>
         <div class="col-lg-6">

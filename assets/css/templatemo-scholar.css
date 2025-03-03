@@ -138,8 +138,8 @@ body {
 }
 
 .section {
-  padding-top: 30px;
-  margin-top: 120px;
+  padding-top: 0px;
+  margin-top: 80px;
 }
 
 .section-heading {
@@ -696,19 +696,23 @@ Banner Style
   background-position: right bottom;
   background-repeat: no-repeat;
   background-size: cover;
-  padding: 140px 0px 120px 0px;
+  padding: 140px 0px 35px 0px;
 }
 
 .main-banner .item-1 {
   background-image: url(https://smartlinks.pt/wp-content/uploads/2022/01/marketing-dig-ital-para-hoteis.png);
+  height: 450px;
 }
 
 .main-banner .item-2 {
-  background-image: url(../images/banner-item-02.jpg);
+  background-image: url(../images/estudar.png);  
+  height: 450px;
+
 }
 
 .main-banner .item-3 {
   background-image: url(../images/banner-item-03.jpg);
+  height: 450px;
 }
 
 .main-banner .item {
@@ -848,7 +852,7 @@ Services Style
 }
 
 .services .service-item .icon img {
-  max-width: 86px;
+  max-width: 112px;
   transition: all .2s;
 }
 
@@ -1664,7 +1668,7 @@ Footer Style
 */
 
 footer {
-  margin-top: 150px;
+  margin-top: 120px;
   position: relative;
   background-color: #7a6ad8;
   vertical-align: middle;
