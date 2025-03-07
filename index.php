@@ -78,12 +78,6 @@
                   <p style="width:42%; margin-top:-10px;">Estudar é mais divertido com lições rápidas e interativas — e melhor ainda, não precisa de pagar nada para aprender.</p>
               </div>
             </div>
-            <div class="item item-3" style="margin-top: 10px; margin-right: 110px; background-position: right; background-size: contain;">
-              <div class="header-text" style="margin-left: -120px; margin-top: -25px;">
-                <h2 style="width:55%;">aaaaa</h2>
-                  <p style="width:42%; margin-top:-10px;">aaaaa</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
