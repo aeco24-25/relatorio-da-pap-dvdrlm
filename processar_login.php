@@ -6,7 +6,7 @@
 	$email=$_POST["email"];
 	$pass=$_POST["pass"];
 	
-	$sql = "SELECT email, pass FROM users WHERE email = '$email' AND pass = '$pass'";
+	$sql = "SELECT email, pass FROM users WHERE email = '$email'";
 	echo $sql."<br>";
 	$consulta = $ligacao->query($sql);
 	$consulta->setFetchMode(PDO::FETCH_ASSOC);

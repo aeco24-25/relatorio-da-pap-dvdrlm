@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="assets/images/logo.png">
-	  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <title>DTeaches</title>
 
@@ -58,9 +57,9 @@
       include ("menu.inc");
     ?>
   </header>
-
   <!-- ***** Header Area End ***** -->
 
+  
   <div class="main-banner" id="top">
     <div class="container" style="max-width:1200px; margin-top: -20px;">
       <div class="row">
@@ -93,8 +92,8 @@
               <img src="assets/images/dialogo.png" alt="online degrees" style="max-width:98px;">
             </div>
             <div class="main-content">
-              <h4>aaaaa</h4>
-              <p>aaaaa</p>
+              <h4>Diálogo</h4>
+              <p>Expresse-se com confiança no mundo todo.</p>
             </div>
           </div>
         </div>
@@ -104,19 +103,19 @@
               <img src="assets/images/aviao.png" alt="short courses" style="max-width:120px;">
             </div>
             <div class="main-content">
-              <h4>aaaaa</h4>
-              <p>aaaaa</p>
+              <h4>Turismo</h4>
+              <p>Domine frases úteis para viajar sem dificuldades.</p>
             </div>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
           <div class="service-item">
             <div class="icon">
-              <img src="assets/images/lapis.png" alt="web experts" style="margin-top:-5px;">
-            </div>
+              <img src="assets/images/lapis.png" alt="web experts">
+            </div>  
             <div class="main-content">
-              <h4>aaaaa</h4>
-              <p>aaaaa</p>
+              <h4>Estudo</h4>
+              <p>Técnicas de memorização eficazes e dinâmicas.</p>
               </div>
             </div>
           </div>
