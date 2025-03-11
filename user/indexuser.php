@@ -34,7 +34,7 @@ if (!isset($_SESSION['email'])) {
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
-              <span class="_3ROGm"><img class="_3Kp8s" src="//s3.amazonaws.com/duolingo-images/avatar/default_2/medium" alt="User Avatar"></span><span></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>
+              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="User Avatar"></span><span></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>
               <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
                 <li class="_31ObI _1qBnH"><span class="_3sWvR">Create a profile</span></li>
                 <li class="_31ObI _1qBnH">
@@ -44,7 +44,9 @@ if (!isset($_SESSION['email'])) {
                   <a class="_3sWvR" href="https://support.duolingo.com/hc/en-us">Help</a>
                 </li>
                 <li class="_31ObI _1qBnH"><span class="_3sWvR">Keyboard shortcuts</span></li>
-                <li class="_31ObI _1qBnH"><span class="_3sWvR">Sign in</span></li>
+                <li class="_31ObI _1qBnH">
+                    <a href="logout.php" class="_3sWvR">Sair</a>
+                </li>
               </ul>
             </div>
           </div><a style="margin-left: 45px; background-position: -234px; height: 35px; width: 235px; background-size: cover; background-image:url(dteaches.png);" class="NJXKT _1nAJB cCL9P _2s5Eb" data-test="topbar-logo" href="indexuser.php"></a>

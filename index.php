@@ -145,12 +145,30 @@
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input style="width: 100%;" type="email" name="email" id="email" placeholder="E-mail" required="">
+                      <input 
+                          style="width: 100%;" 
+                          type="email" 
+                          name="email" 
+                          id="email" 
+                          placeholder="E-mail" 
+                          required 
+                          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                          title="Insira um endereço de e-mail válido (exemplo: david@gmail.com)"
+                      >
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input style="width: 100%;" type="password" name="pass" id="pass" placeholder="Password" required="">
+                      <input 
+                          style="width: 100%;" 
+                          type="password" 
+                          name="pass" 
+                          id="pass" 
+                          placeholder="Password" 
+                          required 
+                          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$" 
+                          title="Deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, letras minúsculas e números."
+                      >
                   </fieldset>
                 </div>
                 <div class="col-lg-12">

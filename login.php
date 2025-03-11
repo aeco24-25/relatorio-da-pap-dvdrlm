@@ -92,7 +92,7 @@
     <div class="container" style="display: flex;">
         <div class="col-lg-6 align-self-center">
           <div class="section-heading">
-            <h1 style="margin-top: -26px;" >LOGIN</h1>
+            <h1 style="margin-top: -26px;">LOGIN</h1>
           </div>
           <div class="contact-us-content">
             <form style="margin-top: -30px;" id="contact-form" action="processar_login.php" method="post">
