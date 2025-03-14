@@ -37,8 +37,8 @@
 			//Inserir dados na BD
 			$sqlU= "INSERT INTO users (username, email, pass, data_criacao ) VALUES ('$username', '$email', '$pass', NOW())";
 			$ligacao -> exec($sqlU);
-			
-			header ("Refresh: 1; URL = login.php");
+			echo "Conta criada";
+			header ('Location: login.php');
 		}
 	}	
 ?>
