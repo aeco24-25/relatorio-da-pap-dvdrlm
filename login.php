@@ -108,7 +108,7 @@
                 <!-- ***** Menu Start ***** -->
                 <ul class="nav">
                   <li class="scroll-to-section"><a href="./index.php#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
-                  <li class="scroll-to-section"><a href="./login.php" style="font-weight: 600;">LOGIN</a></li>
+                  <li class="scroll-to-section"><a href="login.php" style="font-weight: 600;">LOGIN</a></li>
                 </ul>
                 <!-- ***** Menu End ***** -->
                 </nav>

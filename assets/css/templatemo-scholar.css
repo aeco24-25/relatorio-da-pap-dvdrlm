@@ -1132,7 +1132,6 @@ Facts Style
 }
 
 .fun-facts:after {
-  background: url(../images/contact-dec-01.png);
   position: absolute;
   left: 15%;
   opacity: 0.5;
@@ -1553,7 +1552,6 @@ Contact Style
 }
 
 .contact-us .contact-us-content::before {
-  background: url(../images/contact-dec-01.png);
   position: absolute;
   left: 50%;
   transform: translateX(-149px);
@@ -1566,7 +1564,6 @@ Contact Style
 }
 
 .contact-us .contact-us-content::after {
-  background: url(../images/contact-dec-02.png);
   position: absolute;
   right: 0;
   bottom: 0;
@@ -1696,7 +1693,6 @@ footer p a:hover {
 }
 
 footer::before {
-  background: url(../images/contact-dec-01.png);
   position: absolute;
   left: 30px;
   transform: rotate(180deg);

@@ -195,6 +195,7 @@
                           type="password" 
                           name="pass" 
                           id="pass" 
+                          autocomplete="on"
                           placeholder="Password" 
                           required 
                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$" 
@@ -213,7 +214,7 @@
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type='hidden' name='data_criacao' value='$data_criacao'>
+                    <input type='hidden' name='data_criacao' value='$data_criacao' autocomplete="on">
                     <button style="width: 100%;" type="submit" id="form-submit" class="orange-button">Crie o seu perfil</button>
                   </fieldset>
                 </div>
