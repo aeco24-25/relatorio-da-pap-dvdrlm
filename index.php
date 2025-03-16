@@ -1,3 +1,12 @@
+<?php
+session_start();
+// Se o utilizador já estiver logado, redirecionar para a página principal
+if(isset($_SESSION['username'])) {
+    header("Location: user/indexuser.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-pt">
   <head>
