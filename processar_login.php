@@ -2,6 +2,11 @@
 	//Ligação
 	include ("ligacao.php");
 	
+	if (empty($_POST['email']) || empty($_POST['pass'])) {
+		header("Location: login.php?erro=campos_vazios");
+		exit();
+	}
+	
 	//Definir $email e $pass
 	$email=$_POST["email"];
 	$pass=$_POST["pass"];
@@ -21,13 +26,11 @@
 			header("Location: user/indexuser.php");
 			exit();
 		} else {
-			echo "Email e/ou senha incorreto(s)";
-			header("Refresh: 3; URL = login.php");
+			header("Location: login.php?erro=dados_invalidos");
 			exit();
 		}
 	} else {
-		echo "Email e/ou senha incorreto(s)";
-		header("Refresh: 3; URL = login.php"); 
+		header("Location: login.php?erro=dados_invalidos");
 		exit();
 	}
 ?>

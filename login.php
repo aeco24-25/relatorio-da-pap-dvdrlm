@@ -1,3 +1,14 @@
+<?php
+// Verificar se há um parâmetro de sucesso
+$sucesso = isset($_GET['sucesso']) ? $_GET['sucesso'] : '';
+$mensagem_sucesso = '';
+
+// Definir a mensagem de sucesso
+if ($sucesso == 'conta_criada') {
+    $mensagem_sucesso = "Conta criada com sucesso! Faça login para continuar.";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-pt">
   <head>
@@ -20,6 +31,94 @@
   </head>
 
 <body>
+  <style>
+    .header-area.header-sticky .header-image {
+        margin-top: -29px;
+        width: 165px;
+        margin-left: 45px;
+        margin-right: 19px;
+        object-fit: contain;
+    }
+
+    .header-area.header-sticky.background-header .header-image {
+        margin-top: -12px;
+        width: 165px;
+        margin-left: 45px;
+        margin-right: 19px;
+        object-fit: contain;
+    }
+
+    .main-banner {
+      height: 80vh;
+    }
+
+    .container {
+      text-align: center;
+      justify-content: center;
+    }
+
+    .container .eye {
+      position: absolute;
+      animation: keyframes-fill .5s;
+    }
+
+    .container .eye-slash {
+      position: absolute;
+      animation: keyframes-fill .5s;
+      display: none;
+    }
+
+    .container input:checked ~ .eye {
+      display: none;
+    }
+
+    .container input:checked ~ .eye-slash {
+      display: block;
+    }
+
+    /* ------ Animation ------ */
+    @keyframes keyframes-fill {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    /* Mensagem de sucesso */
+    .sucesso-mensagem {
+      width: 85%;
+      margin-right: auto;
+      margin-left: auto;
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 50px;
+      margin-top: -54px;
+      text-align: center;
+    }
+    
+    /* Mensagem de erro */
+    .erro-mensagem {
+      width: 85%;
+      margin-right: auto;
+      margin-left: auto;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 50px;
+      margin-top: -54px;
+      text-align: center;
+    }
+  </style>
+
   <!-- ***** Preloader Start ***** -->
   <div id="js-preloader" class="js-preloader">
     <div class="preloader-inner">
@@ -32,64 +131,6 @@
     </div>
   </div>
   <!-- ***** Preloader End ***** -->
-
-<style>
-  .header-area.header-sticky .header-image {
-      margin-top: -29px;
-      width: 165px;
-      margin-left: 45px;
-      margin-right: 19px;
-      object-fit: contain;
-  }
-
-  .header-area.header-sticky.background-header .header-image {
-      margin-top: -12px;
-      width: 165px;
-      margin-left: 45px;
-      margin-right: 19px;
-      object-fit: contain;
-  }
-
-  .main-banner {
-    height: 80vh;
-  }
-
-  .container {
-    text-align: center;
-    justify-content: center;
-  }
-
-  .container .eye {
-    position: absolute;
-    animation: keyframes-fill .5s;
-  }
-
-  .container .eye-slash {
-    position: absolute;
-    animation: keyframes-fill .5s;
-    display: none;
-  }
-
-  .container input:checked ~ .eye {
-    display: none;
-  }
-
-  .container input:checked ~ .eye-slash {
-    display: block;
-  }
-
-  /* ------ Animation ------ */
-  @keyframes keyframes-fill {
-    0% {
-      transform: scale(0);
-      opacity: 0;
-    }
-
-    50% {
-      transform: scale(1.2);
-    }
-  }
-</style>
 
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky" >
@@ -116,7 +157,6 @@
         </div>
     </div>
   </header>
-
   <!-- ***** Header Area End ***** -->
 
   <div class="main-banner">
@@ -126,6 +166,27 @@
             <h1 style="margin-top: -26px;">LOGIN</h1>
           </div>
           <div class="contact-us-content">
+            <!-- Exibir mensagem de sucesso se houver -->
+            <?php if(!empty($mensagem_sucesso)): ?>
+              <div class="sucesso-mensagem">
+                <?php echo $mensagem_sucesso; ?>
+              </div>
+              <?php endif; ?>
+              
+              <!-- Exibir mensagem de erro se houver -->
+            <?php if(isset($_GET['erro'])): ?>
+              <div class="erro-mensagem">
+                <?php 
+                  if($_GET['erro'] == 'dados_invalidos') {
+                    echo "Email ou password incorretos.";
+                  } else if($_GET['erro'] == 'campos_vazios') {
+                    echo "Preencha todos os campos do formulário.";
+                  } else {
+                    echo "Erro ao fazer login. Tente novamente.";
+                  }
+                ?>
+              </div>
+            <?php endif; ?>
             <form style="margin-top: -30px;" id="contact-form" action="processar_login.php" method="post">
               <div class="row">
                 <div class="col-lg-12">

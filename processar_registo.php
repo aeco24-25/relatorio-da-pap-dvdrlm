@@ -3,8 +3,7 @@
 	include ("ligacao.php");
 	
 	if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['pass']))	{
-		echo "Preencha os campos de formulário";
-		header ("Refresh: 2; URL = index.php");
+		header("Location: index.php?erro=campos_vazios#contact");
 		exit();
 	}
 	else
@@ -12,7 +11,6 @@
 		$email = $_POST["email"];
 		$username = $_POST["username"];
 		$pass = $_POST["pass"];
-		$data_criacao = $_POST["data_criacao"];
 		
 		$sqlemail = "SELECT email FROM users WHERE email = :email";
 		$verificar1 = $ligacao->prepare($sqlemail);
@@ -24,21 +22,26 @@
 		$verificar2->bindParam(':username', $username, PDO::PARAM_STR);
 		$verificar2->execute();
 
-		// Verifica se um registro com o nome de usuário já foi encontrado
+		// Verifica se um registro com o email ou username já foi encontrado
 		if ($verificar1->fetch(PDO::FETCH_ASSOC)) {
-			echo "O email já está registado";
-			header("Refresh: 3; URL = index.php#contact");
+			header("Location: index.php?erro=email_existente#contact");
+			exit();
 		}
-		if ($verificar2->fetch(PDO::FETCH_ASSOC)) {
-			echo "O username já está registado";
-			header("Refresh: 3; URL = index.php#contact");
+		else if ($verificar2->fetch(PDO::FETCH_ASSOC)) {
+			header("Location: index.php?erro=username_existente#contact");
+			exit();
 		}
 		else{
 			//Inserir dados na BD
-			$sqlU= "INSERT INTO users (username, email, pass, data_criacao ) VALUES ('$username', '$email', '$pass', NOW())";
-			$ligacao -> exec($sqlU);
-			echo "Conta criada";
-			header ('Location: login.php');
+			$sqlU= "INSERT INTO users (username, email, pass, data_criacao) VALUES (:username, :email, :pass, NOW())";
+			$stmt = $ligacao->prepare($sqlU);
+			$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+			$stmt->bindParam(':email', $email, PDO::PARAM_STR);
+			$stmt->bindParam(':pass', $pass, PDO::PARAM_STR);
+			$stmt->execute();
+			
+			header('Location: login.php?sucesso=conta_criada');
+			exit();
 		}
 	}	
 ?>

@@ -1,9 +1,25 @@
 <?php
 session_start();
-// Se o utilizador já estiver logado, redirecionar para a página principal
 if(isset($_SESSION['username'])) {
     header("Location: user/indexuser.php");
     exit;
+}
+
+// Verificar se há um erro para exibir
+$tipo_erro = isset($_GET['erro']) ? $_GET['erro'] : '';
+$mensagem_erro = '';
+
+// Definir a mensagem de erro com base no parâmetro
+switch($tipo_erro) {
+    case 'campos_vazios':
+        $mensagem_erro = "Preencha todos os campos do formulário.";
+        break;
+    case 'email_existente':
+        $mensagem_erro = "O email já está registado.";
+        break;
+    case 'username_existente':
+        $mensagem_erro = "O username já está registado.";
+        break;
 }
 ?>
 
@@ -76,6 +92,16 @@ if(isset($_SESSION['username'])) {
 
   .container input:checked ~ .eye-slash {
     display: block;
+  }
+
+  .erro-mensagem {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
   }
 
   /* ------ Animation ------ */
@@ -176,6 +202,11 @@ if(isset($_SESSION['username'])) {
         </div>
         <div class="col-lg-6">
           <div class="contact-us-content">
+            <?php if(!empty($mensagem_erro)): ?>
+              <div class="erro-mensagem">
+                <?php echo $mensagem_erro; ?>
+              </div>
+            <?php endif; ?>
             <form id="contact-form" action="processar_registo.php" method="post">
               <div class="row">
                 <div class="col-lg-12">
@@ -235,6 +266,14 @@ if(isset($_SESSION['username'])) {
     </div>
   </div>
 
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>© 2024-2025 DTeaches. Todos os direitos reservados.</a></p>
+      </div>
+    </div>
+  </footer>
+
   <script>
     // JavaScript para alternar a visibilidade da senha
     document.getElementById('togglePassword').addEventListener('change', function() {
@@ -246,14 +285,6 @@ if(isset($_SESSION['username'])) {
       }
     });
   </script>
-
-  <footer>
-    <div class="container">
-      <div class="col-lg-12">
-        <p>© 2024-2025 DTeaches. Todos os direitos reservados.</a></p>
-      </div>
-    </div>
-  </footer>
 
   <!-- Scripts -->
   <!-- Bootstrap core JavaScript -->
