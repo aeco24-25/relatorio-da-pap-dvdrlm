@@ -119,9 +119,28 @@ switch($tipo_erro) {
 
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky" >
-    <?php
-      include ("menu.inc");
-    ?>
+    <div class="container">
+      <div class="row">
+          <div class="col-12">
+              <nav class="main-nav">
+
+              <!-- ***** Logo Start ***** -->
+              <img src="assets/images/logo.png" class="header-image" alt="DTeaches Logo" onclick="window.location.href='index.php';">
+              <!-- ***** Logo End ***** -->
+              <a href="index.php" class="logo">
+                  <h1>D<span style="color:rgba(255, 255, 255, 0.75);">Teaches</span></h1>
+              </a>
+
+              <!-- ***** Menu Start ***** -->
+              <ul class="nav">
+                  <li class="scroll-to-section"><a href="#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
+                  <li class="scroll-to-section"><a href="login.php" style="font-weight: 600;">LOGIN</a></li>
+              </ul>
+              <!-- ***** Menu End ***** -->
+              </nav>
+          </div>
+      </div>
+    </div>
   </header>
   <!-- ***** Header Area End ***** -->
 
@@ -241,7 +260,7 @@ switch($tipo_erro) {
                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$" 
                           title="Deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, letras minúsculas e números." 
                       >
-                      <label class="container" style="--color: #a5a5b0; --size: 30px; display: flex;justify-content: right; margin-top: -67px; margin-left: -6px; font-size: var(--size); fill: var(--color);">
+                      <label class="container" style="--color: #d6d1f3; --size: 30px; display: flex;justify-content: right; margin-top: -67px; margin-left: -6px; font-size: var(--size); fill: var(--color);">
                         <input style="width:10%; opacity:0;"type="checkbox" id="togglePassword">
                         <svg class="eye" xmlns="http://www.w3.org/2000/svg" height="0.8em" viewBox="0 0 576 512">
                           <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"></path>

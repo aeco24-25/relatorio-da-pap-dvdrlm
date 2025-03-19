@@ -44,8 +44,64 @@ $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_express
   <meta content="yes" name="mobile-web-app-capable">
   <link rel="shortcut icon" href="../assets/images/logo.png">
   <link href="ltr-6a8f5d2e.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+    <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
+    <link rel="stylesheet" href="../assets/css/owl.css">
+    <link rel="stylesheet" href="../assets/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
   
   <style>
+    .logo {
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    text-align: var(--bs-body-text-align);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Poppins', sans-serif;
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    box-sizing: border-box;
+    color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    text-decoration: none !important;
+    align-items: center;
+    margin-top: 17px;
+    margin-left: 50px;
+    transition: all 0.3s ease 0s;
+    display: inline-block;
+    }
+
+    h1 {
+    text-align: var(--bs-body-text-align);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Poppins', sans-serif !important;
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    box-sizing: border-box;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    margin-top: -5px;
+    margin-bottom: 0px;
+    font-size: 46px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 700;
+    margin-right: 20px;
+    padding-right: 20px;
+    border-right: 1px solid rgba(250, 250, 250, 0.3);
+    }
+
     .progress-circle {
       position: relative;
       width: 150px;
@@ -150,7 +206,7 @@ $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_express
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
-              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span><span><?php echo htmlspecialchars($username); ?></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>
+              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span><span style="margin-left:-5px; font-family: 'Poppins', sans-serif !important;"><?php echo htmlspecialchars($username); ?></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>
               <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
                 <li class="_31ObI _1qBnH">
                   <a href="perfil.php" class="_3sWvR">Perfil</a>
@@ -163,7 +219,9 @@ $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_express
                 </li>
               </ul>
             </div>
-          </div><a style="margin-left: 45px; background-position: -234px; height: 35px; width: 235px; background-size: cover; background-image:url(dteaches.png);" class="NJXKT _1nAJB cCL9P _2s5Eb" data-test="topbar-logo" href="indexuser.php"></a>
+          </div><a href="index.php" class="logo">
+                <h1>D<span style="text-align: var(--bs-body-text-align); -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; font-family: 'Poppins', sans-serif !important; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0; line-height: 1.2; font-size: 46px; text-transform: uppercase; font-weight: 700; box-sizing: border-box; margin: 0; padding: 0; border: 0; outline: 0; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
+            </a>
         </div>
       </div>
       <div class="LFfrA _3MLiB">
@@ -260,5 +318,6 @@ function getProgressCoordinates($percent, $radius) {
     return round($x, 1) . ' ' . round($y, 1);
 }
 ?>
+
 </body>
 </html>
