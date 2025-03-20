@@ -9,7 +9,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 // Verificar se o ID da categoria foi fornecido
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+if (!isset($_GET['id'])) {
     header('Location: indexuser.php');
     exit();
 }
@@ -108,18 +108,6 @@ $percentagem = ($total_expressoes > 0) ? round(($expressoes_completas / $total_e
           <div class="_3vDrO">
             <div class="_3I51r _2OF7V">
               <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
-              <div class="_2LqjD">
-                <ul class="_20LC5 _2HujR _1ZY-H">
-                  <li class="qsrrc"></li>
-                  <?php
-                  if ($result_categorias->num_rows > 0) {
-                      while($row = $result_categorias->fetch_assoc()) {
-                          echo '<li class="_2uBp_ _1qBnH"><a href="categoria.php?id=' . $row['id_categoria'] . '">' . htmlspecialchars($row['titulo']) . '</a></li>';
-                      }
-                  }
-                  ?>
-                </ul>
-              </div>
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
