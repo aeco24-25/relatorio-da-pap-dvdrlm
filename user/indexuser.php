@@ -1,21 +1,24 @@
 <?php
+// Iniciar sessão
 session_start();
+
+// Verificar autenticação do utilizador
 if (!isset($_SESSION['username'])) {
     header('Location: ../login.php');
     exit();
 }
 
-// Conectar à base de dados
+// Estabelecer ligação à base de dados
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// Obtem as categorias para o menu
+// Obter categorias para o menu
 $sql_categorias = "SELECT id_categoria, titulo FROM categoria ORDER BY id_categoria";
 $result_categorias = $conn->query($sql_categorias);
 
-// Obtem o progresso do utilizador
+// Obter o progresso do utilizador
 $username = $_SESSION['username'];
 $sql_progresso = "SELECT COUNT(*) as total_completo FROM progresso WHERE username = ? AND completo = TRUE";
 $stmt = $conn->prepare($sql_progresso);
@@ -25,14 +28,24 @@ $result_progresso = $stmt->get_result();
 $progresso_row = $result_progresso->fetch_assoc();
 $total_completo = $progresso_row['total_completo'];
 
-// Obtem total de expressões
+// Obter total de expressões
 $sql_total = "SELECT COUNT(*) as total FROM expressoes";
 $result_total = $conn->query($sql_total);
 $total_row = $result_total->fetch_assoc();
 $total_expressoes = $total_row['total'];
 
-// Calcula percentagem para mostrar no progresso
+// Calcular percentagem para mostrar no progresso
 $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_expressoes) * 100) : 0;
+
+// Função para calcular coordenadas do arco SVG
+function getProgressCoordinates($percent, $radius) {
+    $percent = min(100, max(0, $percent)); // Limitar entre 0-100
+    $angle = ($percent / 100) * 360;
+    $radians = (($angle - 90) * M_PI) / 180; // -90 para começar do topo
+    $x = $radius + ($radius * cos($radians));
+    $y = $radius + ($radius * sin($radians));
+    return round($x, 1) . ' ' . round($y, 1);
+}
 ?>
 
 <!DOCTYPE html>
@@ -288,18 +301,5 @@ $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_express
       </div>
     </div>
   </div>
-
-<?php
-// Função para calcular as coordenadas do arco SVG com base na percentagem
-function getProgressCoordinates($percent, $radius) {
-    $percent = min(100, max(0, $percent)); // Limitar entre 0-100
-    $angle = ($percent / 100) * 360;
-    $radians = (($angle - 90) * M_PI) / 180; // -90 para começar do topo
-    $x = $radius + ($radius * cos($radians));
-    $y = $radius + ($radius * sin($radians));
-    return round($x, 1) . ' ' . round($y, 1);
-}
-?>
-
 </body>
 </html>

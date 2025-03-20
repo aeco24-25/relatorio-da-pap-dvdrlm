@@ -1,15 +1,19 @@
 <?php
+// Iniciar sessão
 session_start();
+
+// Verificar autenticação do utilizador
 if (!isset($_SESSION['username'])) {
     header('Location: ../login.php');
     exit();
 }
 
+// Definir variáveis iniciais
 $username = $_SESSION['username'];
 $mensagem = '';
 $erro = '';
 
-// Conectar à base de dados
+// Estabelecer ligação à base de dados
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
@@ -22,8 +26,9 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-// Processar o formulário quando enviado
+// Processar formulário de edição de perfil
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Limpar e validar dados de entrada
     $email = trim($_POST['email']);
     $password_atual = $_POST['password_atual'];
     $nova_password = $_POST['nova_password'];
@@ -33,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($password_atual !== $user['pass']) {
         $erro = "A password atual está incorreta.";
     } else {
-        // Verificar se o email é válido
+        // Validar email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $erro = "Por favor, insira um email válido.";
         } else {
@@ -46,9 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($result->num_rows > 0) {
                 $erro = "Este email já está associado a outra conta.";
             } else {
-                // Se o utilizador quiser alterar a password
+                // Processar alteração de password
                 if (!empty($nova_password)) {
-                    // Verificar se as passwords coincidem
+                    // Validar nova password
                     if ($nova_password !== $confirmar_password) {
                         $erro = "As novas passwords não coincidem.";
                     } else {
@@ -63,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     }
                 } else {
-                    // Apenas atualizar o email
+                    // Atualizar apenas o email
                     $stmt = $conn->prepare("UPDATE users SET email = ? WHERE username = ?");
                     $stmt->bind_param("ss", $email, $username);
                     

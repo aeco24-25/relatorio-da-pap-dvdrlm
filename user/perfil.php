@@ -1,5 +1,8 @@
 <?php
+// Iniciar sessão
 session_start();
+
+// Verificar autenticação do utilizador
 if (!isset($_SESSION['username'])) {
     header('Location: ../login.php');
     exit();
@@ -7,7 +10,7 @@ if (!isset($_SESSION['username'])) {
 
 $username = $_SESSION['username'];
 
-// Conectar à base de dados
+// Estabelecer ligação à base de dados
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);

@@ -1,5 +1,8 @@
 <?php
+// Iniciar sessão
 session_start();
+
+// Verificar autenticação do utilizador
 if (!isset($_SESSION['username'])) {
     header('Location: ../login.php');
     exit();
@@ -11,10 +14,11 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
+// Definir variáveis
 $id_categoria = $_GET['id'];
 $username = $_SESSION['username'];
 
-// Conectar à base de dados
+// Estabelecer ligação à base de dados
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
@@ -33,7 +37,7 @@ if ($result->num_rows === 0) {
 
 $categoria = $result->fetch_assoc();
 
-// Obter expressões desta categoria
+// Obter expressões da categoria com progresso do utilizador
 $stmt = $conn->prepare("SELECT e.*, p.completo 
                        FROM expressoes e 
                        LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ? 
@@ -43,7 +47,7 @@ $stmt->bind_param("si", $username, $id_categoria);
 $stmt->execute();
 $expressoes = $stmt->get_result();
 
-// Contar o progresso
+// Calcular progresso
 $total_expressoes = $expressoes->num_rows;
 $expressoes_completas = 0;
 $expressoes_array = array();
@@ -94,7 +98,6 @@ $percentagem = ($total_expressoes > 0) ? round(($expressoes_completas / $total_e
     padding-right: 20px;
     }
    </style>
-   
 </head>
 
 <body>

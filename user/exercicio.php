@@ -1,5 +1,8 @@
 <?php
+// Iniciar sessão
 session_start();
+
+// Verificar autenticação do utilizador
 if (!isset($_SESSION['username'])) {
     header('Location: ../login.php');
     exit();
@@ -11,10 +14,11 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
+// Definir variáveis
 $id_expressao = $_GET['id'];
 $username = $_SESSION['username'];
 
-// Conectar à base de dados
+// Estabelecer ligação à base de dados
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
@@ -36,14 +40,16 @@ if ($result->num_rows === 0) {
 
 $expressao = $result->fetch_assoc();
 
-// Processar a resposta
+// Variáveis para processamento da resposta
 $mensagem = '';
 $resposta_correta = false;
 
+// Processar resposta do utilizador
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo_exercicio = isset($_POST['tipo']) ? $_POST['tipo'] : 'normal';
     $resposta_usuario = trim($_POST['resposta']);
     
+    // Verificar resposta com base no tipo de exercício
     if ($tipo_exercicio === 'inverso') {
         // Comparar com a versão em inglês
         $resposta_correta = (strtolower($resposta_usuario) === strtolower($expressao['versao_ingles']));
@@ -52,10 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $resposta_correta = (strtolower($resposta_usuario) === strtolower($expressao['traducao_portugues']));
     }
     
+    // Processar resultado da resposta
     if ($resposta_correta) {
         $mensagem = '<div class="mensagem-sucesso">Correto! Parabéns!</div>';
         
-        // Atualizar o progresso do utilizador
+        // Atualizar progresso do utilizador
         $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
                                VALUES (?, ?, TRUE) 
                                ON DUPLICATE KEY UPDATE completo = TRUE");
@@ -66,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Obter expressões da mesma categoria (para opções múltipla escolha)
+// Obter expressões da mesma categoria para opções múltipla escolha
 $stmt = $conn->prepare("SELECT traducao_portugues FROM expressoes 
                        WHERE id_categoria = ? AND id_expressao != ? 
                        ORDER BY RAND() LIMIT 3");
@@ -122,7 +129,6 @@ $tipo_exercicio = isset($_GET['tipo']) ? $_GET['tipo'] : rand(1, 3);
     padding-right: 20px;
     }
    </style>
-   
 </head>
 
 <body>
