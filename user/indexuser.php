@@ -44,53 +44,36 @@ $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_express
   <meta content="yes" name="mobile-web-app-capable">
   <link rel="shortcut icon" href="../assets/images/logo.png">
   <link href="ltr-6a8f5d2e.css" rel="stylesheet">
-
+  <link href="custom-styles.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
-    <link rel="stylesheet" href="../assets/css/owl.css">
-    <link rel="stylesheet" href="../assets/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
+  <link rel="stylesheet" href="../assets/css/owl.css">
+  <link rel="stylesheet" href="../assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
   
   <style>
+    .perfil-container {
+      max-width: 800px;
+      margin: 0 auto;
+      margin-top: 110px;
+    }
+
+    .perfil-titulo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #333;
+      text-align: center;
+    }
+
     .logo {
-    font-size: var(--bs-body-font-size);
-    font-weight: var(--bs-body-font-weight);
-    line-height: var(--bs-body-line-height);
-    text-align: var(--bs-body-text-align);
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-font-smoothing: antialiased;
-    font-family: 'Poppins', sans-serif;
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    box-sizing: border-box;
-    color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    text-decoration: none !important;
-    align-items: center;
-    margin-top: 17px;
+    margin-top: 16px;
     margin-left: 50px;
-    transition: all 0.3s ease 0s;
     display: inline-block;
     }
 
     h1 {
-    text-align: var(--bs-body-text-align);
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-font-smoothing: antialiased;
     font-family: 'Poppins', sans-serif !important;
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    box-sizing: border-box;
-    line-height: 1.2;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
     margin-top: -5px;
     margin-bottom: 0px;
     font-size: 46px;
@@ -99,7 +82,6 @@ $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_express
     font-weight: 700;
     margin-right: 20px;
     padding-right: 20px;
-    border-right: 1px solid rgba(250, 250, 250, 0.3);
     }
 
     .progress-circle {
@@ -219,7 +201,7 @@ $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_express
                 </li>
               </ul>
             </div>
-          </div><a href="index.php" class="logo">
+          </div><a href="indexuser.php" class="logo">
                 <h1>D<span style="text-align: var(--bs-body-text-align); -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; font-family: 'Poppins', sans-serif !important; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0; line-height: 1.2; font-size: 46px; text-transform: uppercase; font-weight: 700; box-sizing: border-box; margin: 0; padding: 0; border: 0; outline: 0; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
             </a>
         </div>

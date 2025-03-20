@@ -37,18 +37,35 @@ $total_completo = $completo_row['total_completo'];
 // Calcular percentagem de progresso geral
 $percentagem_total = ($total_expressoes > 0) ? round(($total_completo / $total_expressoes) * 100) : 0;
 
-// Obter progresso por categoria
+// Obter número de categorias em que o utilizador já tem expressões aprendidas
+$stmt = $conn->prepare("SELECT COUNT(DISTINCT c.id_categoria) as categorias_estudadas 
+                        FROM categoria c
+                        JOIN expressoes e ON c.id_categoria = e.id_categoria
+                        JOIN progresso p ON e.id_expressao = p.id_expressao 
+                        WHERE p.username = ? AND p.completo = TRUE");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$categorias_row = $result->fetch_assoc();
+$categorias_estudadas = $categorias_row['categorias_estudadas'];
+
+// Obter progresso por categoria (apenas para categorias que o utilizador está estudando)
 $sql = "SELECT c.id_categoria, c.titulo, 
         COUNT(e.id_expressao) as total_categoria,
         COUNT(p.id_expressao) as completo_categoria
         FROM categoria c
-        LEFT JOIN expressoes e ON c.id_categoria = e.id_categoria
+        JOIN expressoes e ON c.id_categoria = e.id_categoria
         LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ? AND p.completo = TRUE
+        WHERE EXISTS (
+            SELECT 1 FROM progresso p2 
+            JOIN expressoes e2 ON p2.id_expressao = e2.id_expressao
+            WHERE p2.username = ? AND p2.completo = TRUE AND e2.id_categoria = c.id_categoria
+        )
         GROUP BY c.id_categoria
         ORDER BY c.id_categoria";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
+$stmt->bind_param("ss", $username, $username);
 $stmt->execute();
 $result_categorias = $stmt->get_result();
 
@@ -66,7 +83,32 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
   <meta content="yes" name="mobile-web-app-capable">
   <link rel="shortcut icon" href="../assets/images/logo.png">
   <link href="ltr-6a8f5d2e.css" rel="stylesheet">
+  <link href="custom-styles.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
+  <link rel="stylesheet" href="../assets/css/owl.css">
+  <link rel="stylesheet" href="../assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
   <style>
+    .logo {
+      margin-top: 16px;
+      margin-left: 50px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif !important;
+      margin-top: -5px;
+      margin-bottom: 0px;
+      font-size: 46px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      margin-right: 20px;
+      padding-right: 20px;
+    }
+
     .perfil-container {
       max-width: 800px;
       margin: 0 auto;
@@ -219,8 +261,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
-              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar do Utilizador"></span><span><?php echo htmlspecialchars($username); ?></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>
-              <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
+            <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span><span style="margin-left:-5px; font-family: 'Poppins', sans-serif !important;"><?php echo htmlspecialchars($username); ?></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>              <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
                 <li class="_31ObI _1qBnH">
                   <a href="perfil.php" class="_3sWvR">Perfil</a>
                 </li>
@@ -233,8 +274,9 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
               </ul>
             </div>
           </div>
-          <a style="margin-left: 45px; background-position: -234px; height: 35px; width: 235px; background-size: cover; background-image:url(dteaches.png);" class="NJXKT _1nAJB cCL9P _2s5Eb" data-test="topbar-logo" href="indexuser.php"></a>
-          <div class="_3I8Kk"></div>
+          <a href="indexuser.php" class="logo">
+                <h1>D<span style="text-align: var(--bs-body-text-align); -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; font-family: 'Poppins', sans-serif !important; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0; line-height: 1.2; font-size: 46px; text-transform: uppercase; font-weight: 700; box-sizing: border-box; margin: 0; padding: 0; border: 0; outline: 0; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
+            </a>
         </div>
         <a class="_19E7J" href="indexuser.php">« Voltar</a>
       </div>
@@ -261,7 +303,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
             <div class="estatistica-label">Progresso Total</div>
           </div>
           <div class="estatistica-card">
-            <div class="estatistica-valor"><?php echo $result_categorias->num_rows; ?></div>
+            <div class="estatistica-valor"><?php echo $categorias_estudadas; ?></div>
             <div class="estatistica-label">Categorias Estudadas</div>
           </div>
         </div>

@@ -143,7 +143,6 @@ switch($tipo_erro) {
     </div>
   </header>
   <!-- ***** Header Area End ***** -->
-
   
   <div class="main-banner" id="top">
     <div class="container" style="max-width:1200px; margin-top: -20px;">
