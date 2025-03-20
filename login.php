@@ -221,7 +221,6 @@ if ($sucesso == 'conta_criada') {
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type="hidden" name="data_criacao" value="$data_criacao">
                       <button style="margin-top: 20px;" type="submit" class="btn">ENTRAR</button>
                   </fieldset>
                 </div>

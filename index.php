@@ -272,7 +272,6 @@ switch($tipo_erro) {
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                    <input type='hidden' name='data_criacao' value='$data_criacao' autocomplete="on">
                     <button style="width: 100%;" type="submit" id="form-submit" class="orange-button">Crie o seu perfil</button>
                   </fieldset>
                 </div>

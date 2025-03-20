@@ -22,7 +22,7 @@
 		$verificar2->bindParam(':username', $username, PDO::PARAM_STR);
 		$verificar2->execute();
 
-		// Verifica se um registro com o email ou username já foi encontrado
+		// Verifica se um registo com o email ou username já foi encontrado
 		if ($verificar1->fetch(PDO::FETCH_ASSOC)) {
 			header("Location: index.php?erro=email_existente#contact");
 			exit();
