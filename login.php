@@ -49,7 +49,7 @@ if ($sucesso == 'conta_criada') {
     }
 
     .main-banner {
-      height: 80vh;
+      height: 85vh;
     }
 
     .container {
