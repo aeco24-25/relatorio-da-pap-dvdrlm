@@ -11,9 +11,6 @@ if ($sucesso == 'conta_criada') {
 }
 ?>
 
-fufykfyhfuy
-
-
 <!DOCTYPE html>
 <html lang="pt-pt">
   <head>
