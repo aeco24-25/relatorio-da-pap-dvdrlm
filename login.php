@@ -11,6 +11,8 @@ if ($sucesso == 'conta_criada') {
 }
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="pt-pt">
   <head>
