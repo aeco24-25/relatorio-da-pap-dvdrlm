@@ -1,30 +1,24 @@
 <?php
-// Iniciar sessão
 session_start();
 
-// Verificar autenticação do utilizador
 if (!isset($_SESSION['username'])) {
     header('Location: ../login.php');
     exit();
 }
 
-// Verificar se o ID da categoria foi fornecido
 if (!isset($_GET['id'])) {
     header('Location: indexuser.php');
     exit();
 }
 
-// Definir variáveis
 $id_categoria = $_GET['id'];
 $username = $_SESSION['username'];
 
-// Estabelecer ligação à base de dados
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// Obter informações da categoria
 $stmt = $conn->prepare("SELECT titulo, conteudo FROM categoria WHERE id_categoria = ?");
 $stmt->bind_param("i", $id_categoria);
 $stmt->execute();
@@ -37,7 +31,6 @@ if ($result->num_rows === 0) {
 
 $categoria = $result->fetch_assoc();
 
-// Obter expressões da categoria com progresso do utilizador
 $stmt = $conn->prepare("SELECT e.*, p.completo 
                        FROM expressoes e 
                        LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ? 
@@ -47,7 +40,6 @@ $stmt->bind_param("si", $username, $id_categoria);
 $stmt->execute();
 $expressoes = $stmt->get_result();
 
-// Calcular progresso
 $total_expressoes = $expressoes->num_rows;
 $expressoes_completas = 0;
 $expressoes_array = array();
@@ -59,7 +51,6 @@ while ($row = $expressoes->fetch_assoc()) {
     }
 }
 
-// Calcular percentagem de progresso
 $percentagem = ($total_expressoes > 0) ? round(($expressoes_completas / $total_expressoes) * 100) : 0;
 ?>
 
@@ -81,23 +72,146 @@ $percentagem = ($total_expressoes > 0) ? round(($expressoes_completas / $total_e
 
   <style>
     .logo {
-    margin-top: 16px;
-    margin-left: 50px;
-    display: inline-block;
+      margin-top: 16px;
+      margin-left: 50px;
+      display: inline-block;
     }
 
     h1 {
-    font-family: 'Poppins', sans-serif !important;
-    margin-top: -5px;
-    margin-bottom: 0px;
-    font-size: 46px;
-    text-transform: uppercase;
-    color: #fff;
-    font-weight: 700;
-    margin-right: 20px;
-    padding-right: 20px;
+      font-family: 'Poppins', sans-serif !important;
+      margin-top: -5px;
+      margin-bottom: 0px;
+      font-size: 46px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      margin-right: 20px;
+      padding-right: 20px;
     }
-   </style>
+    
+    .categoria-container {
+      max-width: 800px;
+      margin: 0 auto;
+      margin-top: 110px;
+      padding: 20px;
+    }
+    
+    .categoria-header {
+      background-color: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .categoria-titulo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .categoria-conteudo {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .progresso-container {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .progresso-titulo {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .progresso-barra {
+      height: 20px;
+      background-color: #e5e5e5;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    
+    .progresso-preenchido {
+      height: 100%;
+      background-color: #78c800;
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+    
+    .progresso-texto {
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+    }
+    
+    .card-expressao {
+      background-color: white;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    .completo {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: #78c800;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .expressao-ingles {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1cb0f6;
+      margin-bottom: 10px;
+    }
+    
+    .expressao-portugues {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .btn-practice {
+      background-color: #1cb0f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn-practice:hover {
+      background-color: #0c8ed2;
+    }
+    
+    .sem-expressoes {
+      background-color: white;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      color: #666;
+    }
+  </style>
 </head>
 
 <body>
@@ -124,33 +238,35 @@ $percentagem = ($total_expressoes > 0) ? round(($expressoes_completas / $total_e
                 </li>
               </ul>
             </div>
-          </div><a href="indexuser.php" class="logo">
+          </div>
+          <a href="indexuser.php" class="logo">
                 <h1>D<span style="text-align: var(--bs-body-text-align); -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; font-family: 'Poppins', sans-serif !important; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0; line-height: 1.2; font-size: 46px; text-transform: uppercase; font-weight: 700; box-sizing: border-box; margin: 0; padding: 0; border: 0; outline: 0; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
             </a>
         </div>
         <a class="_19E7J" href="indexuser.php">« Voltar</a>
       </div>
       
-      <div class="LFfrA _3MLiB">
-        <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
-          <div class="categoria-info">
-            <h1 class="categoria-titulo"><?php echo htmlspecialchars($categoria['titulo']); ?></h1>
-            <div class="categoria-conteudo"><?php echo nl2br(htmlspecialchars($categoria['conteudo'])); ?></div>
+      <div class="categoria-container">
+        <div class="categoria-header">
+          <h1 class="categoria-titulo"><?php echo htmlspecialchars($categoria['titulo']); ?></h1>
+          <div class="categoria-conteudo"><?php echo nl2br(htmlspecialchars($categoria['conteudo'])); ?></div>
+        </div>
+        
+        <div class="progresso-container">
+          <div class="progresso-titulo">Seu Progresso</div>
+          <div class="progresso-barra">
+            <div class="progresso-preenchido" style="width: <?php echo $percentagem; ?>%;"></div>
           </div>
-          
-          <div class="progresso-container">
-            <div class="progresso-barra">
-              <div class="progresso-preenchido" style="width: <?php echo $percentagem; ?>%;"></div>
-            </div>
-            <div class="progresso-texto">
-              <?php echo $expressoes_completas; ?> de <?php echo $total_expressoes; ?> expressões aprendidas (<?php echo $percentagem; ?>%)
-            </div>
+          <div class="progresso-texto">
+            <?php echo $expressoes_completas; ?> de <?php echo $total_expressoes; ?> expressões aprendidas (<?php echo $percentagem; ?>%)
           </div>
-          
+        </div>
+        
+        <?php if (!empty($expressoes_array)): ?>
           <?php foreach ($expressoes_array as $expressao): ?>
           <div class="card-expressao">
             <?php if ($expressao['completo']): ?>
-            <div class="completo">Completo</div>
+            <div class="completo">✓ Completo</div>
             <?php endif; ?>
             
             <div class="expressao-ingles"><?php echo htmlspecialchars($expressao['versao_ingles']); ?></div>
@@ -164,13 +280,11 @@ $percentagem = ($total_expressoes > 0) ? round(($expressoes_completas / $total_e
             </form>
           </div>
           <?php endforeach; ?>
-          
-          <?php if (empty($expressoes_array)): ?>
-          <div style="text-align: center; margin-top: 50px; color: #666;">
+        <?php else: ?>
+          <div class="sem-expressoes">
             <p>Ainda não existem expressões nesta categoria.</p>
           </div>
-          <?php endif; ?>
-        </div>
+        <?php endif; ?>
       </div>
     </div>
   </div>
