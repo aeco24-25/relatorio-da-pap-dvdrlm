@@ -225,7 +225,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
   </style>
 </head>
 
-<body>
+<body style="background:white;">
   <div id="root">
     <div data-reactroot="">
       <div class="_6t5Uh" style="height: 78px;">

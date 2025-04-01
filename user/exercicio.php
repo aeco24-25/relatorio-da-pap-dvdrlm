@@ -264,7 +264,6 @@ shuffle($alternativas);
           </form>
           <?php else: ?>
           <div class="exercicio-completo">
-            <p>Parabéns! Acertas-te! 🎉</p>
             
             <?php if ($proxima_expressao): ?>
             <a href="exercicio.php?id=<?php echo $proxima_expressao['id_expressao']; ?>" class="btn-submeter btn-proximo">

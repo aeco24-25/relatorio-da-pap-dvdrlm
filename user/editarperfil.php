@@ -228,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </style>
 </head>
 
-<body>
+<body style="background:white;">
   <div id="root">
     <div data-reactroot="">
       <div class="_6t5Uh" style="height: 78px;">

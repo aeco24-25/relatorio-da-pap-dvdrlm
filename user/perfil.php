@@ -253,7 +253,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
   </style>
 </head>
 
-<body>
+<body style="background:white;">
   <div id="root">
     <div data-reactroot="">
       <div class="_6t5Uh" style="height: 78px;">
