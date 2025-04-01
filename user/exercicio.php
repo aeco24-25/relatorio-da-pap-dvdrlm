@@ -51,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resposta_correta = (strtolower($resposta_usuario) === strtolower($expressao['traducao_portugues']));
     
     if ($resposta_correta) {
-        
         $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
                                VALUES (?, ?, TRUE) 
                                ON DUPLICATE KEY UPDATE completo = TRUE");
@@ -179,19 +178,6 @@ shuffle($alternativas);
       background-color: #6a59c9;
     }
     
-    .mensagem-sucesso {
-      background-color: rgba(46, 204, 113, 0.15);
-      border-left: 4px solid #2ecc71;
-      color: #fff;
-      padding: 20px;
-      margin-bottom: 30px;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    
     .mensagem-erro {
       background-color: rgba(231, 76, 60, 0.15);
       border-left: 4px solid #e74c3c;
@@ -237,15 +223,13 @@ shuffle($alternativas);
       
       <?php if (!$resposta_correta): ?>
         <div class="instrucao">
-          <i class="fas fa-mouse-pointer"></i> Selecione a opção correta
+         Selecione a opção correta
         </div>
-      <?php endif; ?>
-      
-      <div class="exercicio-questao">
-        <?php echo htmlspecialchars($expressao['versao_ingles']); ?>
-      </div>
-      
-      <?php if (!$resposta_correta): ?>
+        
+        <div class="exercicio-questao">
+          <?php echo htmlspecialchars($expressao['versao_ingles']); ?>
+        </div>
+        
         <form method="POST" class="exercicio-form">
           <div class="opcoes-container">
             <?php foreach ($alternativas as $alternativa): ?>
