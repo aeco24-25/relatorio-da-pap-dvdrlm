@@ -1,14 +1,11 @@
 <?php
-// Iniciar sessão
 session_start();
 
-// Verificar autenticação do utilizador
 if (!isset($_SESSION['username'])) {
     header('Location: ../login.php');
     exit();
 }
 
-// Estabelecer ligação à base de dados
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
@@ -39,15 +36,45 @@ $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_express
 
 // Função para calcular coordenadas do arco SVG
 function getProgressCoordinates($percent, $radius) {
-    $percent = min(100, max(0, $percent)); // Limitar entre 0-100
+    $percent = min(100, max(0, $percent));
     $angle = ($percent / 100) * 360;
-    $radians = (($angle - 90) * M_PI) / 180; // -90 para começar do topo
+    $radians = (($angle - 90) * M_PI) / 180;
     $x = $radius + ($radius * cos($radians));
     $y = $radius + ($radius * sin($radians));
     return round($x, 1) . ' ' . round($y, 1);
 }
-?>
 
+// Verificar quais categorias estão liberadas
+$categorias_liberadas = array();
+$categorias_completas = array();
+
+$sql_categorias_progresso = "SELECT c.id_categoria, c.titulo, 
+                            COUNT(e.id_expressao) as total,
+                            SUM(CASE WHEN p.completo = TRUE THEN 1 ELSE 0 END) as completas
+                            FROM categoria c
+                            JOIN expressoes e ON c.id_categoria = e.id_categoria
+                            LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ?
+                            GROUP BY c.id_categoria
+                            ORDER BY c.id_categoria";
+$stmt = $conn->prepare($sql_categorias_progresso);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result_categorias_progresso = $stmt->get_result();
+
+$categoria_anterior_completa = true;
+
+while ($row = $result_categorias_progresso->fetch_assoc()) {
+    $completa = ($row['completas'] == $row['total']);
+    $categorias_completas[$row['id_categoria']] = $completa;
+    
+    if ($categoria_anterior_completa) {
+        $categorias_liberadas[$row['id_categoria']] = true;
+        $categoria_anterior_completa = $completa;
+    } else {
+        $categorias_liberadas[$row['id_categoria']] = false;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-pt">
 <head>
@@ -80,21 +107,21 @@ function getProgressCoordinates($percent, $radius) {
     }
 
     .logo {
-    margin-top: 16px;
-    margin-left: 50px;
-    display: inline-block;
+      margin-top: 16px;
+      margin-left: 50px;
+      display: inline-block;
     }
 
     h1 {
-    font-family: 'Poppins', sans-serif !important;
-    margin-top: -5px;
-    margin-bottom: 0px;
-    font-size: 46px;
-    text-transform: uppercase;
-    color: #fff;
-    font-weight: 700;
-    margin-right: 20px;
-    padding-right: 20px;
+      font-family: 'Poppins', sans-serif !important;
+      margin-top: -5px;
+      margin-bottom: 0px;
+      font-size: 46px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      margin-right: 20px;
+      padding-right: 20px;
     }
 
     .progress-circle {
@@ -175,6 +202,26 @@ function getProgressCoordinates($percent, $radius) {
       border-radius: 5px;
       transition: width 0.3s ease;
     }
+    
+    .categoria-bloqueada {
+      opacity: 0.6;
+      background-color: #f5f5f5;
+    }
+    
+    .categoria-bloqueada .categoria-icon {
+      background-color: #999;
+    }
+    
+    .categoria-bloqueada .categoria-progress-fill {
+      background-color: #999;
+    }
+    
+    .bloqueio-mensagem {
+      font-size: 14px;
+      color: #c62828;
+      margin-top: 5px;
+      font-style: italic;
+    }
   </style>
 </head>
 
@@ -189,7 +236,9 @@ function getProgressCoordinates($percent, $radius) {
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
-              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span><span style="margin-left:-5px; font-family: 'Poppins', sans-serif !important;"><?php echo htmlspecialchars($username); ?></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>
+              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span>
+              <span style="margin-left:-5px; font-family: 'Poppins', sans-serif !important;"><?php echo htmlspecialchars($username); ?></span>
+              <span class="_2Vgy6 _1k0u2 cCL9P"></span>
               <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
                 <li class="_31ObI _1qBnH">
                   <a href="perfil.php" class="_3sWvR">Perfil</a>
@@ -202,9 +251,10 @@ function getProgressCoordinates($percent, $radius) {
                 </li>
               </ul>
             </div>
-          </div><a href="indexuser.php" class="logo">
-                <h1>D<span style="text-align: var(--bs-body-text-align); -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; font-family: 'Poppins', sans-serif !important; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0; line-height: 1.2; font-size: 46px; text-transform: uppercase; font-weight: 700; box-sizing: border-box; margin: 0; padding: 0; border: 0; outline: 0; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
-            </a>
+          </div>
+          <a href="indexuser.php" class="logo">
+            <h1>D<span style="text-align: var(--bs-body-text-align); -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; font-family: 'Poppins', sans-serif !important; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0; line-height: 1.2; font-size: 46px; text-transform: uppercase; font-weight: 700; box-sizing: border-box; margin: 0; padding: 0; border: 0; outline: 0; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
+          </a>
         </div>
       </div>
       <div class="LFfrA _3MLiB">
@@ -247,14 +297,15 @@ function getProgressCoordinates($percent, $radius) {
                   $result_categorias->data_seek(0);
                   if ($result_categorias->num_rows > 0) {
                       while($row = $result_categorias->fetch_assoc()) {
-                          // Obter o número de expressões nesta categoria
                           $cat_id = $row['id_categoria'];
+                          $total_cat = 0;
+                          $completo_cat = 0;
+                          
                           $sql_count = "SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = $cat_id";
                           $result_count = $conn->query($sql_count);
                           $count_row = $result_count->fetch_assoc();
                           $total_cat = $count_row['total'];
                           
-                          // Obter progresso na categoria
                           $sql_prog = "SELECT COUNT(*) as completo FROM expressoes e 
                                       JOIN progresso p ON e.id_expressao = p.id_expressao 
                                       WHERE e.id_categoria = $cat_id AND p.username = '$username' AND p.completo = TRUE";
@@ -262,24 +313,51 @@ function getProgressCoordinates($percent, $radius) {
                           $prog_row = $result_prog->fetch_assoc();
                           $completo_cat = $prog_row['completo'];
                           
-                          // Calcular percentagem para esta categoria
                           $cat_percent = ($total_cat > 0) ? round(($completo_cat / $total_cat) * 100) : 0;
-                          
-                          // Criar a primeira letra como ícone
                           $first_letter = strtoupper(substr($row['titulo'], 0, 1));
                           
-                          echo '<a href="categoria.php?id=' . $cat_id . '" style="text-decoration: none; color: inherit;">
-                                <div class="categoria-card">
-                                  <div class="categoria-icon">' . $first_letter . '</div>
-                                  <div class="categoria-info">
-                                    <div class="categoria-titulo">' . htmlspecialchars($row['titulo']) . '</div>
-                                    <div>' . $completo_cat . ' de ' . $total_cat . ' expressões aprendidas</div>
-                                    <div class="categoria-progress">
-                                      <div class="categoria-progress-fill" style="width: ' . $cat_percent . '%;"></div>
-                                    </div>
-                                  </div>
+                          $liberada = isset($categorias_liberadas[$cat_id]) && $categorias_liberadas[$cat_id];
+                          $completa = isset($categorias_completas[$cat_id]) && $categorias_completas[$cat_id];
+                          
+                          echo '<div class="categoria-card' . (!$liberada ? ' categoria-bloqueada' : '') . '">';
+                          
+                          if ($liberada) {
+                              // Obter primeira expressão da categoria
+                              $sql_primeira = "SELECT e.id_expressao FROM expressoes e 
+                                              WHERE e.id_categoria = $cat_id 
+                                              ORDER BY e.id_expressao LIMIT 1";
+                              $result_primeira = $conn->query($sql_primeira);
+                              if ($result_primeira->num_rows > 0) {
+                                  $primeira_row = $result_primeira->fetch_assoc();
+                                  echo '<a href="exercicio.php?id=' . $primeira_row['id_expressao'] . '" style="text-decoration: none; color: inherit; display: flex; width: 100%;">';
+                              } else {
+                                  echo '<div style="display: flex; width: 100%;">';
+                              }
+                          } else {
+                              echo '<div style="display: flex; width: 100%;">';
+                          }
+                          
+                          echo '<div class="categoria-icon">' . $first_letter . '</div>
+                                <div class="categoria-info">
+                                  <div class="categoria-titulo">' . htmlspecialchars($row['titulo']) . '</div>
+                                  <div>' . $completo_cat . ' de ' . $total_cat . ' expressões aprendidas</div>';
+                          
+                          if (!$liberada) {
+                              echo '<div class="bloqueio-mensagem">Complete a categoria anterior para desbloquear</div>';
+                          }
+                          
+                          echo '<div class="categoria-progress">
+                                  <div class="categoria-progress-fill" style="width: ' . $cat_percent . '%;"></div>
                                 </div>
-                              </a>';
+                              </div>';
+                          
+                          if ($liberada && $result_primeira->num_rows > 0) {
+                              echo '</a>';
+                          } else {
+                              echo '</div>';
+                          }
+                          
+                          echo '</div>';
                       }
                   }
                   ?>
