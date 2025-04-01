@@ -16,7 +16,7 @@ $username = $_SESSION['username'];
 
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
-    die("Falha na ligação: " . $conn->connect_error);
+    die("Erro de conexão: " . $conn->connect_error);
 }
 
 $stmt = $conn->prepare("SELECT e.*, c.titulo as categoria_titulo, c.id_categoria 
@@ -51,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resposta_correta = (strtolower($resposta_usuario) === strtolower($expressao['traducao_portugues']));
     
     if ($resposta_correta) {
-        $mensagem = '<div class="mensagem-sucesso">Correto! Parabéns!</div>';
         
         $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
                                VALUES (?, ?, TRUE) 
@@ -59,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("si", $username, $id_expressao);
         $stmt->execute();
     } else {
-        $mensagem = '<div class="mensagem-erro">Incorreto. Tente novamente.</div>';
+        $mensagem = '<div class="mensagem-erro"><i class="fas fa-times"></i> Incorreto. Tente novamente.</div>';
     }
 }
 
@@ -79,32 +78,20 @@ shuffle($alternativas);
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-PT">
 <head>
   <meta charset="utf-8">
   <title>DTeaches - Exercício</title>
-  <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport">
-  <meta content="yes" name="mobile-web-app-capable">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="shortcut icon" href="../assets/images/logo.png">
-  <link href="ltr-6a8f5d2e.css" rel="stylesheet">
-  <link href="custom-styles.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
-  <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
-  <link rel="stylesheet" href="../assets/css/owl.css">
-  <link rel="stylesheet" href="../assets/css/animate.css">
-  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-
   <style>
-    h1 {
-      font-family: 'Poppins', sans-serif !important;
-      margin-top: -5px;
-      margin-bottom: 0px;
-      font-size: 46px;
-      text-transform: uppercase;
+    body {
+      background-color: #1a1a2e;
       color: #fff;
-      font-weight: 700;
-      margin-right: 20px;
-      padding-right: 20px;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 20px;
     }
     
     .exercicio-container {
@@ -118,22 +105,23 @@ shuffle($alternativas);
       padding: 30px;
     }
     
-    .exercicio-titulo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 30px;
+    .instrucao {
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 25px;
+      font-style: italic;
       text-align: center;
     }
     
     .exercicio-questao {
-      font-size: 24px;
+      font-size: 1.8rem;
       font-weight: bold;
-      color: white;
       text-align: center;
-      margin: 30px 0;
-      padding: 20px;
-      background-color: transparent;
+      margin: 40px 0;
+      padding: 25px;
+      background-color: rgba(55, 70, 79, 0.3);
+      border-radius: 12px;
+      border-left: 4px solid #7b6ada;
     }
     
     .opcoes-container {
@@ -152,25 +140,24 @@ shuffle($alternativas);
     }
     
     .opcao-escolha {
-      padding: 18px;
+      padding: 20px;
       background-color: transparent;
       border-radius: 12px;
       cursor: pointer;
       text-align: center;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
       border: 2px solid #37464f;
-      color: white;
-      font-size: 18px;
+      color: #fff;
+      font-size: 1.2rem;
     }
     
     .opcao-escolha:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.05);
     }
     
     .opcao-radio:checked + .opcao-escolha {
       border-color: #7b6ada;
       background-color: rgba(123, 106, 218, 0.2);
-      color: #fff;
       font-weight: 600;
     }
     
@@ -179,14 +166,13 @@ shuffle($alternativas);
       color: white;
       border: none;
       border-radius: 12px;
-      padding: 16px 24px;
-      font-size: 18px;
+      padding: 18px;
+      font-size: 1.2rem;
       font-weight: bold;
       cursor: pointer;
       width: 100%;
-      margin-top: 20px;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
+      margin-top: 30px;
+      transition: all 0.3s;
     }
     
     .btn-submeter:hover {
@@ -194,90 +180,114 @@ shuffle($alternativas);
     }
     
     .mensagem-sucesso {
-      background-color: rgba(123, 106, 218, 0.2);
-      border-left: 4px solid #7b6ada;
+      background-color: rgba(46, 204, 113, 0.15);
+      border-left: 4px solid #2ecc71;
       color: #fff;
-      padding: 18px;
-      margin-bottom: 25px;
+      padding: 20px;
+      margin-bottom: 30px;
       border-radius: 8px;
-      font-size: 17px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
     
     .mensagem-erro {
-      background-color: rgba(255, 75, 75, 0.15);
-      border-left: 4px solid #ff4b4b;
+      background-color: rgba(231, 76, 60, 0.15);
+      border-left: 4px solid #e74c3c;
       color: #fff;
-      padding: 18px;
-      margin-bottom: 25px;
+      padding: 20px;
+      margin-bottom: 30px;
       border-radius: 8px;
-      font-size: 17px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
     
     .exercicio-completo {
       text-align: center;
-      margin-top: 30px;
+      margin-top: 40px;
     }
     
-    .exercicio-completo p {
-      font-size: 20px;
-      margin-bottom: 25px;
-      color: #fff;
+    .resposta-correta {
+      font-size: 1.5rem;
+      color: #2ecc71;
+      margin: 30px 0;
+      font-weight: bold;
     }
     
-    .btn-proximo {
-      background-color: #7b6ada;
+    .traducao-container {
+      background-color: rgba(55, 70, 79, 0.3);
+      padding: 25px;
+      border-radius: 12px;
+      margin: 30px 0;
     }
     
-    .btn-proximo:hover {
-      background-color: #6a59c9;
+    .fas {
+      margin-right: 10px;
     }
   </style>
 </head>
 
 <body>
-  
-      <div class="exercicio-container">
-        <?php echo $mensagem; ?>
-        
-        <div class="exercicio-card"> 
-            <div style="font-size: 25px; color: white; margin-bottom: 15px; font-style: italic;">
-              Selecione a opção correta:
-            </div>
-          <div class="exercicio-questao">
-            <?php echo htmlspecialchars($expressao['versao_ingles']); ?>
+  <div class="exercicio-container">
+    <div class="exercicio-card">
+      <?php echo $mensagem; ?>
+      
+      <?php if (!$resposta_correta): ?>
+        <div class="instrucao">
+          <i class="fas fa-mouse-pointer"></i> Selecione a opção correta
+        </div>
+      <?php endif; ?>
+      
+      <div class="exercicio-questao">
+        <?php echo htmlspecialchars($expressao['versao_ingles']); ?>
+      </div>
+      
+      <?php if (!$resposta_correta): ?>
+        <form method="POST" class="exercicio-form">
+          <div class="opcoes-container">
+            <?php foreach ($alternativas as $alternativa): ?>
+            <label class="opcao-label">
+              <input type="radio" name="resposta" value="<?php echo htmlspecialchars($alternativa); ?>" class="opcao-radio" required>
+              <div class="opcao-escolha">
+                <?php echo htmlspecialchars($alternativa); ?>
+              </div>
+            </label>
+            <?php endforeach; ?>
           </div>
           
-          <?php if (!$resposta_correta): ?>
-          <form method="POST" class="exercicio-form">
-            <div class="opcoes-container">
-              <?php foreach ($alternativas as $alternativa): ?>
-              <label class="opcao-label">
-                <input type="radio" name="resposta" value="<?php echo htmlspecialchars($alternativa); ?>" class="opcao-radio" required>
-                <div class="opcao-escolha">
-                  <?php echo htmlspecialchars($alternativa); ?>
-                </div>
-              </label>
-              <?php endforeach; ?>
-            </div>
-            
-            <button type="submit" class="btn-submeter">VERIFICAR</button>
-          </form>
-          <?php else: ?>
-          <div class="exercicio-completo">
-            
-            <?php if ($proxima_expressao): ?>
-            <a href="exercicio.php?id=<?php echo $proxima_expressao['id_expressao']; ?>" class="btn-submeter btn-proximo">
-              Próxima Expressão
-            </a>
-            <?php else: ?>
-            <a href="indexuser.php" class="btn-submeter btn-proximo">
-              Categoria Completa - Voltar ao Início
-            </a>
-            <?php endif; ?>
+          <button type="submit" class="btn-submeter">
+            <i class="fas fa-check"></i> Verificar
+          </button>
+        </form>
+      <?php else: ?>
+        <div class="exercicio-completo">
+          <div class="resposta-correta">
+            <i class="fas fa-check-circle"></i> Resposta Correta!
           </div>
+          
+          <div class="traducao-container">
+            <p><strong><?php echo htmlspecialchars($expressao['versao_ingles']); ?></strong></p>
+            <p><i class="fas fa-arrow-down"></i></p>
+            <p><strong><?php echo htmlspecialchars($expressao['traducao_portugues']); ?></strong></p>
+          </div>
+          
+          <?php if ($proxima_expressao): ?>
+            <a href="exercicio.php?id=<?php echo $proxima_expressao['id_expressao']; ?>" class="btn-submeter">
+              <i class="fas fa-arrow-right"></i> Próxima Expressão
+            </a>
+          <?php else: ?>
+            <a href="indexuser.php" class="btn-submeter">
+              <i class="fas fa-home"></i> Voltar ao Início
+            </a>
           <?php endif; ?>
         </div>
-      </div>
-    
+      <?php endif; ?>
+    </div>
+  </div>
+  
+  <script src="../assets/js/fontawesome.js"></script>
 </body>
 </html>
