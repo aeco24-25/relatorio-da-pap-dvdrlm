@@ -135,7 +135,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     }
     
     .progress-circle-fill {
-      fill: #78c800;
+      fill: #7b6ada;
       transition: all 0.3s ease;
     }
     
@@ -166,7 +166,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     .categoria-icon {
       width: 50px;
       height: 50px;
-      background-color: #1cb0f6;
+      background-color: #7b6ada;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -193,12 +193,12 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       height: 10px;
       border-radius: 5px;
       overflow: hidden;
-      margin-top: 10px;
+      margin-top: 15px;
     }
     
     .categoria-progress-fill {
       height: 100%;
-      background-color: #78c800;
+      background-color: #7b6ada;
       border-radius: 5px;
       transition: width 0.3s ease;
     }
@@ -261,14 +261,14 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
           <div class="_2_lzu">
             <div class="_21w25 _1E3L7">
               <h2>Progresso Geral</h2>
-              <div class="_2PIra">
+              <div class="_2PIra" style="margin-top:20px;">
                 <div class="Rbutm">
                   <span class="_25O1e _2na4C cCL9P _1wV8Y"></span>
                   <div class="_3Ttma">
                     <svg height="150" width="150" viewBox="0 0 150 150">
                       <circle cx="75" cy="75" r="75" fill="#e2e2e2" />
                       <?php if ($percentagem > 0): ?>
-                      <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="#78c800" />
+                      <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="#7b6ada" />
                       <?php endif; ?>
                       <?php if ($percentagem < 100): ?>
                       <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#e2e2e2" />
@@ -339,11 +339,10 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
                           
                           echo '<div class="categoria-icon">' . $first_letter . '</div>
                                 <div class="categoria-info">
-                                  <div class="categoria-titulo">' . htmlspecialchars($row['titulo']) . '</div>
-                                  <div>' . $completo_cat . ' de ' . $total_cat . ' expressões aprendidas</div>';
+                                  <div class="categoria-titulo">' . htmlspecialchars($row['titulo']) . '</div>';
                           
                           if (!$liberada) {
-                              echo '<div class="bloqueio-mensagem">Complete a categoria anterior para desbloquear</div>';
+                              echo '<div class="bloqueio-mensagem">Complete a categoria anterior</div>';
                           }
                           
                           echo '<div class="categoria-progress">

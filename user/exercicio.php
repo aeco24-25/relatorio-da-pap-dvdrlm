@@ -14,6 +14,10 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id_expressao = $_GET['id'];
 $username = $_SESSION['username'];
 
+if (!isset($_SESSION['lives'])) {
+    $_SESSION['lives'] = 5;
+}
+
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
@@ -42,13 +46,33 @@ $stmt_proxima->execute();
 $result_proxima = $stmt_proxima->get_result();
 $proxima_expressao = $result_proxima->fetch_assoc();
 
+// Get total expressions in this category for progress calculation
+$stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = ?");
+$stmt_total->bind_param("i", $expressao['id_categoria']);
+$stmt_total->execute();
+$result_total = $stmt_total->get_result();
+$total_expressions = $result_total->fetch_assoc()['total'];
+
+// Get completed expressions by user in this category
+$stmt_completed = $conn->prepare("SELECT COUNT(*) as completed FROM progresso p 
+                                JOIN expressoes e ON p.id_expressao = e.id_expressao 
+                                WHERE p.username = ? AND p.completo = TRUE AND e.id_categoria = ?");
+$stmt_completed->bind_param("si", $username, $expressao['id_categoria']);
+$stmt_completed->execute();
+$result_completed = $stmt_completed->get_result();
+$completed_expressions = $result_completed->fetch_assoc()['completed'];
+
 $mensagem = '';
 $resposta_correta = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resposta_usuario = isset($_POST['resposta']) ? trim($_POST['resposta']) : '';
     
-    $resposta_correta = (strtolower($resposta_usuario) === strtolower($expressao['traducao_portugues']));
+    // Normalize both strings for comparison
+    $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
+    $resposta_usuario_normalized = strtolower(trim($resposta_usuario));
+    
+    $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
     
     if ($resposta_correta) {
         $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
@@ -56,8 +80,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                ON DUPLICATE KEY UPDATE completo = TRUE");
         $stmt->bind_param("si", $username, $id_expressao);
         $stmt->execute();
+        $completed_expressions++; // Increment for the current correct answer
     } else {
+        $_SESSION['lives']--; // Decrease lives on wrong answer
         $mensagem = '<div class="mensagem-erro"><i class="fas fa-times"></i> Incorreto. Tente novamente.</div>';
+        
+        // If lives reach 0, redirect to indexuser.php
+        if ($_SESSION['lives'] <= 0) {
+            $_SESSION['lives'] = 5; // Reset lives
+            header('Location: indexuser.php?message=no_lives');
+            exit();
+        }
     }
 }
 
@@ -95,11 +128,13 @@ shuffle($alternativas);
     
     .exercicio-container {
       max-width: 800px;
-      margin: 0 auto;
+      margin: -55px auto;
       padding: 20px;
+      position: relative;
     }
     
     .exercicio-card {
+      margin-top: 20px;
       background-color: transparent;
       padding: 30px;
     }
@@ -107,16 +142,15 @@ shuffle($alternativas);
     .instrucao {
       font-size: 1.3rem;
       color: #fff;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
       font-style: italic;
       text-align: center;
     }
     
     .exercicio-questao {
-      font-size: 1.8rem;
+      font-size: 1.4rem;
       font-weight: bold;
       text-align: center;
-      margin: 40px 0;
       padding: 25px;
       background-color: rgba(55, 70, 79, 0.3);
       border-radius: 12px;
@@ -124,10 +158,10 @@ shuffle($alternativas);
     }
     
     .opcoes-container {
+      margin-top: 35px;
       display: grid;
       grid-template-columns: 1fr;
       gap: 15px;
-      margin-bottom: 30px;
     }
     
     .opcao-label {
@@ -172,6 +206,7 @@ shuffle($alternativas);
       width: 100%;
       margin-top: 30px;
       transition: all 0.3s;
+      text-decoration: none; 
     }
     
     .btn-submeter:hover {
@@ -210,15 +245,98 @@ shuffle($alternativas);
       margin: 30px 0;
     }
     
-    .fas {
-      margin-right: 10px;
+    .btn-sair {
+      position: absolute;
+      top: 62px;
+      left: 40px;
+      background-color: transparent;
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      font-size: 1.68rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    
+    .btn-sair:hover {
+      background-color: rgba(123, 106, 218, 0.2);
+    }
+    
+    .progress-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .progress-bar {
+      margin-left: 40px;
+      flex-grow: 1;
+      height: 20px;
+      background-color: rgba(55, 70, 79, 0.3);
+      border-radius: 10px;
+      margin-right: 20px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #7b6ada;
+      border-radius: 10px;
+      transition: width 0.3s;
+    }
+    
+    .lives-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .life {
+      color: #e74c3c;
+      font-size: 1.5rem;
+      margin-left: 5px;
+    }
+    
+    .progress-text {
+      margin-top: 5px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: #aaa;
     }
   </style>
 </head>
 
 <body>
   <div class="exercicio-container">
+    <a href="indexuser.php" class="btn-sair" title="Voltar">
+      <i class="fas fa-times"></i>
+    </a>
+    
     <div class="exercicio-card">
+      <!-- Progress bar and lives -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: <?php echo ($completed_expressions / $total_expressions) * 100; ?>%"></div>
+        </div>
+        <div class="lives-container">
+          <?php 
+          $full_hearts = $_SESSION['lives'];
+          $empty_hearts = 5 - $full_hearts;
+          
+          for ($i = 0; $i < $full_hearts; $i++) {
+              echo '<i class="fas fa-heart life"></i>';
+          }
+          for ($i = 0; $i < $empty_hearts; $i++) {
+              echo '<i class="far fa-heart life"></i>';
+          }
+          ?>
+        </div>
+      </div>
+      
       <?php echo $mensagem; ?>
       
       <?php if (!$resposta_correta): ?>
