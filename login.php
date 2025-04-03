@@ -23,6 +23,7 @@ if ($sucesso == 'conta_criada') {
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="assets/css/stylelogin.css">
     <link rel="stylesheet" href="assets/css/fontawesome.css">
     <link rel="stylesheet" href="assets/css/templatemo-scholar.css">
     <link rel="stylesheet" href="assets/css/owl.css">
@@ -33,103 +34,6 @@ if ($sucesso == 'conta_criada') {
   </head>
 
 <body>
-  <style>
-    .header-area.header-sticky .header-image {
-      margin-top: -29px;
-      width: 165px;
-      margin-left: 45px;
-      margin-right: 19px;
-      object-fit: contain;
-    }
-
-    .header-area.header-sticky.background-header .header-image {
-      margin-top: -12px;
-      width: 165px;
-      margin-left: 45px;
-      margin-right: 19px;
-      object-fit: contain;
-    }
-
-    .main-banner {
-      height: 85vh;
-    }
-
-    .container {
-      text-align: center;
-      justify-content: center;
-    }
-
-    .container .eye {
-      position: absolute;
-      animation: keyframes-fill .5s;
-    }
-
-    .container .eye-slash {
-      position: absolute;
-      animation: keyframes-fill .5s;
-      display: none;
-    }
-
-    .container input:checked ~ .eye {
-      display: none;
-    }
-
-    .container input:checked ~ .eye-slash {
-      display: block;
-    }
-
-    .password-link {
-      color: #1e1e1e !important;
-      text-decoration: none !important;
-      transition: color 0.3s ease !important;
-    }
-
-    .password-link:hover {
-      color: #d6d1f3 !important; 
-    }
-
-    /* ------ Animation ------ */
-    @keyframes keyframes-fill {
-      0% {
-        transform: scale(0);
-        opacity: 0;
-      }
-
-      50% {
-        transform: scale(1.2);
-      }
-    }
-
-    /* Mensagem de sucesso */
-    .sucesso-mensagem {
-      width: 85%;
-      margin-right: auto;
-      margin-left: auto;
-      background-color: #d4edda;
-      border: 1px solid #c3e6cb;
-      color: #155724;
-      padding: 4px;
-      border-radius: 10px;
-      margin-bottom: 50px;
-      margin-top: -54px;
-      text-align: center;
-    }
-    
-    /* Mensagem de erro */
-    .erro-mensagem {
-      width: 85%;
-      margin-right: auto;
-      margin-left: auto;
-      background-color: #f8d7da;
-      border: 1px solid #f5c6cb;
-      color: #721c24;
-      padding: 4px;
-      border-radius: 10px;
-      margin-bottom: 50px;
-      margin-top: -54px;
-      text-align: center;
-    }
-  </style>
 
   <!-- ***** Preloader Start ***** -->
   <div id="js-preloader" class="js-preloader">
@@ -146,28 +50,9 @@ if ($sucesso == 'conta_criada') {
 
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky" >
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-
-                <!-- ***** Logo Start ***** -->
-                <img src="assets/images/logo.png" class="header-image" alt="DTeaches Logo" onclick="window.location.href='index.php';">
-                <!-- ***** Logo End ***** -->
-                <a href="index.php" class="logo">
-                  <h1>D<span style="color: #ffffffb0;">Teaches</span></h1>
-                </a>
-
-                <!-- ***** Menu Start ***** -->
-                <ul class="nav">
-                  <li class="scroll-to-section"><a href="./index.php#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
-                  <li class="scroll-to-section"><a href="login.php" style="font-weight: 600;">LOGIN</a></li>
-                </ul>
-                <!-- ***** Menu End ***** -->
-                </nav>
-            </div>
-        </div>
-    </div>
+    <?php
+      include ("menulogin.inc");
+    ?>
   </header>
   <!-- ***** Header Area End ***** -->
 
@@ -178,14 +63,12 @@ if ($sucesso == 'conta_criada') {
             <h1 style="margin-top: -26px;">LOGIN</h1>
           </div>
           <div class="contact-us-content">
-            <!-- Exibir mensagem de sucesso se houver -->
             <?php if(!empty($mensagem_sucesso)): ?>
               <div class="sucesso-mensagem">
                 <?php echo $mensagem_sucesso; ?>
               </div>
               <?php endif; ?>
               
-              <!-- Exibir mensagem de erro se houver -->
             <?php if(isset($_GET['erro'])): ?>
               <div class="erro-mensagem">
                 <?php 
@@ -242,7 +125,6 @@ if ($sucesso == 'conta_criada') {
   </div>
 
   <script>
-    // JavaScript para alternar a visibilidade da senha
     document.getElementById('togglePassword').addEventListener('change', function() {
       const passwordInput = document.getElementById('pass');
       if (this.checked) {
@@ -253,7 +135,6 @@ if ($sucesso == 'conta_criada') {
     });
   </script>
 
-  <!-- Scripts -->
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>

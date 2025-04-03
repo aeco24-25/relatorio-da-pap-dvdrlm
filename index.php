@@ -35,6 +35,7 @@ switch($tipo_erro) {
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="assets/css/styleindex.css">
     <link rel="stylesheet" href="assets/css/fontawesome.css">
     <link rel="stylesheet" href="assets/css/templatemo-scholar.css">
     <link rel="stylesheet" href="assets/css/owl.css">
@@ -58,89 +59,11 @@ switch($tipo_erro) {
   </div>
   <!-- ***** Preloader End ***** -->
 
-<style>
-  .header-area.header-sticky .header-image {
-    margin-top: -29px;
-    width: 165px;
-    margin-left: 45px;
-    margin-right: 19px;
-    object-fit: contain;
-  }
-
-  .header-area.header-sticky.background-header .header-image {
-    margin-top: -12px;
-    width: 165px;
-    margin-left: 45px;
-    margin-right: 19px;
-    object-fit: contain;
-  }
-
-  .container .eye {
-    position: absolute;
-    animation: keyframes-fill .5s;
-  }
-
-  .container .eye-slash {
-    position: absolute;
-    animation: keyframes-fill .5s;
-    display: none;
-  }
-
-  .container input:checked ~ .eye {
-    display: none;
-  }
-
-  .container input:checked ~ .eye-slash {
-    display: block;
-  }
-
-  .erro-mensagem {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-
-  /* ------ Animation ------ */
-  @keyframes keyframes-fill {
-    0% {
-      transform: scale(0);
-      opacity: 0;
-    }
-
-    50% {
-      transform: scale(1.2);
-    }
-  }
-</style>
-
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky" >
-    <div class="container">
-      <div class="row">
-          <div class="col-12">
-              <nav class="main-nav">
-
-              <!-- ***** Logo Start ***** -->
-              <img src="assets/images/logo.png" class="header-image" alt="DTeaches Logo" onclick="window.location.href='index.php';">
-              <!-- ***** Logo End ***** -->
-              <a href="index.php" class="logo">
-                  <h1>D<span style="color:rgba(255, 255, 255, 0.75);">Teaches</span></h1>
-              </a>
-
-              <!-- ***** Menu Start ***** -->
-              <ul class="nav">
-                  <li class="scroll-to-section"><a href="#contact" style="font-weight: 600;">COMEÇAR JÁ</a></li>
-                  <li class="scroll-to-section"><a href="login.php" style="font-weight: 600;">LOGIN</a></li>
-              </ul>
-              <!-- ***** Menu End ***** -->
-              </nav>
-          </div>
-      </div>
-    </div>
+    <?php
+      include ("menuindex.inc");
+    ?>
   </header>
   <!-- ***** Header Area End ***** -->
   
@@ -292,7 +215,6 @@ switch($tipo_erro) {
   </footer>
 
   <script>
-    // JavaScript para alternar a visibilidade da senha
     document.getElementById('togglePassword').addEventListener('change', function() {
       const passwordInput = document.getElementById('pass');
       if (this.checked) {
@@ -307,8 +229,8 @@ switch($tipo_erro) {
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-  <script src="assets/js/isotope.min.js"></script>
   <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/isotope.min.js"></script>
   <script src="assets/js/counter.js"></script>
   <script src="assets/js/custom.js"></script>
 

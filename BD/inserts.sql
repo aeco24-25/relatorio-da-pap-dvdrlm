@@ -1,4 +1,3 @@
-
 INSERT INTO categoria (titulo, conteudo) VALUES 
 ('Saudações e Apresentações', 'Aprenda expressões essenciais para cumprimentar pessoas, apresentar-se e iniciar conversas básicas em inglês.'),
 ('No Hotel', 'Expressões úteis para fazer check-in, solicitar serviços e resolver problemas no hotel durante a sua estadia.'),
