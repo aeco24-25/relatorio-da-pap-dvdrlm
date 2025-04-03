@@ -92,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport">
   <meta content="yes" name="mobile-web-app-capable">
   <link rel="shortcut icon" href="../assets/images/logo.png">
-  <link href="ltr-6a8f5d2e.css" rel="stylesheet">
-  <link href="custom-styles.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/ltr-6a8f5d2e.css">
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
   <link rel="stylesheet" href="../assets/css/owl.css">

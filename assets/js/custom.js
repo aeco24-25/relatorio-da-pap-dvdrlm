@@ -63,7 +63,7 @@
 		navText: ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>'],
 		margin: 30,
 		autoplay: true,
-		autoplayTimeout: 5000,
+		autoplayTimeout: 10000,
 		autoplayHoverPause: true,
 		responsive: {
 			992: { items: 1 },

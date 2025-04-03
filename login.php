@@ -114,15 +114,16 @@ if ($sucesso == 'conta_criada') {
           </div>
         </div>
       </div>
-        <footer>
-          <div class="container">
-            <div class="col-lg-12">
-              <p>© 2024-2025 DTeaches. Todos os direitos reservados.</a></p>
-            </div>
-          </div>
-        </footer>
     </div>
   </div>
+
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>© 2024-2025 DTeaches. Todos os direitos reservados.</a></p>
+      </div>
+    </div>
+  </footer>
 
   <script>
     document.getElementById('togglePassword').addEventListener('change', function() {
@@ -135,11 +136,10 @@ if ($sucesso == 'conta_criada') {
     });
   </script>
 
-  <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-  <script src="assets/js/isotope.min.js"></script>
   <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/isotope.min.js"></script>
   <script src="assets/js/counter.js"></script>
   <script src="assets/js/custom.js"></script>
 

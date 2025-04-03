@@ -116,7 +116,9 @@ shuffle($alternativas);
   <title>DTeaches - Exercício</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="shortcut icon" href="../assets/images/logo.png">
+  
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  
   <style>
     body {
       background-color: #1a1a2e;

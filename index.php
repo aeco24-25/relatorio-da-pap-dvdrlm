@@ -152,21 +152,31 @@ switch($tipo_erro) {
               <div class="row">
                 <div class="col-lg-12">
                   <fieldset>
-                    <input style="width: 100%;" type="text" name="username" id="username" placeholder="Nome" autocomplete="on" required>
+                    <input 
+                      style="width: 100%;" 
+                      type="text" 
+                      name="username" 
+                      id="username" 
+                      placeholder="Nome" 
+                      autocomplete="on" 
+                      required
+                      pattern="[A-Za-z0-9_]+" 
+                      title="Apenas letras, números e underscores são permitidos."
+                    >                  
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
-                      <input 
-                          style="width: 100%;" 
-                          type="email" 
-                          name="email" 
-                          id="email" 
-                          placeholder="E-mail" 
-                          required 
-                          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
-                          title="Insira um endereço de e-mail válido (exemplo: david@gmail.com)"
-                      >
+                    <input 
+                        style="width: 100%;" 
+                        type="email" 
+                        name="email" 
+                        id="email" 
+                        placeholder="E-mail" 
+                        required 
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                        title="Insira um endereço de e-mail válido (exemplo: david@gmail.com)."
+                    >
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
@@ -225,8 +235,6 @@ switch($tipo_erro) {
     });
   </script>
 
-  <!-- Scripts -->
-  <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
   <script src="assets/js/owl-carousel.js"></script>
