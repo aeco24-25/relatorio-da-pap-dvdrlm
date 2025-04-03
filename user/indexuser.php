@@ -291,7 +291,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
           </div>
           <div class="_3MT-S">
               <div class="_2hEQd _1E3L7">
-                <h2 style="margin-bottom: 20px;">Categorias</h2>
+                <h2 style="margin-top: -10px; margin-bottom: 20px; text-align: center;">Categorias</h2>
                 <div style="max-width: 800px; margin: 0 auto;">
                   <?php
                   $result_categorias->data_seek(0);
