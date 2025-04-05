@@ -75,19 +75,19 @@ switch($tipo_erro) {
             <div class="item item-1" style="margin-right: -25px; background-position: right; background-size: contain;">
               <div class="header-text" style="margin-left: -155px; margin-top: -30px;">
                 <h2 style="width:55%;">Enriqueça a sua Viagem</h2>
-                  <p style="width:47%; margin-top:-10px;">Aprender algumas expressões básicas pode fazer toda a diferença na sua experiência de viagem. Desde pedir comida a pedir indicações, conhecer o básico do idioma local torna a sua experiência mais rica e agradável.</p>
+                  <p style="width:47%; margin-top:-10px;">Aprender algumas expressões básicas pode fazer toda a diferença na sua experiência de viagem. Desde pedir comida a solicitar indicações, conhecer o básico do idioma local torna a sua experiência mais rica e agradável.</p>
               </div>
             </div>
             <div class="item item-2" style="margin-top: 10px; margin-right: 110px; background-position: right; background-size: contain;">
-              <div class="header-text" style="margin-left: -140px; margin-top: -20px;">
+              <div class="header-text" style="margin-left: -135px; margin-top: -20px;">
                 <h2 style="width:53%;">Grátis e Divertido!</h2>
-                  <p style="width:53%; margin-top:-10px;">Estudar é mais divertido com lições rápidas e interativas, perfeitas para encaixar na sua rotina diária, seja na pausa para café ou antes de dormir — e melhor ainda, não precisa de pagar nada para aprender.</p>
+                  <p style="width:47%; margin-top:-10px;">Estudar é mais divertido com lições rápidas e interativas, perfeitas para encaixar na sua rotina diária — e melhor ainda, não precisa de pagar nada para aprender.</p>
               </div>
             </div>
-            <div class="item item-3" style="margin-right: -25px; background-position: right; background-size: contain;">
-              <div class="header-text" style="margin-left: -140px; margin-top: -20px;">
+            <div class="item item-3" style="margin-right: 80px; background-position: right; background-size: contain;">
+              <div class="header-text" style="margin-left: -140px; margin-top: -25px;">
                 <h2 style="width:53%;">Aprenda ao seu Ritmo</h2>
-                  <p style="width:44%; margin-top:-10px;">Sem pressão ou prazos. Aprenda quando quiser, onde quiser. Bastam 5 minutos por dia para começar a ver progressos.</p>
+                  <p style="width:45%; margin-top:-10px;">Sem pressão ou prazos. Aprenda quando quiser, onde quiser - seja na pausa para café ou antes de dormir Bastam 5 minutos por dia para começar a ver progressos.</p>
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 CREATE DATABASE dteaches;
+USE dteaches;
 
 CREATE TABLE users (
     username VARCHAR(20) UNIQUE NOT NULL,
