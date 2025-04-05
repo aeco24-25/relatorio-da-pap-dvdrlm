@@ -1,4 +1,4 @@
-.header-area.header-sticky .header-image {
+  .header-area.header-sticky .header-image {
     margin-top: -29px;
     width: 165px;
     margin-left: 45px;
@@ -34,6 +34,7 @@
   }
   
   .erro-mensagem {
+    margin-top: -15px;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
     color: #721c24;
@@ -43,7 +44,6 @@
     text-align: center;
   }
   
-  /* ------ Animation ------ */
   @keyframes keyframes-fill {
     0% {
       transform: scale(0);
