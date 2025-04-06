@@ -9,7 +9,6 @@
 
     });
 
-
 	$(window).scroll(function() {
 	  var scroll = $(window).scrollTop();
 	  var box = $('.header-text').height();
@@ -88,7 +87,6 @@
       }
 	});
 
-
 	// Menu Dropdown Toggle
 	if($('.menu-trigger').length){
 		$(".menu-trigger").on('click', function() {	
@@ -96,7 +94,6 @@
 			$('.header-area .nav').slideToggle(200);
 		});
 	}
-
 
 	// Menu elevator animation
 	$('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function() {

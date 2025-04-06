@@ -144,7 +144,7 @@ switch($tipo_erro) {
           <div class="section-heading">
             <h6>COMEÇAR JÁ</h6>
             <h2>Criar Conta</h2>
-            <p>Ao entrar no DTeaches, concorda com os Termos e Política de Privacidade.</p>
+            <p>Ao entrar no DTeaches, concorda com os <a href="tep.php" style="color: #1c1c1c; text-decoration: underline !important;">Termos e Política de Privacidade</a>.</p>
           </div>
         </div>
         <div class="col-lg-6">
@@ -222,10 +222,14 @@ switch($tipo_erro) {
     </div>
   </div>
 
-  <footer>
+  <footer style="padding: 55px 0;">
     <div class="container">
       <div class="col-lg-12">
-        <p>© 2024-2025 DTeaches. Todos os direitos reservados.</a></p>
+        <div style="text-align: center;">
+            <p>© 2024-2025 DTeaches. Todos os direitos reservados.</p>
+            <a href="sobre.php" style="color: #d6d1f3; margin: 0 15px;">Sobre</a>
+            <a href="tep.php" style="color: #d6d1f3; margin: 0 15px;">Termos e Política de Privacidade</a>
+        </div>
       </div>
     </div>
   </footer>

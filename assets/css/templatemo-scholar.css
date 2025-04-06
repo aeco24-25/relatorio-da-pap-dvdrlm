@@ -1666,7 +1666,7 @@ Footer Style
 */
 
 footer {
-  margin-top: 120px;
+  margin-top: 95px;
   position: relative;
   background-color: #7a6ad8;
   vertical-align: middle;
@@ -1676,7 +1676,6 @@ footer {
 
 footer p {
   text-align: center;
-  line-height: 150px;
   color: #fff;
   font-weight: 400;
 }
