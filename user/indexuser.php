@@ -92,6 +92,80 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
   
   <style>
+    :root {
+      --primary-color: #7b6ada;
+      --secondary-color: #5a4fcf;
+      --success-color: #4CAF50;
+      --light-gray: #e2e2e2;
+      --dark-gray: #333;
+      --error-color: #c62828;
+    }
+    
+    body {
+      background: white;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .logo {
+      margin-top: 16px;
+      margin-left: 50px;
+      display: inline-block;
+    }
+
+    h1 {
+      margin-top: -5px;
+      margin-bottom: 0px;
+      font-size: 46px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      margin-right: 20px;
+      padding-right: 20px;
+    }
+
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      max-width: 800px;
+      margin: 20px auto;
+    }
+
+    .progress-circle {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      text-align: center;
+    }
+
+    .stat-item {
+      flex: 1;
+      padding: 0.5rem;
+    }
+
+    .stat-number {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: var(--dark-gray);
+    }
+
     .perfil-container {
       max-width: 800px;
       margin: 0 auto;
@@ -113,7 +187,6 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     }
 
     h1 {
-      font-family: 'Poppins', sans-serif !important;
       margin-top: -5px;
       margin-bottom: 0px;
       font-size: 46px;
@@ -237,7 +310,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
               <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span>
-              <span style="margin-left:-5px; font-family: 'Poppins', sans-serif !important;"><?php echo htmlspecialchars($username); ?></span>
+              <span style="margin-left:-5px;"><?php echo htmlspecialchars($username); ?></span>
               <span class="_2Vgy6 _1k0u2 cCL9P"></span>
               <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
                 <li class="_31ObI _1qBnH">
@@ -259,35 +332,35 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       </div>
       <div class="LFfrA _3MLiB">
           <div class="_2_lzu">
-            <div class="_21w25 _1E3L7">
-              <h2>Progresso Geral</h2>
-              <div class="_2PIra" style="margin-top:20px;">
-                <div class="Rbutm">
-                  <span class="_25O1e _2na4C cCL9P _1wV8Y"></span>
-                  <div class="_3Ttma">
-                    <svg height="150" width="150" viewBox="0 0 150 150">
-                      <circle cx="75" cy="75" r="75" fill="#e2e2e2" />
-                      <?php if ($percentagem > 0): ?>
-                      <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="#7b6ada" />
-                      <?php endif; ?>
-                      <?php if ($percentagem < 100): ?>
-                      <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#e2e2e2" />
-                      <?php endif; ?>
-                      <circle cx="75" cy="75" r="60" fill="#ffffff" />
-                      <text x="75" y="80" font-size="24" text-anchor="middle" fill="#333"><?php echo $percentagem; ?>%</text>
-                    </svg>
-                  </div>
+          <div class="_21w25 _1E3L7">
+            <h2>Progresso Geral</h2>
+            <div class="progress-container">
+              <div class="progress-circle">
+                <svg height="150" width="150" viewBox="0 0 150 150" aria-labelledby="progress-percent">
+                  <circle cx="75" cy="75" r="75" fill="#e2e2e2" />
+                  <?php if ($percentagem > 0): ?>
+                  <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="var(--primary-color)" />
+                  <?php endif; ?>
+                  <?php if ($percentagem < 100): ?>
+                  <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#e2e2e2" />
+                  <?php endif; ?>
+                  <circle cx="75" cy="75" r="60" fill="#ffffff" />
+                  <text x="75" y="80" font-size="24" text-anchor="middle" fill="#333"><?php echo $percentagem; ?>%</text>
+                </svg>
+              </div>
+              
+              <div class="progress-stats">
+                <div class="stat-item">
+                  <div class="stat-number"><?php echo $total_completo; ?></div>
+                  <div class="stat-label">expressões aprendidas</div>
                 </div>
-                <div class="_1h5j2">
-                  <div class="g-M5R">
-                    <?php echo $total_completo; ?>
-                  </div><span>expressões aprendidas</span>
-                  <div class="g-M5R">
-                    <?php echo $total_expressoes - $total_completo; ?>
-                  </div><span>expressões por aprender</span>
+                <div class="stat-item">
+                  <div class="stat-number"><?php echo $total_expressoes - $total_completo; ?></div>
+                  <div class="stat-label">expressões por aprender</div>
                 </div>
               </div>
             </div>
+          </div>
           </div>
           <div class="_3MT-S">
               <div class="_2hEQd _1E3L7">

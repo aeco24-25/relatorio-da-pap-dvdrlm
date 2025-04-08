@@ -118,24 +118,27 @@ shuffle($alternativas);
   <link rel="shortcut icon" href="../assets/images/logo.png">
   
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
   
   <style>
     body {
       background-color: #1a1a2e;
-      color: #fff;
+      color: #ffffff;
       font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 20px;
     }
     
     .exercicio-container {
-      max-width: 800px;
+      margin-top:-70px !important;
+      max-width: 850px;
       margin: -55px auto;
       padding: 20px;
       position: relative;
     }
     
     .exercicio-card {
+      padding-bottom: 0px !important;
       margin-top: 20px;
       background-color: transparent;
       padding: 30px;
@@ -144,19 +147,20 @@ shuffle($alternativas);
     .instrucao {
       font-size: 1.3rem;
       color: #fff;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
       font-style: italic;
+      font-weight: bold;
       text-align: center;
     }
     
     .exercicio-questao {
-      font-size: 1.4rem;
-      font-weight: bold;
+      font-size: 1.3rem;
       text-align: center;
-      padding: 25px;
+      padding: 17px;
       background-color: rgba(55, 70, 79, 0.3);
       border-radius: 12px;
-      border-left: 4px solid #7b6ada;
+      border-left: 6px solid #7b6ada;
+      border-right: 6px solid #7b6ada;
     }
     
     .opcoes-container {
@@ -175,7 +179,7 @@ shuffle($alternativas);
     }
     
     .opcao-escolha {
-      padding: 20px;
+      padding: 15px;
       background-color: transparent;
       border-radius: 12px;
       cursor: pointer;
@@ -272,7 +276,7 @@ shuffle($alternativas);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 23px;
     }
     
     .progress-bar {
@@ -343,7 +347,7 @@ shuffle($alternativas);
       
       <?php if (!$resposta_correta): ?>
         <div class="instrucao">
-         Selecione a opção correta
+         Selecione a tradução correta
         </div>
         
         <div class="exercicio-questao">

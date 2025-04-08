@@ -1,4 +1,10 @@
 <?php
+session_start();
+if(isset($_SESSION['username'])) {
+    header("Location: user/indexuser.php");
+    exit;
+}
+
 // Verificar se há um parâmetro de sucesso
 $sucesso = isset($_GET['sucesso']) ? $_GET['sucesso'] : '';
 $mensagem_sucesso = '';

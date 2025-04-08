@@ -165,12 +165,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     input[type="text"]:focus,
     input[type="email"]:focus,
     input[type="password"]:focus {
-      border-color: #1cb0f6;
+      border-color: #7b6ada;
       outline: none;
     }
     
     .btn-salvar {
-      background-color: #1cb0f6;
+      background-color: #7b6ada;
       color: white;
       border: none;
       border-radius: 8px;
@@ -184,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     .btn-salvar:hover {
-      background-color: #0c8ed2;
+      background-color: #7b6ada;
     }
     
     .mensagem-sucesso {
@@ -235,23 +235,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="NbGcm">
           <div class="_3vDrO">
             <div class="_3I51r _2OF7V">
-            <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
-              <div class="_2LqjD">
-                <ul class="_20LC5 _2HujR _1ZY-H">
-                  <li class="qsrrc"></li>
-                  <?php
-                  if ($result_categorias->num_rows > 0) {
-                      while($row = $result_categorias->fetch_assoc()) {
-                          echo '<li class="_2uBp_ _1qBnH"><a href="categoria.php?id=' . $row['id_categoria'] . '">' . htmlspecialchars($row['titulo']) . '</a></li>';
-                      }
-                  }
-                  ?>
-                </ul>
-              </div>
+              <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
-            <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span><span style="margin-left:-5px; font-family: 'Poppins', sans-serif !important;"><?php echo htmlspecialchars($username); ?></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>              <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
+              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span>
+              <span style="margin-left:-5px;"><?php echo htmlspecialchars($username); ?></span>
+              <span class="_2Vgy6 _1k0u2 cCL9P"></span>
+              <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
                 <li class="_31ObI _1qBnH">
                   <a href="perfil.php" class="_3sWvR">Perfil</a>
                 </li>

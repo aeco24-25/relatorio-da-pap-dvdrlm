@@ -133,7 +133,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
       height: 100px;
       border-radius: 50%;
       margin-right: 20px;
-      background-color: #1cb0f6;
+      background-color: #7b6ada;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -182,7 +182,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
     .estatistica-valor {
       font-size: 32px;
       font-weight: bold;
-      color: #1cb0f6;
+      color: #7b6ada;
       margin-bottom: 10px;
     }
     
@@ -230,14 +230,14 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
     
     .progresso-preenchido {
       height: 100%;
-      background-color: #78c800;
+      background-color: #7b6ada;
       border-radius: 10px;
       transition: width 0.5s ease;
     }
     
     .btn-editar {
       display: inline-block;
-      background-color: #1cb0f6;
+      background-color: #7b6ada;
       color: white;
       font-weight: bold;
       padding: 10px 20px;
@@ -260,11 +260,14 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
         <div class="NbGcm">
           <div class="_3vDrO">
             <div class="_3I51r _2OF7V">
-              <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo"></span><span class="_386Yc">Inglês para Turistas</span><span class="_1icRZ _1k9o2 cCL9P"></span>
+              <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
-            <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span><span style="margin-left:-5px; font-family: 'Poppins', sans-serif !important;"><?php echo htmlspecialchars($username); ?></span><span class="_2Vgy6 _1k0u2 cCL9P"></span>              <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
+              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span>
+              <span style="margin-left:-5px;"><?php echo htmlspecialchars($username); ?></span>
+              <span class="_2Vgy6 _1k0u2 cCL9P"></span>
+              <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
                 <li class="_31ObI _1qBnH">
                   <a href="perfil.php" class="_3sWvR">Perfil</a>
                 </li>

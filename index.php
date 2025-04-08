@@ -84,7 +84,7 @@ switch($tipo_erro) {
                   <p style="width:47%; margin-top:-10px;">Estudar é mais divertido com lições rápidas e interativas, perfeitas para encaixar na sua rotina diária — e melhor ainda, não precisa de pagar nada para aprender.</p>
               </div>
             </div>
-            <div class="item item-3" style="margin-right: 80px; background-position: right; background-size: contain;">
+            <div class="item item-3" style="margin-right: 80px; background-position: right -25px; background-size: contain;">
               <div class="header-text" style="margin-left: -140px; margin-top: -25px;">
                 <h2 style="width:53%;">Aprenda ao seu Ritmo</h2>
                   <p style="width:45%; margin-top:-10px;">Sem pressão ou prazos. Aprenda quando quiser, onde quiser - seja na pausa para café ou antes de dormir Bastam 5 minutos por dia para começar a ver progressos.</p>
