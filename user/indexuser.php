@@ -217,7 +217,6 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     
     .categoria-card:hover {
       margin-bottom: 30px;
-
       transform: translateY(-5px);
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
@@ -316,7 +315,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       background-color: #fcfcff;
       border-radius: 12px;
       padding: 20px;
-      margin: 20px auto;
+      margin: 40px 40px;
       max-width: 800px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       text-align: center;
@@ -383,38 +382,38 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       </div>
       <div class="LFfrA _3MLiB">
           <div class="_2_lzu">
-          <div class="_21w25 _1E3L7">
-            <h2 style="text-align: center;">Progresso Geral</h2>
-            <div class="progress-container">
-              <div class="progress-circle">
-                <svg height="150" width="150" viewBox="0 0 150 150" aria-labelledby="progress-percent">
-                  <circle cx="75" cy="75" r="75" fill="#e2e2e2" />
-                  <?php if ($percentagem > 0): ?>
-                  <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="var(--primary-color)" />
-                  <?php endif; ?>
-                  <?php if ($percentagem < 100): ?>
-                  <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#7b6ada" />
-                  <?php endif; ?>
-                  <circle cx="75" cy="75" r="60" fill="#fcfcff" />
-                  <text x="75" y="80" font-size="24" text-anchor="middle" fill="#333"><?php echo $percentagem; ?>%</text>
-                </svg>
-              </div>
-              
-              <div class="progress-stats">
-                <div class="stat-item">
-                  <div class="stat-number"><?php echo $total_completo; ?></div>
-                  <div class="stat-label">expressões aprendidas</div>
+            <div class="_21w25 _1E3L7">
+              <h2 style="text-align: center;">Progresso Geral</h2>
+              <div class="progress-container">
+                <div class="progress-circle">
+                  <svg height="150" width="150" viewBox="0 0 150 150" aria-labelledby="progress-percent">
+                    <circle cx="75" cy="75" r="75" fill="#e2e2e2" />
+                    <?php if ($percentagem > 0): ?>
+                    <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="var(--primary-color)" />
+                    <?php endif; ?>
+                    <?php if ($percentagem < 100): ?>
+                    <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#7b6ada" />
+                    <?php endif; ?>
+                    <circle cx="75" cy="75" r="60" fill="#fcfcff" />
+                    <text x="75" y="80" font-size="24" text-anchor="middle" fill="#333"><?php echo $percentagem; ?>%</text>
+                  </svg>
                 </div>
-                <div class="stat-item">
-                  <div class="stat-number"><?php echo $total_expressoes - $total_completo; ?></div>
-                  <div class="stat-label">expressões por aprender</div>
+                
+                <div class="progress-stats">
+                  <div class="stat-item">
+                    <div class="stat-number"><?php echo $total_completo; ?></div>
+                    <div class="stat-label">expressões aprendidas</div>
+                  </div>
+                  <div class="stat-item">
+                    <div class="stat-number"><?php echo $total_expressoes - $total_completo; ?></div>
+                    <div class="stat-label">expressões por aprender</div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Meta diária estilo Duolingo -->
             <div class="daily-goal">
-              <h3><i class="fas fa-bullseye"></i> Meta Diária</h3>
+              <h3>Meta Diária</h3>
               <div class="goal-progress">
                 <div class="goal-progress-fill" style="width: <?php echo min(100, round(($total_completo / 10) * 100)); ?>%"></div>
               </div>
@@ -423,7 +422,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
               </div>
             </div>
           </div>
-          </div>
+          
           <div class="_3MT-S">
               <div class="_2hEQd _1E3L7">
                 <h2 style="margin-top: -10px; margin-bottom: 20px; text-align: center;">Categorias</h2>

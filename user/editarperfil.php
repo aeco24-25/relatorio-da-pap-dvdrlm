@@ -120,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     .perfil-container {
+      padding-bottom: 30px;
       max-width: 800px;
       margin: 0 auto;
       margin-top: 110px;
