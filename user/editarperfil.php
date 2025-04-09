@@ -129,12 +129,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 30px;
-      color: #333;
+      color: #dedaf6;
       text-align: center;
     }
     
     .formulario {
-      background-color: #fff;
+      background-color: #f5f4ff;
       border-radius: 12px;
       padding: 30px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     .btn-salvar {
       background-color: #7b6ada;
-      color: white;
+      color: #f5f4ff;
       border: none;
       border-radius: 8px;
       padding: 12px 24px;
@@ -228,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </style>
 </head>
 
-<body style="background:white;">
+<body style="background:#7b6ada;">
   <div id="root">
     <div data-reactroot="">
       <div class="_6t5Uh" style="height: 78px;">
@@ -277,26 +277,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+            <input type="email" id="email" name="email" style="background-color: #f5f4ff;" value="<?php echo htmlspecialchars($user['email']); ?>" required>
           </div>
           
           <div class="secao-titulo">Alterar Password</div>
           
           <div class="form-group">
             <label for="password_atual">Password Atual</label>
-            <input type="password" id="password_atual" name="password_atual">
+            <input style="background-color: #f5f4ff;" type="password" id="password_atual" name="password_atual">
             <div class="nota-info">Necessário para confirmar qualquer alteração.</div>
           </div>
           
           <div class="form-group">
             <label for="nova_password">Nova Password</label>
-            <input type="password" id="nova_password" name="nova_password">
+            <input type="password" id="nova_password" name="nova_password" style="background-color: #f5f4ff;">
             <div class="nota-info">Deixe em branco para manter a password atual.</div>
           </div>
           
           <div class="form-group">
             <label for="confirmar_password">Confirmar Nova Password</label>
-            <input type="password" id="confirmar_password" name="confirmar_password">
+            <input type="password" id="confirmar_password" name="confirmar_password" style="background-color: #f5f4ff;">
           </div>
           <button type="submit" class="btn-salvar">Guardar Alterações</button>
         </form>

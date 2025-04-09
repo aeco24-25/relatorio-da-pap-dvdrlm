@@ -102,7 +102,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     }
     
     body {
-      background: white;
+      background: #fcfcff;
       font-family: 'Poppins', sans-serif;
     }
     
@@ -128,19 +128,12 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       flex-direction: column;
       align-items: center;
       padding: 2rem;
-      background: white;
+      background: #fcfcff;
       border-radius: 12px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       margin-bottom: 2rem;
       max-width: 800px;
       margin: 20px auto;
-    }
-
-    .progress-circle {
-      position: relative;
-      width: 150px;
-      height: 150px;
-      margin-bottom: 1.5rem;
     }
 
     .progress-stats {
@@ -186,25 +179,15 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       display: inline-block;
     }
 
-    h1 {
-      margin-top: -5px;
-      margin-bottom: 0px;
-      font-size: 46px;
-      text-transform: uppercase;
-      color: #fff;
-      font-weight: 700;
-      margin-right: 20px;
-      padding-right: 20px;
-    }
-
     .progress-circle {
       position: relative;
       width: 150px;
       height: 150px;
+      margin-bottom: 1.5rem;
     }
     
     .progress-circle-bg {
-      fill: #e2e2e2;
+      fill: #fcfcff;
     }
     
     .progress-circle-fill {
@@ -221,7 +204,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     }
     
     .categoria-card {
-      background-color: white;
+      background-color: #fcfcff;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       padding: 20px;
@@ -229,9 +212,12 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
+      position: relative;
     }
     
     .categoria-card:hover {
+      margin-bottom: 30px;
+
       transform: translateY(-5px);
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
@@ -245,9 +231,15 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       align-items: center;
       justify-content: center;
       margin-right: 15px;
-      color: white;
+      color: #fcfcff;
       font-weight: bold;
       font-size: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .categoria-card:hover .categoria-icon {
+      transform: scale(1.1);
+      background-color: var(--secondary-color);
     }
     
     .categoria-info {
@@ -259,6 +251,11 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       font-weight: bold;
       margin-bottom: 5px;
       color: #333;
+      transition: all 0.3s ease;
+    }
+    
+    .categoria-card:hover .categoria-titulo {
+      color: var(--primary-color);
     }
     
     .categoria-progress {
@@ -295,10 +292,64 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       margin-top: 5px;
       font-style: italic;
     }
+
+    .categoria-bloqueada::after {
+      content: "Complete a categoria anterior para desbloquear";
+      position: absolute;
+      bottom: -30px;
+      left: 0;
+      background: var(--error-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .categoria-bloqueada:hover::after {
+      opacity: 1;
+    }
+
+    .daily-goal {
+      background-color: #fcfcff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 800px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .daily-goal h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    .goal-progress {
+      height: 10px;
+      background-color: #e2e2e2;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .goal-progress-fill {
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 5px;
+      transition: width 0.5s ease;
+    }
+
+    .goal-text {
+      font-size: 14px;
+      color: var(--dark-gray);
+    }
   </style>
 </head>
 
-<body style="background:white;">
+<body style="background:#7b6ada;">
   <div id="root">
     <div data-reactroot="">
       <div class="_6t5Uh" style="height: 78px;">
@@ -333,7 +384,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       <div class="LFfrA _3MLiB">
           <div class="_2_lzu">
           <div class="_21w25 _1E3L7">
-            <h2>Progresso Geral</h2>
+            <h2 style="text-align: center;">Progresso Geral</h2>
             <div class="progress-container">
               <div class="progress-circle">
                 <svg height="150" width="150" viewBox="0 0 150 150" aria-labelledby="progress-percent">
@@ -342,9 +393,9 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
                   <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="var(--primary-color)" />
                   <?php endif; ?>
                   <?php if ($percentagem < 100): ?>
-                  <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#e2e2e2" />
+                  <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#7b6ada" />
                   <?php endif; ?>
-                  <circle cx="75" cy="75" r="60" fill="#ffffff" />
+                  <circle cx="75" cy="75" r="60" fill="#fcfcff" />
                   <text x="75" y="80" font-size="24" text-anchor="middle" fill="#333"><?php echo $percentagem; ?>%</text>
                 </svg>
               </div>
@@ -358,6 +409,17 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
                   <div class="stat-number"><?php echo $total_expressoes - $total_completo; ?></div>
                   <div class="stat-label">expressões por aprender</div>
                 </div>
+              </div>
+            </div>
+
+            <!-- Meta diária estilo Duolingo -->
+            <div class="daily-goal">
+              <h3><i class="fas fa-bullseye"></i> Meta Diária</h3>
+              <div class="goal-progress">
+                <div class="goal-progress-fill" style="width: <?php echo min(100, round(($total_completo / 10) * 100)); ?>%"></div>
+              </div>
+              <div class="goal-text">
+                <?php echo $total_completo; ?> de 10 expressões hoje
               </div>
             </div>
           </div>
@@ -415,7 +477,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
                                   <div class="categoria-titulo">' . htmlspecialchars($row['titulo']) . '</div>';
                           
                           if (!$liberada) {
-                              echo '<div class="bloqueio-mensagem">Complete a categoria anterior</div>';
+                              echo '<div class="bloqueio-mensagem">Bloqueado</div>';
                           }
                           
                           echo '<div class="categoria-progress">

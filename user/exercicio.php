@@ -18,11 +18,17 @@ if (!isset($_SESSION['lives'])) {
     $_SESSION['lives'] = 5;
 }
 
+// Inicializar array de erros se não existir
+if (!isset($_SESSION['erros_atual'])) {
+    $_SESSION['erros_atual'] = array();
+}
+
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
+// Obter expressão principal
 $stmt = $conn->prepare("SELECT e.*, c.titulo as categoria_titulo, c.id_categoria 
                        FROM expressoes e 
                        JOIN categoria c ON e.id_categoria = c.id_categoria 
@@ -38,6 +44,15 @@ if ($result->num_rows === 0) {
 
 $expressao = $result->fetch_assoc();
 
+// Verificar se é a primeira vez que o usuário vê esta expressão
+$stmt_first_view = $conn->prepare("SELECT completo FROM progresso 
+                                 WHERE username = ? AND id_expressao = ?");
+$stmt_first_view->bind_param("si", $username, $id_expressao);
+$stmt_first_view->execute();
+$result_first_view = $stmt_first_view->get_result();
+$first_view = ($result_first_view->num_rows === 0);
+
+// Obter próxima expressão na mesma categoria
 $stmt_proxima = $conn->prepare("SELECT id_expressao FROM expressoes 
                               WHERE id_categoria = ? AND id_expressao > ? 
                               ORDER BY id_expressao ASC LIMIT 1");
@@ -46,14 +61,14 @@ $stmt_proxima->execute();
 $result_proxima = $stmt_proxima->get_result();
 $proxima_expressao = $result_proxima->fetch_assoc();
 
-// Get total expressions in this category for progress calculation
+// Obter total de expressões na categoria
 $stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = ?");
 $stmt_total->bind_param("i", $expressao['id_categoria']);
 $stmt_total->execute();
 $result_total = $stmt_total->get_result();
 $total_expressions = $result_total->fetch_assoc()['total'];
 
-// Get completed expressions by user in this category
+// Obter expressões completas pelo usuário na categoria
 $stmt_completed = $conn->prepare("SELECT COUNT(*) as completed FROM progresso p 
                                 JOIN expressoes e ON p.id_expressao = e.id_expressao 
                                 WHERE p.username = ? AND p.completo = TRUE AND e.id_categoria = ?");
@@ -62,38 +77,66 @@ $stmt_completed->execute();
 $result_completed = $stmt_completed->get_result();
 $completed_expressions = $result_completed->fetch_assoc()['completed'];
 
+// Obter exemplos de uso
+$stmt_exemplos = $conn->prepare("SELECT exemplo FROM exemplos WHERE id_expressao = ?");
+$stmt_exemplos->bind_param("i", $id_expressao);
+$stmt_exemplos->execute();
+$result_exemplos = $stmt_exemplos->get_result();
+
 $mensagem = '';
 $resposta_correta = false;
+$mostrar_explicacao = $first_view && !isset($_POST['pular_explicacao']);
+$mostrar_resumo_erros = isset($_POST['finalizar_sessao']) && !empty($_SESSION['erros_atual']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $resposta_usuario = isset($_POST['resposta']) ? trim($_POST['resposta']) : '';
-    
-    // Normalize both strings for comparison
-    $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
-    $resposta_usuario_normalized = strtolower(trim($resposta_usuario));
-    
-    $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
-    
-    if ($resposta_correta) {
-        $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
-                               VALUES (?, ?, TRUE) 
-                               ON DUPLICATE KEY UPDATE completo = TRUE");
-        $stmt->bind_param("si", $username, $id_expressao);
-        $stmt->execute();
-        $completed_expressions++; // Increment for the current correct answer
-    } else {
-        $_SESSION['lives']--; // Decrease lives on wrong answer
-        $mensagem = '<div class="mensagem-erro"><i class="fas fa-times"></i> Incorreto. Tente novamente.</div>';
+    if (isset($_POST['pular_explicacao'])) {
+        $mostrar_explicacao = false;
+    } 
+    elseif (isset($_POST['finalizar_sessao'])) {
+        // Limpar erros da sessão atual
+        $_SESSION['erros_atual'] = array();
+        header("Location: exercicio.php?id=$id_expressao");
+        exit();
+    }
+    else {
+        $resposta_usuario = isset($_POST['resposta']) ? trim($_POST['resposta']) : '';
         
-        // If lives reach 0, redirect to indexuser.php
-        if ($_SESSION['lives'] <= 0) {
-            $_SESSION['lives'] = 5; // Reset lives
-            header('Location: indexuser.php?message=no_lives');
-            exit();
+        // Normalizar strings para comparação
+        $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
+        $resposta_usuario_normalized = strtolower(trim($resposta_usuario));
+        
+        $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
+        
+        if ($resposta_correta) {
+            $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
+                                   VALUES (?, ?, TRUE) 
+                                   ON DUPLICATE KEY UPDATE completo = TRUE");
+            $stmt->bind_param("si", $username, $id_expressao);
+            $stmt->execute();
+            $completed_expressions++;
+            
+            // Se acertou depois de ter errado, remove dos erros
+            if (($key = array_search($id_expressao, $_SESSION['erros_atual'])) !== false) {
+                unset($_SESSION['erros_atual'][$key]);
+            }
+        } else {
+            $_SESSION['lives']--;
+            $mensagem = '<div class="mensagem-erro"><i class="fas fa-times"></i> Incorreto. Tente novamente.</div>';
+            
+            // Adiciona aos erros se ainda não estiver lá
+            if (!in_array($id_expressao, $_SESSION['erros_atual'])) {
+                $_SESSION['erros_atual'][] = $id_expressao;
+            }
+            
+            if ($_SESSION['lives'] <= 0) {
+                $_SESSION['lives'] = 5;
+                $mostrar_resumo_erros = true;
+            }
         }
     }
 }
 
+// Obter alternativas para a questão
 $stmt = $conn->prepare("SELECT traducao_portugues FROM expressoes 
                        WHERE id_categoria = ? AND id_expressao != ? 
                        ORDER BY RAND() LIMIT 3");
@@ -107,6 +150,19 @@ while ($row = $result_alternativas->fetch_assoc()) {
 }
 $alternativas[] = $expressao['traducao_portugues'];
 shuffle($alternativas);
+
+// Se for mostrar resumo de erros, buscar detalhes das expressões erradas
+$expressoes_erradas = array();
+if ($mostrar_resumo_erros && !empty($_SESSION['erros_atual'])) {
+    $ids_erros = implode(",", $_SESSION['erros_atual']);
+    $stmt_erros = $conn->prepare("SELECT * FROM expressoes WHERE id_expressao IN ($ids_erros)");
+    $stmt_erros->execute();
+    $result_erros = $stmt_erros->get_result();
+    
+    while ($erro = $result_erros->fetch_assoc()) {
+        $expressoes_erradas[] = $erro;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -219,12 +275,30 @@ shuffle($alternativas);
       background-color: #6a59c9;
     }
     
+    .btn-secundario {
+      background-color: transparent;
+      color: #7b6ada;
+      border: 2px solid #7b6ada;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+      transition: all 0.3s;
+    }
+    
+    .btn-secundario:hover {
+      background-color: rgba(123, 106, 218, 0.1);
+    }
+    
     .mensagem-erro {
       background-color: rgba(231, 76, 60, 0.15);
       border-left: 4px solid #e74c3c;
       color: #fff;
       padding: 20px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       border-radius: 8px;
       font-size: 1.1rem;
       display: flex;
@@ -245,6 +319,7 @@ shuffle($alternativas);
     }
     
     .traducao-container {
+      margin-bottom: 50px !important;
       background-color: rgba(55, 70, 79, 0.3);
       padding: 25px;
       border-radius: 12px;
@@ -307,11 +382,75 @@ shuffle($alternativas);
       margin-left: 5px;
     }
     
-    .progress-text {
-      margin-top: 5px;
-      text-align: right;
-      font-size: 0.9rem;
-      color: #aaa;
+    .explicacao-container {
+      background-color: rgba(55, 70, 79, 0.3);
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .explicacao-titulo {
+      color: #7b6ada;
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    
+    .explicacao-conteudo {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .exemplos-container {
+      background-color: rgba(55, 70, 79, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    
+    .exemplos-container h4 {
+      margin-top: 0;
+      color: #7b6ada;
+      font-size: 1.2rem;
+    }
+    
+    .exemplo-item {
+      margin: 10px 0;
+      padding: 10px;
+      border-left: 3px solid #7b6ada;
+      background-color: rgba(123, 106, 218, 0.1);
+    }
+    
+    .resumo-erros-container {
+      background-color: rgba(231, 76, 60, 0.1);
+      border: 2px solid #e74c3c;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .resumo-erros-titulo {
+      color: #e74c3c;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .erro-item {
+      background-color: rgba(231, 76, 60, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .erro-questao {
+      font-weight: bold;
+      color: #fff;
+    }
+    
+    .erro-resposta {
+      color: #2ecc71;
+      font-style: italic;
     }
   </style>
 </head>
@@ -345,9 +484,59 @@ shuffle($alternativas);
       
       <?php echo $mensagem; ?>
       
-      <?php if (!$resposta_correta): ?>
+      <?php if ($mostrar_resumo_erros): ?>
+        <!-- Tela de resumo de erros -->
+        <div class="resumo-erros-container">
+          <h2 class="resumo-erros-titulo"><i class="fas fa-exclamation-triangle"></i> Revise seus erros</h2>
+          
+          <?php foreach ($expressoes_erradas as $erro): ?>
+            <div class="erro-item">
+              <div class="erro-questao"><?php echo htmlspecialchars($erro['versao_ingles']); ?></div>
+              <div class="erro-resposta">Resposta correta: <?php echo htmlspecialchars($erro['traducao_portugues']); ?></div>
+            </div>
+          <?php endforeach; ?>
+          
+          <form method="POST">
+            <button type="submit" name="finalizar_sessao" class="btn-submeter">
+              <i class="fas fa-check"></i> Continuar
+            </button>
+          </form>
+        </div>
+      <?php elseif ($mostrar_explicacao): ?>
+        <!-- Tela de explicação (como no Duolingo) -->
+        <div class="explicacao-container">
+          <h2 class="explicacao-titulo"><?php echo htmlspecialchars($expressao['versao_ingles']); ?></h2>
+          <p class="explicacao-conteudo" style="color: #7b6ada; font-size: 1.5rem; margin-bottom: 25px; text-align: center; font-weight: bold;">
+             <?php echo htmlspecialchars($expressao['traducao_portugues']); ?>
+          </p>
+          
+          <?php if (!empty($expressao['explicacao'])): ?>
+            <div class="explicacao-conteudo">
+               <?php echo htmlspecialchars($expressao['explicacao']); ?>
+            </div>
+          <?php endif; ?>
+          
+          <?php if ($result_exemplos->num_rows > 0): ?>
+            <div class="exemplos-container">
+              <h4><i class="fas fa-comment-dots"></i> Exemplos de uso:</h4>
+              <?php while($exemplo = $result_exemplos->fetch_assoc()): ?>
+                <div class="exemplo-item">
+                  <div class="exemplo-ingles"><?php echo htmlspecialchars($exemplo['exemplo']); ?></div>
+                </div>
+              <?php endwhile; ?>
+            </div>
+          <?php endif; ?>
+          
+          <form method="POST">
+            <button type="submit" name="pular_explicacao" class="btn-submeter">
+              <i class="fas fa-arrow-right"></i> Praticar agora
+            </button>
+          </form>
+        </div>
+      <?php elseif (!$resposta_correta): ?>
+        <!-- Tela de exercício -->
         <div class="instrucao">
-         Selecione a tradução correta
+          Selecione a tradução correta
         </div>
         
         <div class="exercicio-questao">
@@ -371,15 +560,16 @@ shuffle($alternativas);
           </button>
         </form>
       <?php else: ?>
+        <!-- Tela de resposta correta -->
         <div class="exercicio-completo">
           <div class="resposta-correta">
             <i class="fas fa-check-circle"></i> Resposta Correta!
           </div>
           
           <div class="traducao-container">
-            <p><strong><?php echo htmlspecialchars($expressao['versao_ingles']); ?></strong></p>
-            <p><i class="fas fa-arrow-down"></i></p>
-            <p><strong><?php echo htmlspecialchars($expressao['traducao_portugues']); ?></strong></p>
+            <p style="color:#f5f4ff;"><strong><?php echo htmlspecialchars($expressao['versao_ingles']); ?></strong></p>
+            <p style="color:#f5f4ff;"><i class="fas fa-arrow-down"></i></p>
+            <p style="color:#f5f4ff;"><strong><?php echo htmlspecialchars($expressao['traducao_portugues']); ?></strong></p>
           </div>
           
           <?php if ($proxima_expressao): ?>

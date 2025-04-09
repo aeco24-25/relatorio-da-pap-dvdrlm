@@ -122,7 +122,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
       display: flex;
       align-items: center;
       margin-bottom: 30px;
-      background-color: #fff;
+      background-color: #f5f4ff;
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -172,7 +172,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
     }
     
     .estatistica-card {
-      background-color: #fff;
+      background-color: #f5f4ff;
       border-radius: 12px;
       padding: 20px;
       text-align: center;
@@ -195,11 +195,11 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 20px;
-      color: #333;
+      color: #dedaf6;
     }
     
     .categoria-progresso {
-      background-color: #fff;
+      background-color: #f5f4ff;
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 20px;
@@ -253,7 +253,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
   </style>
 </head>
 
-<body style="background:white;">
+<body style="background:#7b6ada;">
   <div id="root">
     <div data-reactroot="">
       <div class="_6t5Uh" style="height: 78px;">

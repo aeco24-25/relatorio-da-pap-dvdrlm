@@ -18,8 +18,16 @@ CREATE TABLE expressoes (
     id_expressao INT PRIMARY KEY AUTO_INCREMENT,
     versao_ingles TEXT NOT NULL,
     traducao_portugues TEXT NOT NULL,
+    explicacao TEXT,
     id_categoria INT NOT NULL,
     FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+);
+
+CREATE TABLE exemplos (
+    id_exemplo INT PRIMARY KEY AUTO_INCREMENT,
+    id_expressao INT NOT NULL,
+    exemplo TEXT NOT NULL,
+    FOREIGN KEY (id_expressao) REFERENCES expressoes(id_expressao)
 );
 
 CREATE TABLE progresso (
