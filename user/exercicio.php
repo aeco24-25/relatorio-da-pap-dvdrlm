@@ -11,6 +11,20 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
+// Verificação de saída
+if (isset($_GET['sair'])) {
+    $_SESSION['confirmar_saida'] = true;
+    header("Location: indexuser.php");
+    exit();
+}
+
+if (isset($_GET['confirmar_saida'])) {
+    unset($_SESSION['erros_atual']);
+    $_SESSION['lives'] = 5;
+    header("Location: indexuser.php");
+    exit();
+}
+
 $id_expressao = $_GET['id'];
 $username = $_SESSION['username'];
 
@@ -18,9 +32,17 @@ if (!isset($_SESSION['lives'])) {
     $_SESSION['lives'] = 5;
 }
 
-// Inicializar array de erros se não existir
 if (!isset($_SESSION['erros_atual'])) {
     $_SESSION['erros_atual'] = array();
+}
+
+// Inicializar progresso da sessão
+if (!isset($_SESSION['progresso_sessao'])) {
+    $_SESSION['progresso_sessao'] = array(
+        'categoria_atual' => null,
+        'expressoes_completas' => array(),
+        'total_expressoes' => 0
+    );
 }
 
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
@@ -44,7 +66,23 @@ if ($result->num_rows === 0) {
 
 $expressao = $result->fetch_assoc();
 
-// Verificar se é a primeira vez que o usuário vê esta expressão
+// Verificar se mudou de categoria
+if ($_SESSION['progresso_sessao']['categoria_atual'] != $expressao['id_categoria']) {
+    $_SESSION['progresso_sessao'] = array(
+        'categoria_atual' => $expressao['id_categoria'],
+        'expressoes_completas' => array(),
+        'total_expressoes' => 0
+    );
+    
+    // Obter total de expressões na categoria
+    $stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = ?");
+    $stmt_total->bind_param("i", $expressao['id_categoria']);
+    $stmt_total->execute();
+    $result_total = $stmt_total->get_result();
+    $_SESSION['progresso_sessao']['total_expressoes'] = $result_total->fetch_assoc()['total'];
+}
+
+// Verificar progresso no banco de dados
 $stmt_first_view = $conn->prepare("SELECT completo FROM progresso 
                                  WHERE username = ? AND id_expressao = ?");
 $stmt_first_view->bind_param("si", $username, $id_expressao);
@@ -52,7 +90,7 @@ $stmt_first_view->execute();
 $result_first_view = $stmt_first_view->get_result();
 $first_view = ($result_first_view->num_rows === 0);
 
-// Obter próxima expressão na mesma categoria
+// Obter próxima expressão
 $stmt_proxima = $conn->prepare("SELECT id_expressao FROM expressoes 
                               WHERE id_categoria = ? AND id_expressao > ? 
                               ORDER BY id_expressao ASC LIMIT 1");
@@ -60,22 +98,6 @@ $stmt_proxima->bind_param("ii", $expressao['id_categoria'], $id_expressao);
 $stmt_proxima->execute();
 $result_proxima = $stmt_proxima->get_result();
 $proxima_expressao = $result_proxima->fetch_assoc();
-
-// Obter total de expressões na categoria
-$stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = ?");
-$stmt_total->bind_param("i", $expressao['id_categoria']);
-$stmt_total->execute();
-$result_total = $stmt_total->get_result();
-$total_expressions = $result_total->fetch_assoc()['total'];
-
-// Obter expressões completas pelo usuário na categoria
-$stmt_completed = $conn->prepare("SELECT COUNT(*) as completed FROM progresso p 
-                                JOIN expressoes e ON p.id_expressao = e.id_expressao 
-                                WHERE p.username = ? AND p.completo = TRUE AND e.id_categoria = ?");
-$stmt_completed->bind_param("si", $username, $expressao['id_categoria']);
-$stmt_completed->execute();
-$result_completed = $stmt_completed->get_result();
-$completed_expressions = $result_completed->fetch_assoc()['completed'];
 
 // Obter exemplos de uso
 $stmt_exemplos = $conn->prepare("SELECT exemplo FROM exemplos WHERE id_expressao = ?");
@@ -85,37 +107,49 @@ $result_exemplos = $stmt_exemplos->get_result();
 
 $mensagem = '';
 $resposta_correta = false;
-$mostrar_explicacao = $first_view && !isset($_POST['pular_explicacao']);
+
+// Verificar se deve mostrar explicação
+$mostrar_explicacao = false;
+if (isset($_POST['ver_explicacao'])) {
+    $mostrar_explicacao = true;
+} elseif ($first_view && !isset($_SESSION['explicacao_vista_'.$id_expressao])) {
+    $mostrar_explicacao = true;
+    $_SESSION['explicacao_vista_'.$id_expressao] = true;
+}
+
 $mostrar_resumo_erros = isset($_POST['finalizar_sessao']) && !empty($_SESSION['erros_atual']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['pular_explicacao'])) {
+        $_SESSION['explicacao_vista_'.$id_expressao] = true;
         $mostrar_explicacao = false;
     } 
     elseif (isset($_POST['finalizar_sessao'])) {
-        // Limpar erros da sessão atual
         $_SESSION['erros_atual'] = array();
         header("Location: exercicio.php?id=$id_expressao");
         exit();
     }
-    else {
+    elseif (!isset($_POST['ver_explicacao'])) {
         $resposta_usuario = isset($_POST['resposta']) ? trim($_POST['resposta']) : '';
         
-        // Normalizar strings para comparação
         $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
         $resposta_usuario_normalized = strtolower(trim($resposta_usuario));
         
         $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
         
         if ($resposta_correta) {
+            // Salvar no banco de dados
             $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
                                    VALUES (?, ?, TRUE) 
                                    ON DUPLICATE KEY UPDATE completo = TRUE");
             $stmt->bind_param("si", $username, $id_expressao);
             $stmt->execute();
-            $completed_expressions++;
             
-            // Se acertou depois de ter errado, remove dos erros
+            // Atualizar progresso da sessão
+            if (!in_array($id_expressao, $_SESSION['progresso_sessao']['expressoes_completas'])) {
+                $_SESSION['progresso_sessao']['expressoes_completas'][] = $id_expressao;
+            }
+            
             if (($key = array_search($id_expressao, $_SESSION['erros_atual'])) !== false) {
                 unset($_SESSION['erros_atual'][$key]);
             }
@@ -123,7 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['lives']--;
             $mensagem = '<div class="mensagem-erro"><i class="fas fa-times"></i> Incorreto. Tente novamente.</div>';
             
-            // Adiciona aos erros se ainda não estiver lá
             if (!in_array($id_expressao, $_SESSION['erros_atual'])) {
                 $_SESSION['erros_atual'][] = $id_expressao;
             }
@@ -163,6 +196,11 @@ if ($mostrar_resumo_erros && !empty($_SESSION['erros_atual'])) {
         $expressoes_erradas[] = $erro;
     }
 }
+
+// Calcular progresso atual para mostrar na barra
+$progresso_atual = count($_SESSION['progresso_sessao']['expressoes_completas']);
+$total_expressoes_categoria = $_SESSION['progresso_sessao']['total_expressoes'];
+$percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $total_expressoes_categoria) * 100) : 0;
 ?>
 
 <!DOCTYPE html>
@@ -457,7 +495,7 @@ if ($mostrar_resumo_erros && !empty($_SESSION['erros_atual'])) {
 
 <body>
   <div class="exercicio-container">
-    <a href="indexuser.php" class="btn-sair" title="Voltar">
+    <a href="exercicio.php?id=<?php echo $id_expressao; ?>&sair=1" class="btn-sair" title="Voltar" onclick="return confirm('Tem a certeza que quer sair? O progresso não será guardado.');">
       <i class="fas fa-times"></i>
     </a>
     
@@ -465,7 +503,7 @@ if ($mostrar_resumo_erros && !empty($_SESSION['erros_atual'])) {
       <!-- Progress bar and lives -->
       <div class="progress-container">
         <div class="progress-bar">
-          <div class="progress-fill" style="width: <?php echo ($completed_expressions / $total_expressions) * 100; ?>%"></div>
+          <div class="progress-fill" style="width: <?php echo $percentagem; ?>%"></div>
         </div>
         <div class="lives-container">
           <?php 
@@ -503,7 +541,7 @@ if ($mostrar_resumo_erros && !empty($_SESSION['erros_atual'])) {
           </form>
         </div>
       <?php elseif ($mostrar_explicacao): ?>
-        <!-- Tela de explicação (como no Duolingo) -->
+        <!-- Tela de explicação -->
         <div class="explicacao-container">
           <h2 class="explicacao-titulo"><?php echo htmlspecialchars($expressao['versao_ingles']); ?></h2>
           <p class="explicacao-conteudo" style="color: #7b6ada; font-size: 1.5rem; margin-bottom: 25px; text-align: center; font-weight: bold;">
@@ -557,6 +595,10 @@ if ($mostrar_resumo_erros && !empty($_SESSION['erros_atual'])) {
           
           <button type="submit" class="btn-submeter">
             <i class="fas fa-check"></i> Verificar
+          </button>
+          
+          <button type="submit" name="ver_explicacao" value="1" class="btn-secundario">
+            <i class="fas fa-book"></i> Ver Explicação Novamente
           </button>
         </form>
       <?php else: ?>

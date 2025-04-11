@@ -108,7 +108,6 @@ if ($sucesso == 'conta_criada') {
                         </svg>
                     </label>
                   </fieldset>
-                  <p style="margin-top: 28px;"><a class="password-link" href="./index.php#contact">Esqueceste-te da password?</a></p>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>

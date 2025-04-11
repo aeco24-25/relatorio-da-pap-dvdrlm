@@ -48,14 +48,18 @@ function getProgressCoordinates($percent, $radius) {
 $categorias_liberadas = array();
 $categorias_completas = array();
 
-$sql_categorias_progresso = "SELECT c.id_categoria, c.titulo, 
-                            COUNT(e.id_expressao) as total,
-                            SUM(CASE WHEN p.completo = TRUE THEN 1 ELSE 0 END) as completas
-                            FROM categoria c
-                            JOIN expressoes e ON c.id_categoria = e.id_categoria
-                            LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ?
-                            GROUP BY c.id_categoria
-                            ORDER BY c.id_categoria";
+// Query otimizada para verificar progresso das categorias
+$sql_categorias_progresso = "SELECT 
+    c.id_categoria, 
+    c.titulo,
+    COUNT(e.id_expressao) as total,
+    SUM(IF(p.completo = TRUE AND p.username = ?, 1, 0)) as completas
+FROM categoria c
+JOIN expressoes e ON c.id_categoria = e.id_categoria
+LEFT JOIN progresso p ON e.id_expressao = p.id_expressao
+GROUP BY c.id_categoria
+ORDER BY c.id_categoria";
+
 $stmt = $conn->prepare($sql_categorias_progresso);
 $stmt->bind_param("s", $username);
 $stmt->execute();
