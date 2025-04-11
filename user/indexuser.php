@@ -312,6 +312,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     }
 
     .daily-goal {
+      margin-top: -10px !important;
       background-color: #fcfcff;
       border-radius: 12px;
       padding: 20px;
