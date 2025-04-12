@@ -253,7 +253,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 5px;
-      color: #333;
+      color: #494949;
       transition: all 0.3s ease;
     }
     
@@ -353,7 +353,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
   </style>
 </head>
 
-<body style="background:#7b6ada;">
+<body style="background:#f2f0ff;">
   <div id="root">
     <div data-reactroot="">
       <div class="_6t5Uh" style="height: 78px;">
@@ -387,8 +387,8 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
       </div>
       <div class="LFfrA _3MLiB">
           <div class="_2_lzu">
-            <div class="_21w25 _1E3L7">
-              <h2 style="text-align: center;">Progresso Geral</h2>
+            <div class="_21w25 _1E3L7" style="background:#7b6ada;">
+              <h2 style="text-align: center; color:#ffffff">Progresso Geral</h2>
               <div class="progress-container">
                 <div class="progress-circle">
                   <svg height="150" width="150" viewBox="0 0 150 150" aria-labelledby="progress-percent">
@@ -429,8 +429,8 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
           </div>
           
           <div class="_3MT-S">
-              <div class="_2hEQd _1E3L7">
-                <h2 style="margin-top: -10px; margin-bottom: 20px; text-align: center;">Categorias</h2>
+              <div class="_2hEQd _1E3L7" style="background:#7b6ada;">
+                <h2 style="margin-top: -10px; margin-bottom: 20px; text-align: center; color:#ffffff;">Categorias</h2>
                 <div style="max-width: 800px; margin: 0 auto;">
                   <?php
                   $result_categorias->data_seek(0);
