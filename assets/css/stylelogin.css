@@ -1,93 +1,93 @@
-  .header-area.header-sticky .header-image {
-    margin-top: -29px;
-    width: 165px;
-    margin-left: 45px;
-    margin-right: 19px;
-    object-fit: contain;
-  }
-  
-  .header-area.header-sticky.background-header .header-image {
-    margin-top: -12px;
-    width: 165px;
-    margin-left: 45px;
-    margin-right: 19px;
-    object-fit: contain;
-  }
-  
-  .main-banner {
-    height: 85vh;
-  }
-  
-  .container {
-    text-align: center;
-    justify-content: center;
-  }
-  
-  .container .eye {
-    position: absolute;
-    animation: keyframes-fill .5s;
-  }
-  
-  .container .eye-slash {
-    position: absolute;
-    animation: keyframes-fill .5s;
-    display: none;
-  }
-  
-  .container input:checked ~ .eye {
-    display: none;
-  }
-  
-  .container input:checked ~ .eye-slash {
-    display: block;
-  }
-  
-  .password-link {
-    color: #1e1e1e !important;
-    text-decoration: none !important;
-    transition: color 0.3s ease !important;
-  }
-  
-  .password-link:hover {
-    color: #d6d1f3 !important; 
-  }
-  
-  /* ------ Animation ------ */
-  @keyframes keyframes-fill {
-    0% {
-      transform: scale(0);
-      opacity: 0;
-    }
-  
-    50% {
-      transform: scale(1.2);
-    }
-  }
-  
-  .sucesso-mensagem {
-    width: 78%;
-    margin-right: auto;
-    margin-left: auto;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
-    padding: 4px;
-    border-radius: 10px;
-    margin-bottom: 50px;
-    margin-top: -54px;
-    text-align: center;
-  }
-  
-  .erro-mensagem {
-    width: 85%;
-    margin-right: auto;
-    margin-left: auto;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-    padding: 4px;
-    border-radius: 10px;
-    margin-bottom: 50px;
-    margin-top: -54px;
-    text-align: center;
-  }
+.header-area.header-sticky .header-image {
+margin-top: -29px;
+width: 165px;
+margin-left: 45px;
+margin-right: 19px;
+object-fit: contain;
+}
+
+.header-area.header-sticky.background-header .header-image {
+margin-top: -12px;
+width: 165px;
+margin-left: 45px;
+margin-right: 19px;
+object-fit: contain;
+}
+
+.main-banner {
+height: 85vh;
+}
+
+.container {
+text-align: center;
+justify-content: center;
+}
+
+.container .eye {
+position: absolute;
+animation: keyframes-fill .5s;
+}
+
+.container .eye-slash {
+position: absolute;
+animation: keyframes-fill .5s;
+display: none;
+}
+
+.container input:checked ~ .eye {
+display: none;
+}
+
+.container input:checked ~ .eye-slash {
+display: block;
+}
+
+.password-link {
+color: #1e1e1e !important;
+text-decoration: none !important;
+transition: color 0.3s ease !important;
+}
+
+.password-link:hover {
+color: #d6d1f3 !important; 
+}
+
+/* ------ Animation ------ */
+@keyframes keyframes-fill {
+0% {
+transform: scale(0);
+opacity: 0;
+}
+
+50% {
+transform: scale(1.2);
+}
+}
+
+.sucesso-mensagem {
+width: 78%;
+margin-right: auto;
+margin-left: auto;
+background-color: #d4edda;
+border: 1px solid #c3e6cb;
+color: #155724;
+padding: 4px;
+border-radius: 10px;
+margin-bottom: 50px;
+margin-top: -54px;
+text-align: center;
+}
+
+.erro-mensagem {
+width: 85%;
+margin-right: auto;
+margin-left: auto;
+background-color: #f8d7da;
+border: 1px solid #f5c6cb;
+color: #721c24;
+padding: 4px;
+border-radius: 10px;
+margin-bottom: 50px;
+margin-top: -54px;
+text-align: center;
+}

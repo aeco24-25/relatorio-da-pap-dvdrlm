@@ -87,170 +87,13 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
   <link rel="shortcut icon" href="../assets/images/logo.png">
   
   <link rel="stylesheet" href="css/ltr-6a8f5d2e.css">  
+  <link rel="stylesheet" href="css/styleindexperfil.css">  
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
   <link rel="stylesheet" href="../assets/css/owl.css">
   <link rel="stylesheet" href="../assets/css/animate.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 
-  <style>
-    .logo {
-      margin-top: 16px;
-      margin-left: 50px;
-      display: inline-block;
-    }
-
-    h1 {
-      font-family: 'Poppins', sans-serif !important;
-      margin-top: -5px;
-      margin-bottom: 0px;
-      font-size: 46px;
-      text-transform: uppercase;
-      color: #fff;
-      font-weight: 700;
-      margin-right: 20px;
-      padding-right: 20px;
-    }
-
-    .perfil-container {
-      max-width: 800px;
-      margin: 0 auto;
-      margin-top: 110px;
-    }
-    
-    .perfil-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 30px;
-      background-color: #f5f4ff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .perfil-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin-right: 20px;
-      background-color: #7b6ada;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      font-weight: bold;
-      color: #fff;
-    }
-    
-    .perfil-info {
-      flex: 1;
-    }
-    
-    .perfil-nome {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #333;
-    }
-    
-    .perfil-email {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-    
-    .perfil-data {
-      font-size: 14px;
-      color: #999;
-    }
-    
-    .perfil-estatisticas {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    
-    .estatistica-card {
-      background-color: #f5f4ff;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .estatistica-valor {
-      font-size: 32px;
-      font-weight: bold;
-      color: #7b6ada;
-      margin-bottom: 10px;
-    }
-    
-    .estatistica-label {
-      font-size: 14px;
-      color: #666;
-    }
-    
-    .progresso-titulo {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      color: #dedaf6;
-    }
-    
-    .categoria-progresso {
-      background-color: #f5f4ff;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .categoria-nome {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #333;
-    }
-    
-    .categoria-estatisticas {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      font-size: 14px;
-      color: #666;
-    }
-    
-    .progresso-barra {
-      height: 20px;
-      background-color: #e5e5e5;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    .progresso-preenchido {
-      height: 100%;
-      background-color: #7b6ada;
-      border-radius: 10px;
-      transition: width 0.5s ease;
-    }
-    
-    .btn-editar {
-      display: inline-block;
-      background-color: #7b6ada;
-      color: white;
-      font-weight: bold;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      margin-top: 10px;
-      transition: background-color 0.3s ease;
-    }
-    
-    .btn-editar:hover {
-      background-color: #0c8ed2;
-    }
-  </style>
 </head>
 
 <body style="background:#7b6ada;">
@@ -258,7 +101,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
     <div data-reactroot="">
       <div class="_6t5Uh" style="height: 78px;">
         <div class="NbGcm">
-          <div class="_3vDrO">
+          <div class="_3vDrO" style="margin-top:-13px;">
             <div class="_3I51r _2OF7V">
               <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
             </div>
@@ -281,8 +124,8 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
             </div>
           </div>
           <a href="indexuser.php" class="logo">
-                <h1>D<span style="text-align: var(--bs-body-text-align); -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; font-family: 'Poppins', sans-serif !important; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0; line-height: 1.2; font-size: 46px; text-transform: uppercase; font-weight: 700; box-sizing: border-box; margin: 0; padding: 0; border: 0; outline: 0; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
-            </a>
+          <h1>D<span style="line-height: 1.2; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
+          </a>
         </div>
         <a class="_19E7J" href="indexuser.php">« Voltar</a>
       </div>

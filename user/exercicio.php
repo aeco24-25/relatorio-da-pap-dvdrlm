@@ -107,21 +107,11 @@ $result_exemplos = $stmt_exemplos->get_result();
 
 $mensagem = '';
 $resposta_correta = false;
-
-// Verificar se deve mostrar explicação
-$mostrar_explicacao = false;
-if (isset($_POST['ver_explicacao'])) {
-    $mostrar_explicacao = true;
-} elseif ($first_view && !isset($_SESSION['explicacao_vista_'.$id_expressao])) {
-    $mostrar_explicacao = true;
-    $_SESSION['explicacao_vista_'.$id_expressao] = true;
-}
-
+$mostrar_explicacao = $first_view && !isset($_POST['pular_explicacao']);
 $mostrar_resumo_erros = isset($_POST['finalizar_sessao']) && !empty($_SESSION['erros_atual']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['pular_explicacao'])) {
-        $_SESSION['explicacao_vista_'.$id_expressao] = true;
         $mostrar_explicacao = false;
     } 
     elseif (isset($_POST['finalizar_sessao'])) {
@@ -129,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: exercicio.php?id=$id_expressao");
         exit();
     }
-    elseif (!isset($_POST['ver_explicacao'])) {
+    else {
         $resposta_usuario = isset($_POST['resposta']) ? trim($_POST['resposta']) : '';
         
         $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
@@ -138,14 +128,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
         
         if ($resposta_correta) {
-            // Salvar no banco de dados
             $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
                                    VALUES (?, ?, TRUE) 
                                    ON DUPLICATE KEY UPDATE completo = TRUE");
             $stmt->bind_param("si", $username, $id_expressao);
             $stmt->execute();
             
-            // Atualizar progresso da sessão
             if (!in_array($id_expressao, $_SESSION['progresso_sessao']['expressoes_completas'])) {
                 $_SESSION['progresso_sessao']['expressoes_completas'][] = $id_expressao;
             }
@@ -495,7 +483,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
 
 <body>
   <div class="exercicio-container">
-    <a href="exercicio.php?id=<?php echo $id_expressao; ?>&sair=1" class="btn-sair" title="Voltar" onclick="return confirm('Tem a certeza que quer sair? O progresso não será guardado.');">
+    <a href="exercicio.php?id=<?php echo $id_expressao; ?>&sair=1" class="btn-sair" title="Voltar" onclick="return confirm('Quer mesmo sair? O progresso será perdido.');">
       <i class="fas fa-times"></i>
     </a>
     
@@ -595,10 +583,6 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
           
           <button type="submit" class="btn-submeter">
             <i class="fas fa-check"></i> Verificar
-          </button>
-          
-          <button type="submit" name="ver_explicacao" value="1" class="btn-secundario">
-            <i class="fas fa-book"></i> Ver Explicação Novamente
           </button>
         </form>
       <?php else: ?>
