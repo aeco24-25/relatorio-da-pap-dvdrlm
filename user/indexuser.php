@@ -48,7 +48,6 @@ function getProgressCoordinates($percent, $radius) {
 $categorias_liberadas = array();
 $categorias_completas = array();
 
-// Query otimizada para verificar progresso das categorias
 $sql_categorias_progresso = "SELECT 
     c.id_categoria, 
     c.titulo,
@@ -78,6 +77,20 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
         $categorias_liberadas[$row['id_categoria']] = false;
     }
 }
+
+// Array de ícones para cada categoria
+$categorias_icones = [
+  'fa-handshake',          
+  'fa-hotel',              
+  'fa-utensils',          
+  'fa-bus',               
+  'fa-exclamation-triangle', 
+  'fa-shopping-bag',      
+  'fa-map-marked-alt',    
+  'fa-briefcase',         
+  'fa-laptop-code',       
+  'fa-gamepad'             
+];
 ?>
 <!DOCTYPE html>
 <html lang="pt-pt">
@@ -453,7 +466,6 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
                           $completo_cat = $prog_row['completo'];
                           
                           $cat_percent = ($total_cat > 0) ? round(($completo_cat / $total_cat) * 100) : 0;
-                          $first_letter = strtoupper(substr($row['titulo'], 0, 1));
                           
                           $liberada = isset($categorias_liberadas[$cat_id]) && $categorias_liberadas[$cat_id];
                           $completa = isset($categorias_completas[$cat_id]) && $categorias_completas[$cat_id];
@@ -476,8 +488,11 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
                               echo '<div style="display: flex; width: 100%;">';
                           }
                           
-                          echo '<div class="categoria-icon">' . $first_letter . '</div>
-                                <div class="categoria-info">
+                          // Mostrar ícone da categoria
+                          $icon = $categorias_icones[$cat_id - 1] ?? 'fa-folder'; // -1 porque arrays começam em 0
+                          echo '<div class="categoria-icon"><i class="fas ' . $icon . '"></i></div>';
+                          
+                          echo '<div class="categoria-info">
                                   <div class="categoria-titulo">' . htmlspecialchars($row['titulo']) . '</div>';
                           
                           if (!$liberada) {

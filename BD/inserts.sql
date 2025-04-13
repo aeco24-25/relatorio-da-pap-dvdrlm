@@ -1,14 +1,17 @@
 USE dteaches;
 
 -- Inserir categorias
-INSERT INTO categoria (titulo, conteudo) VALUES 
-('Saudações e Apresentações', 'Aprenda expressões essenciais para cumprimentar pessoas, apresentar-se e iniciar conversas básicas em inglês.'),
-('No Hotel', 'Expressões úteis para fazer check-in, solicitar serviços e resolver problemas no hotel durante a sua estadia.'),
-('Restaurantes e Alimentação', 'Como fazer pedidos, perguntar sobre a ementa e pedir a conta em inglês quando estiver em restaurantes ou cafés.'),
-('Transportes', 'Vocabulário e frases para utilizar diferentes meios de transporte, comprar bilhetes e pedir informações.'),
-('Emergências', 'Expressões cruciais para situações de emergência, como pedir ajuda médica ou relatar problemas.'),
-('Compras', 'Frases úteis para fazer compras, perguntar preços e negociar em lojas e mercados.'),
-('Direções e Localizações', 'Como pedir e entender direções, perguntar por locais e usar mapas em inglês.');
+INSERT INTO categoria (titulo) VALUES 
+('Saudações e Apresentações'),
+('No Hotel'),
+('Restaurantes e Alimentação'),
+('Transportes'),
+('Emergências'),
+('Compras'),
+('Direções e Localizações'),
+('Trabalho e Negócios'),
+('Tecnologia e Internet'),
+('Lazer e Entretenimento');
 
 -- =============================================
 -- SAUDAÇÕES E APRESENTAÇÕES
@@ -205,3 +208,84 @@ INSERT INTO exemplos (id_expressao, exemplo) VALUES
 (68, '"I am lost. Can you point me to Avenida da Liberdade?"'),
 (69, '"Where is the tourist information center? I need a city map"'),
 (70, '"How do I get back to my hotel? I\'m staying at the Tivoli"');
+
+-- =============================================
+-- TRABALHO E NEGÓCIOS
+-- =============================================
+INSERT INTO expressoes (versao_ingles, traducao_portugues, id_categoria, explicacao) VALUES
+('I would like to schedule a meeting', 'Gostaria de marcar uma reunião', 8, 'Frase formal para solicitar um encontro profissional. Pode especificar data/hora depois.'),
+('When is the deadline?', 'Quando é o prazo final?', 8, 'Pergunta importante sobre prazos de projetos. Alternativa: "What is the deadline for this?"'),
+('Could you send me the report?', 'Pode enviar-me o relatório?', 8, 'Pedido profissional comum. Pode adicionar "by email" para especificar o método.'),
+('I need to speak with the manager', 'Preciso de falar com o gerente', 8, 'Frase para solicitar conversa com superior hierárquico.'),
+('Let me check my schedule', 'Deixe-me verificar a minha agenda', 8, 'Resposta educada quando precisa de confirmar disponibilidade.'),
+('The presentation is ready', 'A apresentação está pronta', 8, 'Informação importante antes de reuniões. Pode adicionar "for the meeting".'),
+('Could you clarify this point?', 'Poderia esclarecer este ponto?', 8, 'Frase profissional para pedir explicações adicionais.'),
+('I will follow up by email', 'Vou dar seguimento por email', 8, 'Expressão comum para indicar continuação de contacto profissional.'),
+('We need to reschedule', 'Precisamos de remarcar', 8, 'Frase útil quando é necessário alterar horários marcados.'),
+('Thank you for your time', 'Obrigado pelo seu tempo', 8, 'Expressão de cortesia no final de reuniões ou conversas profissionais.');
+
+INSERT INTO exemplos (id_expressao, exemplo) VALUES
+(71, '"I would like to schedule a meeting for next Wednesday" disse ao assistente.'),
+(72, '"When is the deadline for the project submission?" perguntei ao colega.'),
+(73, '"Could you send me the report by the end of the day?" solicitei.'),
+(74, '"I need to speak with the manager about the new contract"'),
+(75, '"Let me check my schedule and I\'ll get back to you" respondi.'),
+(76, '"The presentation is ready for tomorrow\'s client meeting"'),
+(77, '"Could you clarify this point about the budget?" pedi na reunião.'),
+(78, '"I will follow up by email with the details" prometi.'),
+(79, '"We need to reschedule our appointment due to an emergency"'),
+(80, '"Thank you for your time and valuable feedback" disse no final.');
+
+-- =============================================
+-- TECNOLOGIA E INTERNET
+-- =============================================
+INSERT INTO expressoes (versao_ingles, traducao_portugues, id_categoria, explicacao) VALUES
+('How do I connect to the WiFi?', 'Como me ligo à rede WiFi?', 9, 'Pergunta essencial em hotéis, cafés e espaços públicos. Precisa do nome da rede e senha.'),
+('My password is not working', 'A minha palavra-passe não está a funcionar', 9, 'Frase para reportar problemas de acesso. Pode precisar de "reset password".'),
+('The website is not loading', 'O site não está a carregar', 9, 'Explicação comum para problemas técnicos. Alternativa: "The page won\'t open".'),
+('I forgot my username', 'Esqueci o meu nome de utilizador', 9, 'Problema comum em plataformas online. Geralmente requer recuperação de conta.'),
+('Where can I charge my phone?', 'Onde posso carregar o telemóvel?', 9, 'Pergunta prática em locais públicos. Pode especificar o tipo de carregador.'),
+('How do I update the app?', 'Como atualizo a aplicação?', 9, 'Dúvida comum sobre manutenção de software. Alternativa: "Check for updates".'),
+('The file is too large to send', 'O ficheiro é demasiado grande para enviar', 9, 'Problema técnico comum. Solução pode ser compressão ou serviço de cloud.'),
+('Could you help me with this software?', 'Pode ajudar-me com este programa?', 9, 'Pedido de assistência técnica. Especifique o nome do software se possível.'),
+('I need to recover my account', 'Preciso de recuperar a minha conta', 9, 'Frase para situações de acesso perdido a contas online.'),
+('Is there a computer available?', 'Há algum computador disponível?', 9, 'Pergunta útil em bibliotecas, centros de negócios ou espaços coworking.');
+
+INSERT INTO exemplos (id_expressao, exemplo) VALUES
+(81, '"How do I connect to the WiFi? What\'s the password?" perguntei na receção.'),
+(82, '"My password is not working even though I\'m sure it\'s correct"'),
+(83, '"The website is not loading properly on my mobile device"'),
+(84, '"I forgot my username for this platform" disse ao técnico de suporte.'),
+(85, '"Where can I charge my phone? My battery is almost dead"'),
+(86, '"How do I update the app? It keeps crashing"'),
+(87, '"The file is too large to send by email. Any alternatives?"'),
+(88, '"Could you help me with this software? I\'m new to it"'),
+(89, '"I need to recover my account. I clicked \'forgot password\'"'),
+(90, '"Is there a computer available with Photoshop installed?"');
+
+-- =============================================
+-- LAZER E ENTRETENIMENTO
+-- =============================================
+INSERT INTO expressoes (versao_ingles, traducao_portugues, id_categoria, explicacao) VALUES
+('What are your hobbies?', 'Quais são os teus hobbies?', 10, 'Pergunta comum em conversas sociais. Respostas típicas incluem atividades como ler, viajar, etc.'),
+('Do you want to go out tonight?', 'Queres sair esta noite?', 10, 'Convite informal para atividades sociais. Pode especificar o local depois.'),
+('I love this song!', 'Adoro esta música!', 10, 'Expressão de entusiasmo sobre música. Alternativa: "This is my favorite song!".'),
+('What time does the concert start?', 'A que horas começa o concerto?', 10, 'Pergunta importante sobre eventos. Verifique também local e preços.'),
+('Are there any good museums here?', 'Há bons museus aqui?', 10, 'Pergunta para explorar cultura local. Pode especificar tipo de museu.'),
+('Can you recommend a good movie?', 'Podes recomendar um bom filme?', 10, 'Pedido de sugestão para entretenimento. Pode especificar o género.'),
+('Let''s take a photo!', 'Vamos tirar uma foto!', 10, 'Sugestão comum em passeios e eventos sociais. Alternativa: "Picture time!".'),
+('Where is the best place to dance?', 'Onde é o melhor sítio para dançar?', 10, 'Pergunta sobre vida noturna. Respostas podem incluir clubes ou bares.'),
+('I prefer outdoor activities', 'Prefiro atividades ao ar livre', 10, 'Expressão sobre preferências de lazer. Pode especificar como hiking, ciclismo, etc.'),
+('That was so much fun!', 'Foi tão divertido!', 10, 'Expressão pós-atividade para mostrar apreço. Alternativa: "I had a great time!".');
+
+INSERT INTO exemplos (id_expressao, exemplo) VALUES
+(91, '"What are your hobbies?" perguntou o novo colega durante o almoço.'),
+(92, '"Do you want to go out tonight? There\'s a new jazz club opening"'),
+(93, '"I love this song! Turn up the volume!" disse no carro.'),
+(94, '"What time does the concert start? We don\'t want to be late"'),
+(95, '"Are there any good museums here with contemporary art?"'),
+(96, '"Can you recommend a good movie for family night?"'),
+(97, '"Let\'s take a photo with this amazing view as background!"'),
+(98, '"Where is the best place to dance salsa in this city?"'),
+(99, '"I prefer outdoor activities like hiking and kayaking"'),
+(100, '"That was so much fun! We should do this again soon"');
