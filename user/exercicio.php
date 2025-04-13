@@ -11,18 +11,9 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
-// Verificação de saída
 if (isset($_GET['sair'])) {
-    $_SESSION['confirmar_saida'] = true;
-    header("Location: indexuser.php");
-    exit();
-}
-
-if (isset($_GET['confirmar_saida'])) {
-    unset($_SESSION['erros_atual']);
-    $_SESSION['lives'] = 5;
-    header("Location: indexuser.php");
-    exit();
+  header("Location: indexuser.php");
+  exit();
 }
 
 $id_expressao = $_GET['id'];
@@ -483,7 +474,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
 
 <body>
   <div class="exercicio-container">
-    <a href="exercicio.php?id=<?php echo $id_expressao; ?>&sair=1" class="btn-sair" title="Voltar" onclick="return confirm('Quer mesmo sair? O progresso será perdido.');">
+    <a href="exercicio.php?id=<?php echo $id_expressao; ?>&sair=1" class="btn-sair" title="Voltar" onclick="return confirm('Quer mesmo sair?');">
       <i class="fas fa-times"></i>
     </a>
     
@@ -513,7 +504,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
       <?php if ($mostrar_resumo_erros): ?>
         <!-- Tela de resumo de erros -->
         <div class="resumo-erros-container">
-          <h2 class="resumo-erros-titulo"><i class="fas fa-exclamation-triangle"></i> Revise seus erros</h2>
+          <h2 class="resumo-erros-titulo"><i class="fas fa-exclamation-triangle"></i> Revise os seus erros</h2>
           
           <?php foreach ($expressoes_erradas as $erro): ?>
             <div class="erro-item">

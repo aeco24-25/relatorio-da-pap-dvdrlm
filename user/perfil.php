@@ -178,7 +178,10 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
         </div>
         <?php
             }
-        }
+        } else {
+          // Mensagem quando não há progresso em nenhuma categoria
+          echo 'Ainda não completaste nenhuma expressão.';
+          }
         ?>
       </div>
     </div>
