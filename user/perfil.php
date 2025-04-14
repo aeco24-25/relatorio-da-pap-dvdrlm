@@ -87,7 +87,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
   <link rel="shortcut icon" href="../assets/images/logo.png">
   
   <link rel="stylesheet" href="css/ltr-6a8f5d2e.css">  
-  <link rel="stylesheet" href="css/styleindexperfil.css">  
+  <link rel="stylesheet" href="css/styleperfil.css">  
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
   <link rel="stylesheet" href="../assets/css/owl.css">
