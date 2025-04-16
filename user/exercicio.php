@@ -29,13 +29,42 @@ if (!isset($_SESSION['erros_atual'])) {
     $_SESSION['erros_atual'] = array();
 }
 
-// Inicializar progresso da sessão
-if (!isset($_SESSION['progresso_sessao'])) {
-    $_SESSION['progresso_sessao'] = array(
-        'categoria_atual' => null,
+$conn = new mysqli('localhost', 'root', '', 'dteaches');
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
+}
+
+// Obter expressão principal e informações da categoria
+$stmt = $conn->prepare("SELECT e.*, c.titulo as categoria_titulo, c.id_categoria 
+                       FROM expressoes e 
+                       JOIN categoria c ON e.id_categoria = c.id_categoria 
+                       WHERE e.id_expressao = ?");
+$stmt->bind_param("i", $id_expressao);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    header('Location: indexuser.php');
+    exit();
+}
+
+$expressao = $result->fetch_assoc();
+$id_categoria = $expressao['id_categoria'];
+
+// Inicializar progresso da categoria na sessão se não existir
+if (!isset($_SESSION['progresso_categorias'][$id_categoria])) {
+    $_SESSION['progresso_categorias'][$id_categoria] = array(
         'expressoes_completas' => array(),
-        'total_expressoes' => 0
+        'total_expressoes' => 0,
+        'ultima_expressao' => null
     );
+    
+    // Obter total de expressões na categoria
+    $stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = ?");
+    $stmt_total->bind_param("i", $id_categoria);
+    $stmt_total->execute();
+    $result_total = $stmt_total->get_result();
+    $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'] = $result_total->fetch_assoc()['total'];
 }
 
 // Inicializar meta diária
@@ -52,44 +81,7 @@ if (!isset($_SESSION['meta_diaria'])) {
     );
 }
 
-$conn = new mysqli('localhost', 'root', '', 'dteaches');
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
-}
-
-// Obter expressão principal
-$stmt = $conn->prepare("SELECT e.*, c.titulo as categoria_titulo, c.id_categoria 
-                       FROM expressoes e 
-                       JOIN categoria c ON e.id_categoria = c.id_categoria 
-                       WHERE e.id_expressao = ?");
-$stmt->bind_param("i", $id_expressao);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 0) {
-    header('Location: indexuser.php');
-    exit();
-}
-
-$expressao = $result->fetch_assoc();
-
-// Verificar se mudou de categoria
-if ($_SESSION['progresso_sessao']['categoria_atual'] != $expressao['id_categoria']) {
-    $_SESSION['progresso_sessao'] = array(
-        'categoria_atual' => $expressao['id_categoria'],
-        'expressoes_completas' => array(),
-        'total_expressoes' => 0
-    );
-    
-    // Obter total de expressões na categoria
-    $stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = ?");
-    $stmt_total->bind_param("i", $expressao['id_categoria']);
-    $stmt_total->execute();
-    $result_total = $stmt_total->get_result();
-    $_SESSION['progresso_sessao']['total_expressoes'] = $result_total->fetch_assoc()['total'];
-}
-
-// Verificar progresso no banco de dados
+// Verificar progresso no banco de dados para esta expressão
 $stmt_first_view = $conn->prepare("SELECT completo FROM progresso 
                                  WHERE username = ? AND id_expressao = ?");
 $stmt_first_view->bind_param("si", $username, $id_expressao);
@@ -97,14 +89,27 @@ $stmt_first_view->execute();
 $result_first_view = $stmt_first_view->get_result();
 $first_view = ($result_first_view->num_rows === 0);
 
-// Obter próxima expressão
-$stmt_proxima = $conn->prepare("SELECT id_expressao FROM expressoes 
-                              WHERE id_categoria = ? AND id_expressao > ? 
-                              ORDER BY id_expressao ASC LIMIT 1");
-$stmt_proxima->bind_param("ii", $expressao['id_categoria'], $id_expressao);
+// Obter próxima expressão não completada na mesma categoria
+$stmt_proxima = $conn->prepare("SELECT e.id_expressao 
+                              FROM expressoes e
+                              LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ? AND p.completo = TRUE
+                              WHERE e.id_categoria = ? AND p.id_expressao IS NULL AND e.id_expressao > ?
+                              ORDER BY e.id_expressao ASC LIMIT 1");
+$stmt_proxima->bind_param("sii", $username, $id_categoria, $id_expressao);
 $stmt_proxima->execute();
 $result_proxima = $stmt_proxima->get_result();
 $proxima_expressao = $result_proxima->fetch_assoc();
+
+// Se não houver próxima expressão não completada, verificar se há alguma após esta
+if (!$proxima_expressao) {
+    $stmt_proxima_alternativa = $conn->prepare("SELECT id_expressao FROM expressoes 
+                                              WHERE id_categoria = ? AND id_expressao > ? 
+                                              ORDER BY id_expressao ASC LIMIT 1");
+    $stmt_proxima_alternativa->bind_param("ii", $id_categoria, $id_expressao);
+    $stmt_proxima_alternativa->execute();
+    $result_proxima_alternativa = $stmt_proxima_alternativa->get_result();
+    $proxima_expressao = $result_proxima_alternativa->fetch_assoc();
+}
 
 // Obter exemplos de uso
 $stmt_exemplos = $conn->prepare("SELECT exemplo FROM exemplos WHERE id_expressao = ?");
@@ -136,9 +141,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("si", $username, $id_expressao);
             $stmt->execute();
             
-            // Atualizar progresso da sessão
-            if (!in_array($id_expressao, $_SESSION['progresso_sessao']['expressoes_completas'])) {
-                $_SESSION['progresso_sessao']['expressoes_completas'][] = $id_expressao;
+            // Atualizar progresso na sessão
+            if (!in_array($id_expressao, $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'])) {
+                $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'][] = $id_expressao;
+                $_SESSION['progresso_categorias'][$id_categoria]['ultima_expressao'] = $id_expressao;
             }
             
             // Remover dos erros se estiver lá
@@ -190,7 +196,7 @@ if (isset($_SESSION['mostrar_feedback']) && $_SESSION['mostrar_feedback'] && $_S
 $stmt = $conn->prepare("SELECT traducao_portugues FROM expressoes 
                        WHERE id_categoria = ? AND id_expressao != ? 
                        ORDER BY RAND() LIMIT 3");
-$stmt->bind_param("ii", $expressao['id_categoria'], $id_expressao);
+$stmt->bind_param("ii", $id_categoria, $id_expressao);
 $stmt->execute();
 $result_alternativas = $stmt->get_result();
 
@@ -202,8 +208,8 @@ $alternativas[] = $expressao['traducao_portugues'];
 shuffle($alternativas);
 
 // Calcular progresso atual para mostrar na barra
-$progresso_atual = count($_SESSION['progresso_sessao']['expressoes_completas']);
-$total_expressoes_categoria = $_SESSION['progresso_sessao']['total_expressoes'];
+$progresso_atual = count($_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas']);
+$total_expressoes_categoria = $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'];
 $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $total_expressoes_categoria) * 100) : 0;
 ?>
 
@@ -232,6 +238,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
       <div class="progress-container">
         <div class="progress-bar">
           <div class="progress-fill" style="width: <?php echo $percentagem; ?>%"></div>
+          <div class="progress-text"><?php echo $progresso_atual; ?>/<?php echo $total_expressoes_categoria; ?></div>
         </div>
         <div class="lives-container">
           <?php 

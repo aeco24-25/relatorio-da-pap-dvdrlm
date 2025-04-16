@@ -90,6 +90,11 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     $categoria_anterior_completa = $completa;
 }
 
+// Inicializar array de progresso por categoria na sessão se não existir
+if (!isset($_SESSION['progresso_categorias'])) {
+    $_SESSION['progresso_categorias'] = array();
+}
+
 // Ícones para categorias
 $categorias_icones = [
     'fa-handshake', 'fa-hotel', 'fa-utensils', 'fa-bus', 
@@ -221,15 +226,40 @@ $categorias_icones = [
                           echo '<div class="categoria-card' . (!$liberada ? ' categoria-bloqueada' : '') . '">';
                           
                           if ($liberada) {
-                              $sql_primeira = "SELECT e.id_expressao FROM expressoes e 
-                                              WHERE e.id_categoria = $cat_id 
-                                              ORDER BY e.id_expressao LIMIT 1";
+                              // Obter primeira expressão não completada na categoria
+                              $sql_primeira = "SELECT e.id_expressao 
+                                              FROM expressoes e
+                                              LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = '$username' AND p.completo = TRUE
+                                              WHERE e.id_categoria = $cat_id AND p.id_expressao IS NULL
+                                              ORDER BY e.id_expressao ASC LIMIT 1";
+                              
                               $result_primeira = $conn->query($sql_primeira);
+                              
+                              // Se todas estiverem completas, pegar a última
+                              if ($result_primeira->num_rows === 0) {
+                                  $sql_ultima = "SELECT e.id_expressao 
+                                                FROM expressoes e
+                                                JOIN progresso p ON e.id_expressao = p.id_expressao 
+                                                WHERE e.id_categoria = $cat_id AND p.username = '$username' AND p.completo = TRUE
+                                                ORDER BY e.id_expressao DESC LIMIT 1";
+                                  $result_primeira = $conn->query($sql_ultima);
+                              }
+                              
                               if ($result_primeira->num_rows > 0) {
                                   $primeira_row = $result_primeira->fetch_assoc();
                                   echo '<a href="exercicio.php?id=' . $primeira_row['id_expressao'] . '" style="text-decoration: none; color: inherit; display: flex; width: 100%;">';
                               } else {
-                                  echo '<div style="display: flex; width: 100%;">';
+                                  // Se não houver nenhuma expressão completada, pegar a primeira da categoria
+                                  $sql_primeira_expressao = "SELECT id_expressao FROM expressoes 
+                                                           WHERE id_categoria = $cat_id 
+                                                           ORDER BY id_expressao ASC LIMIT 1";
+                                  $result_primeira = $conn->query($sql_primeira_expressao);
+                                  if ($result_primeira->num_rows > 0) {
+                                      $primeira_row = $result_primeira->fetch_assoc();
+                                      echo '<a href="exercicio.php?id=' . $primeira_row['id_expressao'] . '" style="text-decoration: none; color: inherit; display: flex; width: 100%;">';
+                                  } else {
+                                      echo '<div style="display: flex; width: 100%;">';
+                                  }
                               }
                           } else {
                               echo '<div style="display: flex; width: 100%;">';
