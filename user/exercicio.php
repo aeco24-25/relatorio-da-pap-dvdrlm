@@ -12,17 +12,19 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 if (isset($_GET['sair'])) {
-  header("Location: indexuser.php");
-  exit();
+    header("Location: indexuser.php");
+    exit();
 }
 
 $id_expressao = $_GET['id'];
 $username = $_SESSION['username'];
 
+// Inicializar vidas se não existirem
 if (!isset($_SESSION['lives'])) {
     $_SESSION['lives'] = 5;
 }
 
+// Inicializar erros atuais se não existirem
 if (!isset($_SESSION['erros_atual'])) {
     $_SESSION['erros_atual'] = array();
 }
@@ -33,6 +35,20 @@ if (!isset($_SESSION['progresso_sessao'])) {
         'categoria_atual' => null,
         'expressoes_completas' => array(),
         'total_expressoes' => 0
+    );
+}
+
+// Inicializar meta diária
+if (!isset($_SESSION['meta_diaria'])) {
+    $_SESSION['meta_diaria'] = array(
+        'data' => date('Y-m-d'),
+        'completas' => 0
+    );
+} elseif ($_SESSION['meta_diaria']['data'] != date('Y-m-d')) {
+    // Resetar meta se for um novo dia
+    $_SESSION['meta_diaria'] = array(
+        'data' => date('Y-m-d'),
+        'completas' => 0
     );
 }
 
@@ -99,53 +115,75 @@ $result_exemplos = $stmt_exemplos->get_result();
 $mensagem = '';
 $resposta_correta = false;
 $mostrar_explicacao = $first_view && !isset($_POST['pular_explicacao']);
-$mostrar_resumo_erros = isset($_POST['finalizar_sessao']) && !empty($_SESSION['erros_atual']);
+$mostrar_feedback = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['pular_explicacao'])) {
         $mostrar_explicacao = false;
     } 
-    elseif (isset($_POST['finalizar_sessao'])) {
-        $_SESSION['erros_atual'] = array();
-        header("Location: exercicio.php?id=$id_expressao");
-        exit();
-    }
     else {
         $resposta_usuario = isset($_POST['resposta']) ? trim($_POST['resposta']) : '';
-        
         $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
         $resposta_usuario_normalized = strtolower(trim($resposta_usuario));
         
         $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
         
         if ($resposta_correta) {
+            // Atualizar banco de dados
             $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
                                    VALUES (?, ?, TRUE) 
                                    ON DUPLICATE KEY UPDATE completo = TRUE");
             $stmt->bind_param("si", $username, $id_expressao);
             $stmt->execute();
             
+            // Atualizar progresso da sessão
             if (!in_array($id_expressao, $_SESSION['progresso_sessao']['expressoes_completas'])) {
                 $_SESSION['progresso_sessao']['expressoes_completas'][] = $id_expressao;
             }
             
+            // Remover dos erros se estiver lá
             if (($key = array_search($id_expressao, $_SESSION['erros_atual'])) !== false) {
                 unset($_SESSION['erros_atual'][$key]);
             }
+            
+            // Atualizar meta diária (máximo 10)
+            if ($_SESSION['meta_diaria']['completas'] < 10) {
+                $_SESSION['meta_diaria']['completas']++;
+            }
+            
+            // Preparar feedback para próxima tela
+            $_SESSION['mostrar_feedback'] = true;
+            $_SESSION['expressao_feedback'] = $id_expressao;
+            
+            header("Location: exercicio.php?id=$id_expressao");
+            exit();
         } else {
+            // Resposta incorreta
             $_SESSION['lives']--;
+            
+            // Verificar se acabaram as vidas
+            if ($_SESSION['lives'] <= 0) {
+                $_SESSION['lives'] = 5; // Resetar vidas
+                $_SESSION['erros_atual'] = array(); // Limpar erros
+                header("Location: indexuser.php"); // Redirecionar para início
+                exit();
+            }
+            
             $mensagem = '<div class="mensagem-erro"><i class="fas fa-times"></i> Incorreto. Tente novamente.</div>';
             
+            // Adicionar aos erros se não estiver lá
             if (!in_array($id_expressao, $_SESSION['erros_atual'])) {
                 $_SESSION['erros_atual'][] = $id_expressao;
             }
-            
-            if ($_SESSION['lives'] <= 0) {
-                $_SESSION['lives'] = 5;
-                $mostrar_resumo_erros = true;
-            }
         }
     }
+}
+
+// Verificar se deve mostrar feedback de acerto
+if (isset($_SESSION['mostrar_feedback']) && $_SESSION['mostrar_feedback'] && $_SESSION['expressao_feedback'] == $id_expressao) {
+    $mostrar_feedback = true;
+    unset($_SESSION['mostrar_feedback']);
+    unset($_SESSION['expressao_feedback']);
 }
 
 // Obter alternativas para a questão
@@ -162,19 +200,6 @@ while ($row = $result_alternativas->fetch_assoc()) {
 }
 $alternativas[] = $expressao['traducao_portugues'];
 shuffle($alternativas);
-
-// Se for mostrar resumo de erros, buscar detalhes das expressões erradas
-$expressoes_erradas = array();
-if ($mostrar_resumo_erros && !empty($_SESSION['erros_atual'])) {
-    $ids_erros = implode(",", $_SESSION['erros_atual']);
-    $stmt_erros = $conn->prepare("SELECT * FROM expressoes WHERE id_expressao IN ($ids_erros)");
-    $stmt_erros->execute();
-    $result_erros = $stmt_erros->get_result();
-    
-    while ($erro = $result_erros->fetch_assoc()) {
-        $expressoes_erradas[] = $erro;
-    }
-}
 
 // Calcular progresso atual para mostrar na barra
 $progresso_atual = count($_SESSION['progresso_sessao']['expressoes_completas']);
@@ -203,7 +228,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
     </a>
     
     <div class="exercicio-card">
-      <!-- Progress bar and lives -->
+      <!-- Barra de progresso e vidas -->
       <div class="progress-container">
         <div class="progress-bar">
           <div class="progress-fill" style="width: <?php echo $percentagem; ?>%"></div>
@@ -225,25 +250,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
       
       <?php echo $mensagem; ?>
       
-      <?php if ($mostrar_resumo_erros): ?>
-        <!-- Tela de resumo de erros -->
-        <div class="resumo-erros-container">
-          <h2 class="resumo-erros-titulo"><i class="fas fa-exclamation-triangle"></i> Revise os seus erros</h2>
-          
-          <?php foreach ($expressoes_erradas as $erro): ?>
-            <div class="erro-item">
-              <div class="erro-questao"><?php echo htmlspecialchars($erro['versao_ingles']); ?></div>
-              <div class="erro-resposta">Resposta correta: <?php echo htmlspecialchars($erro['traducao_portugues']); ?></div>
-            </div>
-          <?php endforeach; ?>
-          
-          <form method="POST">
-            <button type="submit" name="finalizar_sessao" class="btn-submeter">
-              <i class="fas fa-check"></i> Continuar
-            </button>
-          </form>
-        </div>
-      <?php elseif ($mostrar_explicacao): ?>
+      <?php if ($mostrar_explicacao): ?>
         <!-- Tela de explicação -->
         <div class="explicacao-container">
           <h2 class="explicacao-titulo"><?php echo htmlspecialchars($expressao['versao_ingles']); ?></h2>
@@ -274,6 +281,29 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
             </button>
           </form>
         </div>
+      <?php elseif ($mostrar_feedback): ?>
+        <!-- Feedback de acerto -->
+        <div class="exercicio-completo">
+          <div class="resposta-correta">
+            <i class="fas fa-check-circle"></i> Resposta Correta!
+          </div>
+          
+          <div class="traducao-container">
+            <p style="color:#f5f4ff;"><strong><?php echo htmlspecialchars($expressao['versao_ingles']); ?></strong></p>
+            <p style="color:#f5f4ff;"><i class="fas fa-arrow-down"></i></p>
+            <p style="color:#f5f4ff;"><strong><?php echo htmlspecialchars($expressao['traducao_portugues']); ?></strong></p>
+          </div>
+          
+          <?php if ($proxima_expressao): ?>
+            <a href="exercicio.php?id=<?php echo $proxima_expressao['id_expressao']; ?>" class="btn-submeter">
+              <i class="fas fa-arrow-right"></i> Próxima Expressão
+            </a>
+          <?php else: ?>
+            <a href="indexuser.php" class="btn-submeter">
+              <i class="fas fa-home"></i> Voltar ao Início
+            </a>
+          <?php endif; ?>
+        </div>
       <?php elseif (!$resposta_correta): ?>
         <!-- Tela de exercício -->
         <div class="instrucao">
@@ -300,29 +330,6 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
             <i class="fas fa-check"></i> Verificar
           </button>
         </form>
-      <?php else: ?>
-        <!-- Tela de resposta correta -->
-        <div class="exercicio-completo">
-          <div class="resposta-correta">
-            <i class="fas fa-check-circle"></i> Resposta Correta!
-          </div>
-          
-          <div class="traducao-container">
-            <p style="color:#f5f4ff;"><strong><?php echo htmlspecialchars($expressao['versao_ingles']); ?></strong></p>
-            <p style="color:#f5f4ff;"><i class="fas fa-arrow-down"></i></p>
-            <p style="color:#f5f4ff;"><strong><?php echo htmlspecialchars($expressao['traducao_portugues']); ?></strong></p>
-          </div>
-          
-          <?php if ($proxima_expressao): ?>
-            <a href="exercicio.php?id=<?php echo $proxima_expressao['id_expressao']; ?>" class="btn-submeter">
-              <i class="fas fa-arrow-right"></i> Próxima Expressão
-            </a>
-          <?php else: ?>
-            <a href="indexuser.php" class="btn-submeter">
-              <i class="fas fa-home"></i> Voltar ao Início
-            </a>
-          <?php endif; ?>
-        </div>
       <?php endif; ?>
     </div>
   </div>

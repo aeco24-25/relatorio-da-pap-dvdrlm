@@ -11,11 +11,28 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// Obter categorias para o menu
+// Inicializar meta diária se não existir
+if (!isset($_SESSION['meta_diaria'])) {
+    $_SESSION['meta_diaria'] = array(
+        'data' => date('Y-m-d'),
+        'completas' => 0
+    );
+} elseif ($_SESSION['meta_diaria']['data'] != date('Y-m-d')) {
+    // Resetar meta se for um novo dia
+    $_SESSION['meta_diaria'] = array(
+        'data' => date('Y-m-d'),
+        'completas' => 0
+    );
+}
+
+// Obter número de expressões completadas hoje (limitado a 10)
+$completas_hoje = min(10, $_SESSION['meta_diaria']['completas']);
+
+// Obter categorias
 $sql_categorias = "SELECT id_categoria, titulo FROM categoria ORDER BY id_categoria";
 $result_categorias = $conn->query($sql_categorias);
 
-// Obter o progresso do utilizador
+// Obter progresso geral do usuário
 $username = $_SESSION['username'];
 $sql_progresso = "SELECT COUNT(*) as total_completo FROM progresso WHERE username = ? AND completo = TRUE";
 $stmt = $conn->prepare($sql_progresso);
@@ -31,10 +48,10 @@ $result_total = $conn->query($sql_total);
 $total_row = $result_total->fetch_assoc();
 $total_expressoes = $total_row['total'];
 
-// Calcular percentagem para mostrar no progresso
+// Calcular percentagem de progresso geral
 $percentagem = ($total_expressoes > 0) ? round(($total_completo / $total_expressoes) * 100) : 0;
 
-// Função para calcular coordenadas do arco SVG
+// Função para coordenadas do arco de progresso
 function getProgressCoordinates($percent, $radius) {
     $percent = min(100, max(0, $percent));
     $angle = ($percent / 100) * 360;
@@ -44,7 +61,7 @@ function getProgressCoordinates($percent, $radius) {
     return round($x, 1) . ' ' . round($y, 1);
 }
 
-// Verificar quais categorias estão liberadas
+// Verificar categorias liberadas e completas
 $categorias_liberadas = array();
 $categorias_completas = array();
 
@@ -52,15 +69,15 @@ $sql_categorias_progresso = "SELECT
     c.id_categoria, 
     c.titulo,
     COUNT(e.id_expressao) as total,
-    SUM(IF(p.completo = TRUE AND p.username = ?, 1, 0)) as completas
+    SUM(CASE WHEN p.completo = TRUE AND p.username = ? THEN 1 ELSE 0 END) as completas
 FROM categoria c
 JOIN expressoes e ON c.id_categoria = e.id_categoria
-LEFT JOIN progresso p ON e.id_expressao = p.id_expressao
-GROUP BY c.id_categoria
+LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ?
+GROUP BY c.id_categoria, c.titulo
 ORDER BY c.id_categoria";
 
 $stmt = $conn->prepare($sql_categorias_progresso);
-$stmt->bind_param("s", $username);
+$stmt->bind_param("ss", $username, $username);
 $stmt->execute();
 $result_categorias_progresso = $stmt->get_result();
 
@@ -69,29 +86,18 @@ $categoria_anterior_completa = true;
 while ($row = $result_categorias_progresso->fetch_assoc()) {
     $completa = ($row['completas'] == $row['total']);
     $categorias_completas[$row['id_categoria']] = $completa;
-    
-    if ($categoria_anterior_completa) {
-        $categorias_liberadas[$row['id_categoria']] = true;
-        $categoria_anterior_completa = $completa;
-    } else {
-        $categorias_liberadas[$row['id_categoria']] = false;
-    }
+    $categorias_liberadas[$row['id_categoria']] = $categoria_anterior_completa;
+    $categoria_anterior_completa = $completa;
 }
 
-// Array de ícones para cada categoria
+// Ícones para categorias
 $categorias_icones = [
-  'fa-handshake',          
-  'fa-hotel',              
-  'fa-utensils',          
-  'fa-bus',               
-  'fa-exclamation-triangle', 
-  'fa-shopping-bag',      
-  'fa-map-marked-alt',    
-  'fa-briefcase',         
-  'fa-laptop-code',       
-  'fa-gamepad'             
+    'fa-handshake', 'fa-hotel', 'fa-utensils', 'fa-bus', 
+    'fa-exclamation-triangle', 'fa-shopping-bag', 'fa-map-marked-alt', 
+    'fa-briefcase', 'fa-laptop-code', 'fa-gamepad'
 ];
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-pt">
 <head>
@@ -108,7 +114,6 @@ $categorias_icones = [
   <link rel="stylesheet" href="../assets/css/owl.css">
   <link rel="stylesheet" href="../assets/css/animate.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-  
 </head>
 
 <body style="background:#f2f0ff;">
@@ -178,10 +183,10 @@ $categorias_icones = [
             <div class="daily-goal">
               <h3>Meta Diária</h3>
               <div class="goal-progress">
-                <div class="goal-progress-fill" style="width: <?php echo min(100, round(($total_completo / 10) * 100)); ?>%"></div>
+                <div class="goal-progress-fill" style="width: <?php echo min(100, ($completas_hoje / 10) * 100); ?>%"></div>
               </div>
               <div class="goal-text">
-                <?php echo $total_completo; ?> de 10 expressões hoje
+                <?php echo $completas_hoje; ?> de 10 expressões hoje
               </div>
             </div>
           </div>
@@ -195,9 +200,10 @@ $categorias_icones = [
                   if ($result_categorias->num_rows > 0) {
                       while($row = $result_categorias->fetch_assoc()) {
                           $cat_id = $row['id_categoria'];
-                          $total_cat = 0;
-                          $completo_cat = 0;
+                          $liberada = isset($categorias_liberadas[$cat_id]) && $categorias_liberadas[$cat_id];
+                          $completa = isset($categorias_completas[$cat_id]) && $categorias_completas[$cat_id];
                           
+                          // Obter progresso da categoria
                           $sql_count = "SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = $cat_id";
                           $result_count = $conn->query($sql_count);
                           $count_row = $result_count->fetch_assoc();
@@ -212,13 +218,9 @@ $categorias_icones = [
                           
                           $cat_percent = ($total_cat > 0) ? round(($completo_cat / $total_cat) * 100) : 0;
                           
-                          $liberada = isset($categorias_liberadas[$cat_id]) && $categorias_liberadas[$cat_id];
-                          $completa = isset($categorias_completas[$cat_id]) && $categorias_completas[$cat_id];
-                          
                           echo '<div class="categoria-card' . (!$liberada ? ' categoria-bloqueada' : '') . '">';
                           
                           if ($liberada) {
-                              // Obter primeira expressão da categoria
                               $sql_primeira = "SELECT e.id_expressao FROM expressoes e 
                                               WHERE e.id_categoria = $cat_id 
                                               ORDER BY e.id_expressao LIMIT 1";
@@ -233,8 +235,7 @@ $categorias_icones = [
                               echo '<div style="display: flex; width: 100%;">';
                           }
                           
-                          // Mostrar ícone da categoria
-                          $icon = $categorias_icones[$cat_id - 1] ?? 'fa-folder'; // -1 porque arrays começam em 0
+                          $icon = $categorias_icones[$cat_id - 1] ?? 'fa-folder';
                           echo '<div class="categoria-icon"><i class="fas ' . $icon . '"></i></div>';
                           
                           echo '<div class="categoria-info">

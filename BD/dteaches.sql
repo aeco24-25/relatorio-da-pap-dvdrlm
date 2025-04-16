@@ -10,7 +10,7 @@ CREATE TABLE users (
 
 CREATE TABLE categoria (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(50) NOT NULL,
+    titulo VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE expressoes (
