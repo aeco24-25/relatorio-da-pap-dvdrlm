@@ -128,7 +128,7 @@ $categorias_icones = [
         <div class="NbGcm">
           <div class="_3vDrO">
             <div class="_3I51r _2OF7V">
-              <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
+              <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo" style="margin-right: 5px;"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
@@ -154,7 +154,7 @@ $categorias_icones = [
         </div>
       </div>
       <div class="LFfrA _3MLiB">
-          <div class="_2_lzu">
+          <div class="_2_lzu" style="line-height:0.75;">
             <div class="_21w25 _1E3L7" style="background:#7b6ada;">
               <h2 style="text-align: center; color:#ffffff">Progresso Geral</h2>
               <div class="progress-container">
@@ -235,15 +235,13 @@ $categorias_icones = [
                               
                               $result_primeira = $conn->query($sql_primeira);
                               
-                              // Se todas estiverem completas, pegar a última
+                              // Se todas estiverem completas, vamos para a primeira expressão para permitir revisão
                               if ($result_primeira->num_rows === 0) {
-                                  $sql_ultima = "SELECT e.id_expressao 
-                                                FROM expressoes e
-                                                JOIN progresso p ON e.id_expressao = p.id_expressao 
-                                                WHERE e.id_categoria = $cat_id AND p.username = '$username' AND p.completo = TRUE
-                                                ORDER BY e.id_expressao DESC LIMIT 1";
-                                  $result_primeira = $conn->query($sql_ultima);
-                              }
+                                $sql_primeira_expressao = "SELECT id_expressao FROM expressoes 
+                                                         WHERE id_categoria = $cat_id 
+                                                         ORDER BY id_expressao ASC LIMIT 1";
+                                $result_primeira = $conn->query($sql_primeira_expressao);
+                            }
                               
                               if ($result_primeira->num_rows > 0) {
                                   $primeira_row = $result_primeira->fetch_assoc();

@@ -132,8 +132,8 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
       
       <div class="perfil-container">
         <div class="perfil-header">
-          <div class="perfil-avatar">
-            <?php echo strtoupper(substr($username, 0, 1)); ?>
+          <div class="perfil-avatar" style="overflow: hidden;">
+            <img src="../assets/images/user2.png" alt="Avatar" style="margin-top: 10px;">
           </div>
           <div class="perfil-info">
             <div class="perfil-nome"><?php echo htmlspecialchars($username); ?></div>
@@ -173,7 +173,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
             <div><?php echo $percentagem_cat; ?>% completo</div>
           </div>
           <div class="progresso-barra">
-            <div class="progresso-preenchido" style="width: <?php echo $percentagem_cat; ?>%;"></div>
+            <div class="progresso-preenchido <?php echo ($percentagem_cat == 100) ? 'completa' : 'incompleta'; ?>" style="width: <?php echo $percentagem_cat; ?>%;"></div>
           </div>
         </div>
         <?php
