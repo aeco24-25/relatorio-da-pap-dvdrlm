@@ -175,8 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
             
-            $mensagem = '<div class="mensagem-erro"><i class="fas fa-times"></i> Incorreto. Tente novamente.</div>';
-            
+            $mensagem = '<div class="exercicio-completo"><div class="resposta-incorreta"><i class="fas fa-times-circle"></i>  Incorreto!</div></div>';
             // Adicionar aos erros se não estiver lá
             if (!in_array($id_expressao, $_SESSION['erros_atual'])) {
                 $_SESSION['erros_atual'][] = $id_expressao;

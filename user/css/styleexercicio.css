@@ -273,3 +273,11 @@ color: #fff;
 color: #2ecc71;
 font-style: italic;
 }
+
+.resposta-incorreta {
+margin-top: -15px !important;
+font-size: 1.55rem;
+color: #e74c3c;
+margin: 15px 0;
+font-weight: bold;
+}
