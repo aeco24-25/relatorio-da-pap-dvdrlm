@@ -252,3 +252,15 @@ transition: width 0.5s ease;
 font-size: 14px;
 color: var(--dark-gray);
 }
+
+.categoria-completa .categoria-icon {
+    background-color: #66BB6A;
+}
+
+.categoria-completa .categoria-progress-fill {
+    background-color: #66BB6A !important;
+}
+
+.categoria-completa:hover .categoria-icon {
+    background-color: #57A85A; 
+}

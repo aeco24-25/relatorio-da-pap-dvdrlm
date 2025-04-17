@@ -132,7 +132,7 @@ $categorias_icones = [
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
-              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user.png" alt="Avatar"></span>
+              <span class="_3ROGm"><img class="_3Kp8s" src="../assets/images/user2.png" alt="Avatar"></span>
               <span style="margin-left:-5px;"><?php echo htmlspecialchars($username); ?></span>
               <span class="_2Vgy6 _1k0u2 cCL9P"></span>
               <ul class="_3q7Wh OSaWc _2HujR _1ZY-H">
@@ -165,7 +165,7 @@ $categorias_icones = [
                     <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="var(--primary-color)" />
                     <?php endif; ?>
                     <?php if ($percentagem < 100): ?>
-                    <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#7b6ada" />
+                    <path d="M 75 75 L <?php echo getProgressCoordinates($percentagem, 75); ?> A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 0 75 0 Z" fill="#66BB6A" />
                     <?php endif; ?>
                     <circle cx="75" cy="75" r="60" fill="#fcfcff" />
                     <text x="75" y="80" font-size="24" text-anchor="middle" fill="#333"><?php echo $percentagem; ?>%</text>
@@ -223,9 +223,9 @@ $categorias_icones = [
                           
                           $cat_percent = ($total_cat > 0) ? round(($completo_cat / $total_cat) * 100) : 0;
                           
-                          echo '<div class="categoria-card' . (!$liberada ? ' categoria-bloqueada' : '') . '">';
-                          
-                          if ($liberada) {
+                          echo '<div class="categoria-card' . (!$liberada ? ' categoria-bloqueada' : '') . ($completa ? ' categoria-completa' : '') . '">';                        
+                                                
+                          if ($liberada || $completa) {
                               // Obter primeira expressão não completada na categoria
                               $sql_primeira = "SELECT e.id_expressao 
                                               FROM expressoes e
@@ -280,7 +280,7 @@ $categorias_icones = [
                                 </div>
                               </div>';
                           
-                          if ($liberada && $result_primeira->num_rows > 0) {
+                          if (($liberada || $completa) && isset($primeira_row)) {
                               echo '</a>';
                           } else {
                               echo '</div>';
