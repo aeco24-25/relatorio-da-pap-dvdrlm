@@ -291,3 +291,45 @@ height: 100%;
 pointer-events: none;
 z-index: 9999;
 }
+
+.tela-erros-container {
+border-radius: 10px;
+padding: 30px;
+margin: 20px auto;
+max-width: 500px;
+text-align: center;
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.tela-erros-container h2 {
+color: #7b6ada;
+margin-bottom: 20px;
+}
+
+.tela-erros-container .icone-aviso {
+color: #ff5252;
+font-size: 50px;
+margin-bottom: 20px;
+}
+
+.btn-voltar-inicio {
+background-color: #7b6ada;
+color: white;
+padding: 12px 25px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-size: 16px;
+margin-top: 20px;
+text-decoration: none;
+display: inline-block;
+transition: background-color 0.3s;
+}
+
+.btn-voltar-inicio:hover {
+background-color: #6a5acd;
+}
+
+.btn-voltar-inicio i {
+margin-right: 8px;
+}
