@@ -224,6 +224,9 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
   
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="js/confetti.js"></script> 
+
 </head>
 
 <body>
@@ -310,6 +313,15 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
             </a>
           <?php endif; ?>
         </div>
+        
+        <!-- Script para disparar confetti -->
+        <script>
+          // Chama a função do ficheiro externo
+          window.onload = function() {
+            fireConfetti();
+          };
+        </script>
+
       <?php elseif (!$resposta_correta): ?>
         <!-- Tela de exercício -->
         <div class="instrucao">
