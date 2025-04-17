@@ -192,8 +192,12 @@ background-color: #999;
 }
 
 .bloqueio-mensagem {
-font-size: 14px;
-color: #c62828;
+background-color: #ff5252;
+padding: 3px 8px;
+border-radius: 10px;
+font-size: 0.8rem;
+display: inline-block;
+color: white;
 margin-top: 5px;
 font-style: italic;
 }
@@ -263,4 +267,8 @@ background-color: #66BB6A !important;
 
 .categoria-completa:hover .categoria-icon {
 background-color: #57A85A; 
+}
+
+.categoria-completa {
+border-left: 5px solid #4CAF50 !important;
 }
