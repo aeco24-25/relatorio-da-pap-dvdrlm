@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="NbGcm">
           <div class="_3vDrO">
             <div class="_3I51r _2OF7V">
-              <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
+              <span class="oboa9 _3viv6 HCWXf _3PU7E _3JPjo" style="margin-right: 5px;"></span><span class="_1icRZ _1k9o2 cCL9P"></span>
             </div>
             <div class="_1ALvM"></div>
             <div class="_1G4t1 _3HsQj _2OF7V" data-test="user-dropdown">
