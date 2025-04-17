@@ -1,4 +1,3 @@
-// js/confetti.js
 function fireConfetti() {
     confetti({
       particleCount: 150,
@@ -9,7 +8,7 @@ function fireConfetti() {
     });
   }
   
-  // Exporte a função se for um módulo
+  // Exportar a função se for um módulo
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { fireConfetti };
 }
