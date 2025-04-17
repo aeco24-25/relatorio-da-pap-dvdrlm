@@ -293,7 +293,6 @@ Header Style
 
 
 .logo {
-    display: flex; /* Faz com que a imagem e o texto fiquem na mesma linha */
     align-items: center; /* Estabiliza verticalmente a imagem e o texto */
 }
 
