@@ -167,6 +167,7 @@ $categorias_icones = [
                 </div>
               </div>
             </div>
+          </div>
           
           <div class="_3MT-S">
               <div class="_2hEQd _1E3L7" style="background:#7b6ada;">
