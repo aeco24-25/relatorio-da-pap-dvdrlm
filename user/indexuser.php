@@ -11,23 +11,6 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// Inicializar meta diária se não existir
-if (!isset($_SESSION['meta_diaria'])) {
-    $_SESSION['meta_diaria'] = array(
-        'data' => date('Y-m-d'),
-        'completas' => 0
-    );
-} elseif ($_SESSION['meta_diaria']['data'] != date('Y-m-d')) {
-    // Resetar meta se for um novo dia
-    $_SESSION['meta_diaria'] = array(
-        'data' => date('Y-m-d'),
-        'completas' => 0
-    );
-}
-
-// Obter número de expressões completadas hoje (limitado a 10)
-$completas_hoje = min(10, $_SESSION['meta_diaria']['completas']);
-
 // Obter categorias
 $sql_categorias = "SELECT id_categoria, titulo FROM categoria ORDER BY id_categoria";
 $result_categorias = $conn->query($sql_categorias);
@@ -184,17 +167,6 @@ $categorias_icones = [
                 </div>
               </div>
             </div>
-
-            <div class="daily-goal">
-              <h3>Meta Diária</h3>
-              <div class="goal-progress">
-                <div class="goal-progress-fill" style="width: <?php echo min(100, ($completas_hoje / 10) * 100); ?>%"></div>
-              </div>
-              <div class="goal-text">
-                <?php echo $completas_hoje; ?> de 10 expressões hoje
-              </div>
-            </div>
-          </div>
           
           <div class="_3MT-S">
               <div class="_2hEQd _1E3L7" style="background:#7b6ada;">
