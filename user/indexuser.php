@@ -163,7 +163,7 @@ $categorias_icones = [
               <div class="progress-container">
                 <div class="progress-circle">
                   <svg height="150" width="150" viewBox="0 0 150 150" aria-labelledby="progress-percent">
-                    <circle cx="75" cy="75" r="75" fill="#66bb6a" />
+                    <circle cx="75" cy="75" r="75" fill="#e2e2e2" />
                     <?php if ($percentagem > 0): ?>
                     <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="var(--primary-color)" />
                     <?php endif; ?>

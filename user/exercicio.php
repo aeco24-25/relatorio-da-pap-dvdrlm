@@ -46,8 +46,6 @@ $_SESSION['meta_diaria'] = [
     'completas_real' => $hoje_row['hoje']
 ];
 
-
-
 // Obter expressão principal e informações da categoria
 $stmt = $conn->prepare("SELECT e.*, c.titulo as categoria_titulo, c.id_categoria, e.tipo_exercicio
                        FROM expressoes e 
@@ -98,6 +96,18 @@ if (!isset($_SESSION['progresso_categorias'][$id_categoria])) {
     $stmt_total->execute();
     $result_total = $stmt_total->get_result();
     $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'] = $result_total->fetch_assoc()['total'];
+    
+    // Obter expressões já completadas pelo usuário nesta categoria
+    $stmt_completas = $conn->prepare("SELECT id_expressao FROM progresso 
+                                    WHERE username = ? AND completo = TRUE 
+                                    AND id_expressao IN (SELECT id_expressao FROM expressoes WHERE id_categoria = ?)");
+    $stmt_completas->bind_param("si", $username, $id_categoria);
+    $stmt_completas->execute();
+    $result_completas = $stmt_completas->get_result();
+    
+    while ($row = $result_completas->fetch_assoc()) {
+        $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'][$row['id_expressao']] = true;
+    }
 }
 
 // Verificar progresso no banco de dados para esta expressão
@@ -112,12 +122,24 @@ $first_view = ($result_first_view->num_rows === 0);
 $stmt_proxima = $conn->prepare("SELECT e.id_expressao 
                               FROM expressoes e
                               LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ? AND p.completo = TRUE
-                              WHERE e.id_categoria = ? AND p.id_expressao IS NULL AND e.id_expressao > ?
+                              WHERE e.id_categoria = ? AND (p.id_expressao IS NULL OR e.id_expressao > ?)
                               ORDER BY e.id_expressao ASC LIMIT 1");
 $stmt_proxima->bind_param("sii", $username, $id_categoria, $id_expressao);
 $stmt_proxima->execute();
 $result_proxima = $stmt_proxima->get_result();
 $proxima_expressao = $result_proxima->fetch_assoc();
+
+// Se não encontrou próxima expressão, verifica se pode reiniciar a categoria
+if (!$proxima_expressao) {
+    $stmt_reiniciar = $conn->prepare("SELECT e.id_expressao 
+                                    FROM expressoes e
+                                    WHERE e.id_categoria = ?
+                                    ORDER BY e.id_expressao ASC LIMIT 1");
+    $stmt_reiniciar->bind_param("i", $id_categoria);
+    $stmt_reiniciar->execute();
+    $result_reiniciar = $stmt_reiniciar->get_result();
+    $proxima_expressao = $result_reiniciar->fetch_assoc();
+}
 
 // Obter exemplos de uso
 $stmt_exemplos = $conn->prepare("SELECT exemplo FROM exemplos WHERE id_expressao = ?");
@@ -186,6 +208,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['meta_diaria']['completas']++;
             }
             
+            // Atualizar progresso na sessão
+            $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'][$id_expressao] = true;
+            
             // Redirecionar para feedback
             $_SESSION['mostrar_feedback'] = true;
             $_SESSION['expressao_feedback'] = $id_expressao;
@@ -230,7 +255,7 @@ if ($tipo_exercicio == 'traducao') {
     shuffle($alternativas);
 }
 
-// Calcular progresso atual para mostrar na barra
+// Calcular progresso atual para mostrar na barra - agora consultando diretamente a sessão atualizada
 $progresso_atual = count($_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas']);
 $total_expressoes_categoria = $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'];
 $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $total_expressoes_categoria) * 100) : 0;
@@ -349,7 +374,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
           
           <?php if ($proxima_expressao): ?>
             <a href="exercicio.php?id=<?php echo $proxima_expressao['id_expressao']; ?>" class="btn-submeter">
-              <i class="fas fa-arrow-right"></i> Próxima Expressão
+              <i class="fas fa-arrow-right"></i> <?php echo ($progresso_atual >= $total_expressoes_categoria) ? 'Repetir Categoria' : 'Próxima Expressão'; ?>
             </a>
           <?php else: ?>
             <a href="indexuser.php" class="btn-submeter">
