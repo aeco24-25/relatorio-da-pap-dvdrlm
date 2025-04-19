@@ -29,6 +29,22 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
+// VERIFICAÇÃO DA META DIÁRIA 
+$sql_hoje = "SELECT COUNT(*) as hoje FROM progresso 
+            WHERE username = ? AND completo = TRUE 
+            AND DATE(data_conclusao) = CURDATE()";
+$stmt_hoje = $conn->prepare($sql_hoje);
+$stmt_hoje->bind_param("s", $_SESSION['username']);
+$stmt_hoje->execute();
+$result_hoje = $stmt_hoje->get_result();
+$hoje_row = $result_hoje->fetch_assoc();
+
+if ($hoje_row['hoje'] >= 10) {
+    $_SESSION['meta_diaria']['completas'] = 10;
+    header("Location: indexuser.php?meta_completa=1");
+    exit();
+}
+
 // Obter expressão principal e informações da categoria
 $stmt = $conn->prepare("SELECT e.*, c.titulo as categoria_titulo, c.id_categoria 
                        FROM expressoes e 
@@ -105,21 +121,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($resposta_correta) {
             // Atualizar banco de dados
-            $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo) 
-                                   VALUES (?, ?, TRUE) 
-                                   ON DUPLICATE KEY UPDATE completo = TRUE");
-            $stmt->bind_param("si", $username, $id_expressao);
+            $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo, data_conclusao) 
+                                  VALUES (?, ?, TRUE, NOW()) 
+                                  ON DUPLICATE KEY UPDATE completo = TRUE, data_conclusao = NOW()");
+            $stmt->bind_param("si", $_SESSION['username'], $id_expressao);
             $stmt->execute();
             
-            // Atualizar progresso na sessão
-            if (!in_array($id_expressao, $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'])) {
-                $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'][] = $id_expressao;
+            // Atualizar contador na sessão (sem ultrapassar 10)
+            if (!isset($_SESSION['meta_diaria'])) {
+                $_SESSION['meta_diaria'] = [
+                    'data' => date('Y-m-d'),
+                    'completas' => 0
+                ];
             }
             
-            // Preparar feedback para próxima tela
+            if ($_SESSION['meta_diaria']['completas'] < 10) {
+                $_SESSION['meta_diaria']['completas']++;
+            }
+            
+            // Redirecionar para feedback
             $_SESSION['mostrar_feedback'] = true;
             $_SESSION['expressao_feedback'] = $id_expressao;
-            
             header("Location: exercicio.php?id=$id_expressao");
             exit();
         } else {

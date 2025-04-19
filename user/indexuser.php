@@ -11,6 +11,25 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
+// META DIÁRIA
+$sql_hoje = "SELECT COUNT(*) as hoje FROM progresso 
+            WHERE username = ? AND completo = TRUE 
+            AND DATE(data_conclusao) = CURDATE()";
+$stmt_hoje = $conn->prepare($sql_hoje);
+$stmt_hoje->bind_param("s", $_SESSION['username']);
+$stmt_hoje->execute();
+$result_hoje = $stmt_hoje->get_result();
+$hoje_row = $result_hoje->fetch_assoc();
+
+// Garante que não ultrapasse 10
+$completas_hoje = min(10, $hoje_row['hoje']);
+
+// Atualiza a sessão
+$_SESSION['meta_diaria'] = [
+    'data' => date('Y-m-d'),
+    'completas' => $completas_hoje
+];
+
 // Obter categorias
 $sql_categorias = "SELECT id_categoria, titulo FROM categoria ORDER BY id_categoria";
 $result_categorias = $conn->query($sql_categorias);
@@ -166,6 +185,16 @@ $categorias_icones = [
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="daily-goal">
+                <h3>Meta Diária</h3>
+                <div class="goal-progress">
+                    <div class="goal-progress-fill" style="width: <?= min(100, ($completas_hoje / 10) * 100) ?>%"></div>
+                </div>
+                <div class="goal-text">
+                    <?= $completas_hoje ?> de 10 expressões hoje<br><br>
+                    <?= ($completas_hoje >= 10) ? '🎉 Meta concluída!' : '' ?>
+                </div>
             </div>
           </div>
           

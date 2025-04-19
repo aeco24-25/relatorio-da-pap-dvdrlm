@@ -33,6 +33,7 @@ CREATE TABLE progresso (
     username VARCHAR(20),
     id_expressao INT,
     completo BOOLEAN DEFAULT FALSE,
+    data_conclusao DATETIME DEFAULT NULL,
     PRIMARY KEY (username, id_expressao),
     FOREIGN KEY (username) REFERENCES users(username),
     FOREIGN KEY (id_expressao) REFERENCES expressoes(id_expressao)
