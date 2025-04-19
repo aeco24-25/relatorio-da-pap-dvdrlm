@@ -11,7 +11,7 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// META DIÁRIA
+// META DIÁRIA - Sempre mostrar no máximo 10, mesmo que tenha completado mais
 $sql_hoje = "SELECT COUNT(*) as hoje FROM progresso 
             WHERE username = ? AND completo = TRUE 
             AND DATE(data_conclusao) = CURDATE()";
@@ -21,13 +21,14 @@ $stmt_hoje->execute();
 $result_hoje = $stmt_hoje->get_result();
 $hoje_row = $result_hoje->fetch_assoc();
 
-// Garante que não ultrapasse 10
-$completas_hoje = min(10, $hoje_row['hoje']);
+// Sempre mostrar no máximo 10 na interface
+$completas_hoje_visual = min(10, $hoje_row['hoje']);
 
-// Atualiza a sessão
+// Atualiza a sessão (pode armazenar o valor real também se necessário)
 $_SESSION['meta_diaria'] = [
     'data' => date('Y-m-d'),
-    'completas' => $completas_hoje
+    'completas' => $completas_hoje_visual,
+    'completas_real' => $hoje_row['hoje'] // Armazena o valor real internamente
 ];
 
 // Obter categorias
@@ -162,7 +163,7 @@ $categorias_icones = [
               <div class="progress-container">
                 <div class="progress-circle">
                   <svg height="150" width="150" viewBox="0 0 150 150" aria-labelledby="progress-percent">
-                    <circle cx="75" cy="75" r="75" fill="#e2e2e2" />
+                    <circle cx="75" cy="75" r="75" fill="#66bb6a" />
                     <?php if ($percentagem > 0): ?>
                     <path d="M 75 75 L 75 0 A 75 75 0 <?php echo $percentagem > 50 ? "1" : "0"; ?> 1 <?php echo getProgressCoordinates($percentagem, 75); ?> Z" fill="var(--primary-color)" />
                     <?php endif; ?>
@@ -189,11 +190,11 @@ $categorias_icones = [
             <div class="daily-goal">
                 <h3>Meta Diária</h3>
                 <div class="goal-progress">
-                    <div class="goal-progress-fill" style="width: <?= min(100, ($completas_hoje / 10) * 100) ?>%"></div>
+                    <div class="goal-progress-fill" style="width: <?= min(100, ($completas_hoje_visual / 10) * 100) ?>%"></div>
                 </div>
                 <div class="goal-text">
-                    <?= $completas_hoje ?> de 10 expressões hoje<br><br>
-                    <?= ($completas_hoje >= 10) ? '🎉 Meta concluída!' : '' ?>
+                    <?= $completas_hoje_visual ?> de 10 expressões hoje<br><br>
+                    <?= ($completas_hoje_visual >= 10) ? '🎉 Meta concluída!' : '' ?>
                 </div>
             </div>
           </div>
@@ -228,42 +229,31 @@ $categorias_icones = [
                           echo '<div class="categoria-card' . (!$liberada ? ' categoria-bloqueada' : '') . ($completa ? ' categoria-completa' : '') . '">';                        
                                                 
                           if ($liberada || $completa) {
-                              // Obter primeira expressão não completada na categoria
-                              $sql_primeira = "SELECT e.id_expressao 
-                                              FROM expressoes e
-                                              LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = '$username' AND p.completo = TRUE
-                                              WHERE e.id_categoria = $cat_id AND p.id_expressao IS NULL
-                                              ORDER BY e.id_expressao ASC LIMIT 1";
-                              
-                              $result_primeira = $conn->query($sql_primeira);
-                              
-                              // Se todas estiverem completas, vamos para a primeira expressão para permitir revisão
-                              if ($result_primeira->num_rows === 0) {
+                            $sql_primeira = "SELECT e.id_expressao 
+                                            FROM expressoes e
+                                            LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = '$username' AND p.completo = TRUE
+                                            WHERE e.id_categoria = $cat_id AND p.id_expressao IS NULL
+                                            ORDER BY e.id_expressao ASC LIMIT 1";
+                            
+                            $result_primeira = $conn->query($sql_primeira);
+                            
+                            if ($result_primeira->num_rows === 0) {
                                 $sql_primeira_expressao = "SELECT id_expressao FROM expressoes 
                                                          WHERE id_categoria = $cat_id 
                                                          ORDER BY id_expressao ASC LIMIT 1";
                                 $result_primeira = $conn->query($sql_primeira_expressao);
                             }
-                              
-                              if ($result_primeira->num_rows > 0) {
-                                  $primeira_row = $result_primeira->fetch_assoc();
-                                  echo '<a href="exercicio.php?id=' . $primeira_row['id_expressao'] . '" style="text-decoration: none; color: inherit; display: flex; width: 100%;">';
-                              } else {
-                                  // Se não houver nenhuma expressão completada, pegar a primeira da categoria
-                                  $sql_primeira_expressao = "SELECT id_expressao FROM expressoes 
-                                                           WHERE id_categoria = $cat_id 
-                                                           ORDER BY id_expressao ASC LIMIT 1";
-                                  $result_primeira = $conn->query($sql_primeira_expressao);
-                                  if ($result_primeira->num_rows > 0) {
-                                      $primeira_row = $result_primeira->fetch_assoc();
-                                      echo '<a href="exercicio.php?id=' . $primeira_row['id_expressao'] . '" style="text-decoration: none; color: inherit; display: flex; width: 100%;">';
-                                  } else {
-                                      echo '<div style="display: flex; width: 100%;">';
-                                  }
-                              }
-                          } else {
-                              echo '<div style="display: flex; width: 100%;">';
-                          }
+                            
+                            if ($result_primeira->num_rows > 0) {
+                                $primeira_row = $result_primeira->fetch_assoc();
+                                // Link mantido exatamente igual - o exercicio.php agora detecta automaticamente o tipo
+                                echo '<a href="exercicio.php?id=' . $primeira_row['id_expressao'] . '" style="text-decoration: none; color: inherit; display: flex; width: 100%;">';
+                            } else {
+                                echo '<div style="display: flex; width: 100%;">';
+                            }
+                        } else {
+                            echo '<div style="display: flex; width: 100%;">';
+                        }
                           
                           $icon = $categorias_icones[$cat_id - 1] ?? 'fa-folder';
                           echo '<div class="categoria-icon"><i class="fas ' . $icon . '"></i></div>';

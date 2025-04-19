@@ -29,7 +29,7 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-// VERIFICAÇÃO DA META DIÁRIA 
+// VERIFICAÇÃO DA META DIÁRIA - Permite continuar mesmo após 10, mas não mostra mais que 10
 $sql_hoje = "SELECT COUNT(*) as hoje FROM progresso 
             WHERE username = ? AND completo = TRUE 
             AND DATE(data_conclusao) = CURDATE()";
@@ -39,14 +39,17 @@ $stmt_hoje->execute();
 $result_hoje = $stmt_hoje->get_result();
 $hoje_row = $result_hoje->fetch_assoc();
 
-if ($hoje_row['hoje'] >= 10) {
-    $_SESSION['meta_diaria']['completas'] = 10;
-    header("Location: indexuser.php?meta_completa=1");
-    exit();
-}
+// Atualiza a sessão mostrando no máximo 10 visualmente
+$_SESSION['meta_diaria'] = [
+    'data' => date('Y-m-d'),
+    'completas' => min(10, $hoje_row['hoje']),
+    'completas_real' => $hoje_row['hoje']
+];
+
+
 
 // Obter expressão principal e informações da categoria
-$stmt = $conn->prepare("SELECT e.*, c.titulo as categoria_titulo, c.id_categoria 
+$stmt = $conn->prepare("SELECT e.*, c.titulo as categoria_titulo, c.id_categoria, e.tipo_exercicio
                        FROM expressoes e 
                        JOIN categoria c ON e.id_categoria = c.id_categoria 
                        WHERE e.id_expressao = ?");
@@ -61,6 +64,25 @@ if ($result->num_rows === 0) {
 
 $expressao = $result->fetch_assoc();
 $id_categoria = $expressao['id_categoria'];
+$tipo_exercicio = $expressao['tipo_exercicio'];
+
+// Obter dados específicos do tipo de exercício
+$preenchimento_data = null;
+$associacao_data = null;
+
+if ($tipo_exercicio == 'preenchimento') {
+    $stmt_preenchimento = $conn->prepare("SELECT * FROM exercicio_preenchimento WHERE id_expressao = ?");
+    $stmt_preenchimento->bind_param("i", $id_expressao);
+    $stmt_preenchimento->execute();
+    $result_preenchimento = $stmt_preenchimento->get_result();
+    $preenchimento_data = $result_preenchimento->fetch_assoc();
+} elseif ($tipo_exercicio == 'associacao') {
+    $stmt_associacao = $conn->prepare("SELECT * FROM exercicio_associacao WHERE id_expressao = ?");
+    $stmt_associacao->bind_param("i", $id_expressao);
+    $stmt_associacao->execute();
+    $result_associacao = $stmt_associacao->get_result();
+    $associacao_data = $result_associacao->fetch_assoc();
+}
 
 // Inicializar progresso da categoria na sessão se não existir
 if (!isset($_SESSION['progresso_categorias'][$id_categoria])) {
@@ -117,7 +139,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
         $resposta_usuario_normalized = strtolower(trim($resposta_usuario));
         
-        $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
+        // Verificação diferente para cada tipo de exercício
+        if ($tipo_exercicio == 'traducao') {
+            $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
+        } elseif ($tipo_exercicio == 'preenchimento') {
+            $respostas_corretas = json_decode($preenchimento_data['palavras_chave'], true);
+            $respostas_usuario = isset($_POST['respostas_lacunas']) ? $_POST['respostas_lacunas'] : [];
+            $resposta_correta = true;
+            
+            foreach ($respostas_corretas as $index => $correta) {
+                if (!isset($respostas_usuario[$index]) || strtolower(trim($respostas_usuario[$index])) !== strtolower($correta)) {
+                    $resposta_correta = false;
+                    break;
+                }
+            }
+        } elseif ($tipo_exercicio == 'associacao') {
+            $pares_corretos = json_decode($associacao_data['itens_ingles'], true);
+            $resposta_correta = true;
+            
+            foreach ($pares_corretos as $index => $ingles) {
+                $portugues_correto = json_decode($associacao_data['itens_portugues'], true)[$index];
+                if (!isset($_POST['associacao'][$index]) || $_POST['associacao'][$index] !== $portugues_correto) {
+                    $resposta_correta = false;
+                    break;
+                }
+            }
+        }
         
         if ($resposta_correta) {
             // Atualizar banco de dados
@@ -166,20 +213,22 @@ if (isset($_SESSION['mostrar_feedback']) && $_SESSION['mostrar_feedback'] && $_S
     unset($_SESSION['expressao_feedback']);
 }
 
-// Obter alternativas para a questão
-$stmt = $conn->prepare("SELECT traducao_portugues FROM expressoes 
-                       WHERE id_categoria = ? AND id_expressao != ? 
-                       ORDER BY RAND() LIMIT 3");
-$stmt->bind_param("ii", $id_categoria, $id_expressao);
-$stmt->execute();
-$result_alternativas = $stmt->get_result();
-
+// Obter alternativas para a questão (apenas para tipo tradução)
 $alternativas = array();
-while ($row = $result_alternativas->fetch_assoc()) {
-    $alternativas[] = $row['traducao_portugues'];
+if ($tipo_exercicio == 'traducao') {
+    $stmt = $conn->prepare("SELECT traducao_portugues FROM expressoes 
+                           WHERE id_categoria = ? AND id_expressao != ? 
+                           ORDER BY RAND() LIMIT 3");
+    $stmt->bind_param("ii", $id_categoria, $id_expressao);
+    $stmt->execute();
+    $result_alternativas = $stmt->get_result();
+
+    while ($row = $result_alternativas->fetch_assoc()) {
+        $alternativas[] = $row['traducao_portugues'];
+    }
+    $alternativas[] = $expressao['traducao_portugues'];
+    shuffle($alternativas);
 }
-$alternativas[] = $expressao['traducao_portugues'];
-shuffle($alternativas);
 
 // Calcular progresso atual para mostrar na barra
 $progresso_atual = count($_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas']);
@@ -318,31 +367,96 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
         </script>
 
       <?php elseif (!$resposta_correta && $_SESSION['lives'] > 0): ?>
-        <!-- Tela de exercício -->
-        <div class="instrucao">
-          Selecione a tradução correta
-        </div>
-        
-        <div class="exercicio-questao">
-          <?php echo htmlspecialchars($expressao['versao_ingles']); ?>
-        </div>
-        
-        <form method="POST" class="exercicio-form">
-          <div class="opcoes-container">
-            <?php foreach ($alternativas as $alternativa): ?>
-            <label class="opcao-label">
-              <input type="radio" name="resposta" value="<?php echo htmlspecialchars($alternativa); ?>" class="opcao-radio" required>
-              <div class="opcao-escolha">
-                <?php echo htmlspecialchars($alternativa); ?>
-              </div>
-            </label>
-            <?php endforeach; ?>
+        <!-- Tela de exercício - varia conforme o tipo -->
+        <?php if ($tipo_exercicio == 'traducao'): ?>
+          <!-- Exercício de tradução -->
+          <div class="instrucao">
+            Selecione a tradução correta
           </div>
           
-          <button type="submit" class="btn-submeter">
-            <i class="fas fa-check"></i> Verificar
-          </button>
-        </form>
+          <div class="exercicio-questao">
+            <?php echo htmlspecialchars($expressao['versao_ingles']); ?>
+          </div>
+          
+          <form method="POST" class="exercicio-form">
+            <div class="opcoes-container">
+              <?php foreach ($alternativas as $alternativa): ?>
+              <label class="opcao-label">
+                <input type="radio" name="resposta" value="<?php echo htmlspecialchars($alternativa); ?>" class="opcao-radio" required>
+                <div class="opcao-escolha">
+                  <?php echo htmlspecialchars($alternativa); ?>
+                </div>
+              </label>
+              <?php endforeach; ?>
+            </div>
+            
+            <button type="submit" class="btn-submeter">
+              <i class="fas fa-check"></i> Verificar
+            </button>
+          </form>
+
+        <?php elseif ($tipo_exercicio == 'preenchimento' && $preenchimento_data): ?>
+          <!-- Exercício de preenchimento de lacunas -->
+          <div class="instrucao">
+            Preencha as lacunas corretamente
+          </div>
+          
+          <div class="exercicio-questao">
+            <?php 
+            $texto = $preenchimento_data['texto_com_lacunas'];
+            $partes = explode('______', $texto);
+            $total_lacunas = count($partes) - 1;
+            ?>
+            
+            <form method="POST" class="exercicio-form">
+              <?php for ($i = 0; $i < count($partes); $i++): ?>
+                <?php echo htmlspecialchars($partes[$i]); ?>
+                <?php if ($i < $total_lacunas): ?>
+                  <input type="text" name="respostas_lacunas[]" class="lacuna-input" required>
+                <?php endif; ?>
+              <?php endfor; ?>
+              
+              <button type="submit" class="btn-submeter">
+                <i class="fas fa-check"></i> Verificar
+              </button>
+            </form>
+          </div>
+
+        <?php elseif ($tipo_exercicio == 'associacao' && $associacao_data): ?>
+          <!-- Exercício de associação -->
+          <div class="instrucao">
+            Associe cada termo em inglês com a sua tradução
+          </div>
+          
+          <div class="exercicio-questao">
+            <form method="POST" class="exercicio-form">
+              <div class="associacao-container">
+                <?php
+                $itens_ingles = json_decode($associacao_data['itens_ingles'], true);
+                $itens_portugues = json_decode($associacao_data['itens_portugues'], true);
+                shuffle($itens_portugues);
+                
+                foreach ($itens_ingles as $index => $ingles): ?>
+                  <div class="associacao-item">
+                    <span class="associacao-ingles"><?php echo htmlspecialchars($ingles); ?></span>
+                    <select name="associacao[<?php echo $index; ?>]" class="associacao-select" required>
+                      <option value="">-- Selecione --</option>
+                      <?php foreach ($itens_portugues as $portugues): ?>
+                        <option value="<?php echo htmlspecialchars($portugues); ?>">
+                          <?php echo htmlspecialchars($portugues); ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+              
+              <button type="submit" class="btn-submeter">
+                <i class="fas fa-check"></i> Verificar
+              </button>
+            </form>
+          </div>
+        <?php endif; ?>
       <?php endif; ?>
     </div>
   </div>
