@@ -129,16 +129,41 @@ $stmt_proxima->execute();
 $result_proxima = $stmt_proxima->get_result();
 $proxima_expressao = $result_proxima->fetch_assoc();
 
-// Se não encontrou próxima expressão, verifica se pode reiniciar a categoria
+// Quando não há próxima expressão
 if (!$proxima_expressao) {
-    $stmt_reiniciar = $conn->prepare("SELECT e.id_expressao 
-                                    FROM expressoes e
-                                    WHERE e.id_categoria = ?
-                                    ORDER BY e.id_expressao ASC LIMIT 1");
-    $stmt_reiniciar->bind_param("i", $id_categoria);
-    $stmt_reiniciar->execute();
-    $result_reiniciar = $stmt_reiniciar->get_result();
-    $proxima_expressao = $result_reiniciar->fetch_assoc();
+  // Busca a primeira expressão da categoria
+  $stmt_primeira = $conn->prepare("SELECT id_expressao FROM expressoes WHERE id_categoria = ? ORDER BY id_expressao ASC LIMIT 1");
+  $stmt_primeira->bind_param("i", $id_categoria);
+  $stmt_primeira->execute();
+  $result_primeira = $stmt_primeira->get_result();
+
+  // Se houver uma expressão inicial
+  if ($result_primeira->num_rows > 0) {
+      $expressao_inicial_renovada = $result_primeira->fetch_assoc();
+      $expressao_inicial_renovada_id = $expressao_inicial_renovada['id_expressao'];
+
+      // Mostrar confirmação para repetição da categoria
+      echo '<script>
+              if (confirm("Você já completou todas as expressões dessa categoria. Deseja repetir a categoria?")) {
+                  // Reiniciar o progresso da sessão para a categoria
+                  $_SESSION["progresso_categorias"]["' . $id_categoria . '"] = array(
+                      "expressoes_completas" => array(), // Resetando respostas
+                      "total_expressoes" => ' . $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'] . ', // Mantém o total de expressões
+                      "ultima_expressao" => null // Resetar a última expressão
+                  );
+
+                  // Redirecionar para a primeira expressão da categoria
+                  window.location.href = "exercicio.php?id=' . $expressao_inicial_renovada_id . '";
+              } else {
+                  window.location.href = "indexuser.php"; // Se não quiser repetir, redirecionar
+              }
+            </script>';
+      exit();
+  } else {
+      // Se não existirem expressões para a categoria
+      header('Location: indexuser.php');
+      exit();
+  }
 }
 
 // Obter exemplos de uso
