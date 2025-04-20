@@ -478,7 +478,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
                   <div class="associacao-item">
                     <span class="associacao-ingles"><?php echo htmlspecialchars($ingles); ?></span>
                     <select name="associacao[<?php echo $index; ?>]" class="associacao-select" required>
-                      <option value="">-- Selecione --</option>
+                      <option value=""> Selecione </option>
                       <?php foreach ($itens_portugues as $portugues): ?>
                         <option value="<?php echo htmlspecialchars($portugues); ?>">
                           <?php echo htmlspecialchars($portugues); ?>

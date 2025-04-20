@@ -313,6 +313,7 @@ margin-bottom: 20px;
 }
 
 .btn-voltar-inicio {
+font-weight: bold;
 background-color: #7b6ada;
 color: white;
 padding: 12px 25px;
@@ -435,7 +436,6 @@ margin-right: 8px;
 /* ESTILOS COMUNS PARA TODOS OS TIPOS */
 /* ==================================== */
 
-/* Container do exercício */
 .exercicio-content {
   background-color: rgba(55, 70, 79, 0.1);
   border-radius: 15px;
@@ -444,7 +444,6 @@ margin-right: 8px;
   border: 1px solid rgba(123, 106, 218, 0.2);
 }
 
-/* Feedback visual quando acerta/erra */
 .feedback-correto {
   color: #2ecc71;
   font-weight: bold;
@@ -457,7 +456,6 @@ margin-right: 8px;
   margin: 15px 0;
 }
 
-/* Efeito de hover nos elementos interativos */
 .opcao-escolha:hover,
 .lacuna-input:hover,
 .associacao-select:hover,
