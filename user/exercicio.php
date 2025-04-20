@@ -297,7 +297,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
 <body>
 <div class="exercicio-container">
     <a href="#" class="btn-sair" title="Voltar" onclick="confirmarSaida(); return false;">
-      <i class="fas fa-times" style="margin-right: -2px"></i>
+      <i class="fas fa-times"></i>
     </a>
     
     <div class="exercicio-card">
