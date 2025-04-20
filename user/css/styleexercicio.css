@@ -176,7 +176,7 @@ margin-bottom: 23px;
 }
 
 .progress-bar {
-margin-left: 40px;
+margin-left: 63px;
 flex-grow: 1;
 height: 20px;
 background-color: rgba(55, 70, 79, 0.3);
@@ -537,8 +537,7 @@ margin-right: 8px;
 .btn-sair {
   position: absolute;
   top: 62px;
-  left: 35px;
-  background-color: rgba(123, 106, 218, 0.2);
+  left: 50px;
   color: #fff;
   width: 40px;
   height: 40px;
@@ -548,8 +547,4 @@ margin-right: 8px;
   justify-content: center;
   transition: all 0.3s;
   z-index: 10;
-}
-
-.btn-sair:hover {
-  background-color: rgba(123, 106, 218, 0.4);
 }
