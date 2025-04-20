@@ -172,7 +172,7 @@ margin-bottom: 23px;
 }
 
 .progress-bar {
-margin-left: 50px;
+margin-left: 43px;
 flex-grow: 1;
 height: 20px;
 background-color: rgba(55, 70, 79, 0.3);
@@ -533,7 +533,7 @@ transform: translateY(-2px);
 .btn-sair {
 position: absolute;
 top: 62px;
-left: 50px;
+left: 41px;
 color: #fff;
 width: 40px;
 height: 40px;
