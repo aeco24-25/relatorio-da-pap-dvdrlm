@@ -342,7 +342,7 @@ margin-top: 15px;
 width: 50px;
 height: 50px;
 border-radius: 50%;
-background-color: #e2e2e2;
+background-color: #ffc700;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -364,12 +364,12 @@ color: #333;
 
 .badge-tooltip {
 position: absolute;
-bottom: -30px;
+bottom: -20px;
 left: 50%;
 transform: translateX(-50%);
 background: #333;
 color: white;
-padding: 3px 8px;
+padding: 4px 8px;
 border-radius: 5px;
 font-size: 0.7rem;
 white-space: nowrap;

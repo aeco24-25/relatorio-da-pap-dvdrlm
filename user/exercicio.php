@@ -81,12 +81,40 @@ if ($tipo_exercicio == 'preenchimento') {
     $associacao_data = $result_associacao->fetch_assoc();
 }
 
+// Sincronizar progresso da categoria com o banco de dados
+if (!isset($_SESSION['progresso_categorias'][$id_categoria]['sync_time']) || 
+    time() - $_SESSION['progresso_categorias'][$id_categoria]['sync_time'] > 300) {
+    
+    // Obter total de expressões na categoria
+    $stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = ?");
+    $stmt_total->bind_param("i", $id_categoria);
+    $stmt_total->execute();
+    $result_total = $stmt_total->get_result();
+    $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'] = $result_total->fetch_assoc()['total'];
+    
+    // Obter expressões já completadas pelo usuário nesta categoria
+    $stmt_completas = $conn->prepare("SELECT id_expressao FROM progresso 
+                                    WHERE username = ? AND completo = TRUE 
+                                    AND id_expressao IN (SELECT id_expressao FROM expressoes WHERE id_categoria = ?)");
+    $stmt_completas->bind_param("si", $username, $id_categoria);
+    $stmt_completas->execute();
+    $result_completas = $stmt_completas->get_result();
+    
+    $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'] = array();
+    while ($row = $result_completas->fetch_assoc()) {
+        $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'][$row['id_expressao']] = true;
+    }
+    
+    $_SESSION['progresso_categorias'][$id_categoria]['sync_time'] = time();
+}
+
 // Inicializar progresso da categoria na sessão se não existir
 if (!isset($_SESSION['progresso_categorias'][$id_categoria])) {
     $_SESSION['progresso_categorias'][$id_categoria] = array(
         'expressoes_completas' => array(),
         'total_expressoes' => 0,
-        'ultima_expressao' => null
+        'ultima_expressao' => null,
+        'sync_time' => time()
     );
     
     // Obter total de expressões na categoria
@@ -134,6 +162,22 @@ if (!$proxima_expressao) {
     if (isset($_GET['repetir_categoria'])) {
         // Resetar o progresso da categoria na sessão
         $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'] = array();
+        
+        // Resetar o progresso no banco de dados para esta categoria
+        $stmt_reset = $conn->prepare("DELETE FROM progresso 
+                                    WHERE username = ? 
+                                    AND id_expressao IN (
+                                        SELECT id_expressao FROM expressoes WHERE id_categoria = ?
+                                    )");
+        $stmt_reset->bind_param("si", $username, $id_categoria);
+        $stmt_reset->execute();
+        
+        // Atualizar o total de expressões na categoria
+        $stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM expressoes WHERE id_categoria = ?");
+        $stmt_total->bind_param("i", $id_categoria);
+        $stmt_total->execute();
+        $result_total = $stmt_total->get_result();
+        $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'] = $result_total->fetch_assoc()['total'];
         
         // Buscar a primeira expressão da categoria
         $stmt_primeira = $conn->prepare("SELECT id_expressao FROM expressoes WHERE id_categoria = ? ORDER BY id_expressao ASC LIMIT 1");
@@ -271,10 +315,13 @@ if ($tipo_exercicio == 'traducao') {
     shuffle($alternativas);
 }
 
-// Calcular progresso atual
-$progresso_atual = count($_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas']);
-$total_expressoes_categoria = $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'];
-$percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $total_expressoes_categoria) * 100) : 0;
+// Calcular progresso atual - garantindo valores válidos
+$progresso_atual = max(0, min(
+    count($_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas']),
+    $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes']
+));
+$total_expressoes_categoria = max(1, $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes']);
+$percentagem = round(($progresso_atual / $total_expressoes_categoria) * 100);
 ?>
 
 <!DOCTYPE html>
@@ -392,7 +439,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
               <i class="fas fa-arrow-right"></i> <?php echo ($progresso_atual >= $total_expressoes_categoria) ? 'Repetir Categoria' : 'Próxima Expressão'; ?>
             </a>
           <?php else: ?>
-            <a href="exercicio.php?id=<?php echo $id_expressao; ?>" class="btn-submeter">
+            <a href="exercicio.php?id=<?php echo $id_expressao; ?>&repetir_categoria=1" class="btn-submeter">
               <i class="fas fa-redo"></i> Repetir Categoria
             </a>
           <?php endif; ?>

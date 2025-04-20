@@ -301,7 +301,6 @@ $categorias_icones = [
                             
                             if ($result_primeira->num_rows > 0) {
                                 $primeira_row = $result_primeira->fetch_assoc();
-                                // Link mantido exatamente igual - o exercicio.php agora detecta automaticamente o tipo
                                 echo '<a href="exercicio.php?id=' . $primeira_row['id_expressao'] . '" style="text-decoration: none; color: inherit; display: flex; width: 100%;">';
                             } else {
                                 echo '<div style="display: flex; width: 100%;">';
