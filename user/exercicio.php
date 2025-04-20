@@ -96,7 +96,7 @@ if (!isset($_SESSION['progresso_categorias'][$id_categoria])) {
     $result_total = $stmt_total->get_result();
     $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'] = $result_total->fetch_assoc()['total'];
     
-    // Obter expressões já completadas pelo usuário nesta categoria
+    // Obter expressões já completadas pelo utilizador nesta categoria
     $stmt_completas = $conn->prepare("SELECT id_expressao FROM progresso 
                                     WHERE username = ? AND completo = TRUE 
                                     AND id_expressao IN (SELECT id_expressao FROM expressoes WHERE id_categoria = ?)");
@@ -128,10 +128,29 @@ $stmt_proxima->execute();
 $result_proxima = $stmt_proxima->get_result();
 $proxima_expressao = $result_proxima->fetch_assoc();
 
-// Quando não há próxima expressão
-if (!$proxima_expressao) {
-    // Verificar se o usuário quer repetir a categoria
+// Verificar se a categoria está completa
+$sql_categoria_completa = "SELECT COUNT(*) as total, 
+                          SUM(CASE WHEN p.completo = TRUE AND p.username = ? THEN 1 ELSE 0 END) as completas
+                          FROM expressoes e
+                          LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = ?
+                          WHERE e.id_categoria = ?";
+$stmt_completa = $conn->prepare($sql_categoria_completa);
+$stmt_completa->bind_param("ssi", $username, $username, $id_categoria);
+$stmt_completa->execute();
+$result_completa = $stmt_completa->get_result();
+$completa_row = $result_completa->fetch_assoc();
+
+$categoria_completa = ($completa_row['completas'] == $completa_row['total']);
+
+// Quando a categoria está completa ou não há próxima expressão
+if ($categoria_completa || !$proxima_expressao) {
+    // Verificar se o utilizador quer repetir a categoria
     if (isset($_GET['repetir_categoria'])) {
+        // Resetar o progresso da categoria no banco de dados
+        $stmt_reset = $conn->prepare("DELETE FROM progresso WHERE username = ? AND id_expressao IN (SELECT id_expressao FROM expressoes WHERE id_categoria = ?)");
+        $stmt_reset->bind_param("si", $username, $id_categoria);
+        $stmt_reset->execute();
+        
         // Resetar o progresso da categoria na sessão
         $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'] = array();
         
@@ -145,9 +164,13 @@ if (!$proxima_expressao) {
             $expressao_inicial = $result_primeira->fetch_assoc();
             header("Location: exercicio.php?id=" . $expressao_inicial['id_expressao']);
             exit();
+        } else {
+            // Caso não encontre expressões (não deveria acontecer)
+            header("Location: indexuser.php");
+            exit();
         }
-    } else {
-        // Mostrar opção para repetir a categoria
+    } elseif (!$first_view) {
+        // Mostrar opção para repetir a categoria apenas se não for a primeira visualização
         echo '<script>
                 if (confirm("Completou todas as expressões desta categoria. Deseja repetir?")) {
                     window.location.href = "exercicio.php?id=' . $id_expressao . '&repetir_categoria=1";
@@ -499,7 +522,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
     </div>
   </div>
   
-                        <!-- Diálogo de confirmação de saída -->
+  <!-- Diálogo de confirmação de saída -->
   <script>
   function confirmarSaida() {
       const dialogo = document.createElement('div');
