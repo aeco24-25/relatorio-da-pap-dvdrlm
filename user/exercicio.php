@@ -29,7 +29,7 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-// VERIFICAÇÃO DA META DIÁRIA - Permite continuar mesmo após 10, mas não mostra mais que 10
+// VERIFICAÇÃO DA META DIÁRIA
 $sql_hoje = "SELECT COUNT(*) as hoje FROM progresso 
             WHERE username = ? AND completo = TRUE 
             AND DATE(data_conclusao) = CURDATE()";
@@ -39,7 +39,6 @@ $stmt_hoje->execute();
 $result_hoje = $stmt_hoje->get_result();
 $hoje_row = $result_hoje->fetch_assoc();
 
-// Atualiza a sessão mostrando no máximo 10 visualmente
 $_SESSION['meta_diaria'] = [
     'data' => date('Y-m-d'),
     'completas' => min(10, $hoje_row['hoje']),
@@ -131,39 +130,33 @@ $proxima_expressao = $result_proxima->fetch_assoc();
 
 // Quando não há próxima expressão
 if (!$proxima_expressao) {
-  // Busca a primeira expressão da categoria
-  $stmt_primeira = $conn->prepare("SELECT id_expressao FROM expressoes WHERE id_categoria = ? ORDER BY id_expressao ASC LIMIT 1");
-  $stmt_primeira->bind_param("i", $id_categoria);
-  $stmt_primeira->execute();
-  $result_primeira = $stmt_primeira->get_result();
-
-  // Se houver uma expressão inicial
-  if ($result_primeira->num_rows > 0) {
-      $expressao_inicial_renovada = $result_primeira->fetch_assoc();
-      $expressao_inicial_renovada_id = $expressao_inicial_renovada['id_expressao'];
-
-      // Mostrar confirmação para repetição da categoria
-      echo '<script>
-              if (confirm("Você já completou todas as expressões dessa categoria. Deseja repetir a categoria?")) {
-                  // Reiniciar o progresso da sessão para a categoria
-                  $_SESSION["progresso_categorias"]["' . $id_categoria . '"] = array(
-                      "expressoes_completas" => array(), // Resetando respostas
-                      "total_expressoes" => ' . $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'] . ', // Mantém o total de expressões
-                      "ultima_expressao" => null // Resetar a última expressão
-                  );
-
-                  // Redirecionar para a primeira expressão da categoria
-                  window.location.href = "exercicio.php?id=' . $expressao_inicial_renovada_id . '";
-              } else {
-                  window.location.href = "indexuser.php"; // Se não quiser repetir, redirecionar
-              }
-            </script>';
-      exit();
-  } else {
-      // Se não existirem expressões para a categoria
-      header('Location: indexuser.php');
-      exit();
-  }
+    // Verificar se o usuário quer repetir a categoria
+    if (isset($_GET['repetir_categoria'])) {
+        // Resetar o progresso da categoria na sessão
+        $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'] = array();
+        
+        // Buscar a primeira expressão da categoria
+        $stmt_primeira = $conn->prepare("SELECT id_expressao FROM expressoes WHERE id_categoria = ? ORDER BY id_expressao ASC LIMIT 1");
+        $stmt_primeira->bind_param("i", $id_categoria);
+        $stmt_primeira->execute();
+        $result_primeira = $stmt_primeira->get_result();
+        
+        if ($result_primeira->num_rows > 0) {
+            $expressao_inicial = $result_primeira->fetch_assoc();
+            header("Location: exercicio.php?id=" . $expressao_inicial['id_expressao']);
+            exit();
+        }
+    } else {
+        // Mostrar opção para repetir a categoria
+        echo '<script>
+                if (confirm("Você completou todas as expressões desta categoria. Deseja repetir?")) {
+                    window.location.href = "exercicio.php?id=' . $id_expressao . '&repetir_categoria=1";
+                } else {
+                    window.location.href = "indexuser.php";
+                }
+              </script>';
+        exit();
+    }
 }
 
 // Obter exemplos de uso
@@ -186,7 +179,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
         $resposta_usuario_normalized = strtolower(trim($resposta_usuario));
         
-        // Verificação diferente para cada tipo de exercício
         if ($tipo_exercicio == 'traducao') {
             $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
         } elseif ($tipo_exercicio == 'preenchimento') {
@@ -221,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("si", $_SESSION['username'], $id_expressao);
             $stmt->execute();
             
-            // Atualizar contador na sessão (sem ultrapassar 10)
+            // Atualizar contador na sessão
             if (!isset($_SESSION['meta_diaria'])) {
                 $_SESSION['meta_diaria'] = [
                     'data' => date('Y-m-d'),
@@ -245,10 +237,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Resposta incorreta
             $_SESSION['lives']--;
             
-            // Verificar se acabaram as vidas
             if ($_SESSION['lives'] <= 0) {
                 $_SESSION['mostrar_tela_erros'] = true;
-                $_SESSION['lives'] = 0; // Mostra zero corações
+                $_SESSION['lives'] = 0;
             }
             
             $mensagem = '<div class="exercicio-completo"><div class="resposta-incorreta"><i class="fas fa-times-circle"></i> Incorreto!</div></div>';
@@ -280,7 +271,7 @@ if ($tipo_exercicio == 'traducao') {
     shuffle($alternativas);
 }
 
-// Calcular progresso atual para mostrar na barra - agora consultando diretamente a sessão atualizada
+// Calcular progresso atual
 $progresso_atual = count($_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas']);
 $total_expressoes_categoria = $_SESSION['progresso_categorias'][$id_categoria]['total_expressoes'];
 $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $total_expressoes_categoria) * 100) : 0;
@@ -344,7 +335,6 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
           
           <a href="indexuser.php" class="btn-voltar-inicio" onclick="
             <?php 
-            // Resetar vidas ao clicar em voltar
             $_SESSION['lives'] = 5;
             unset($_SESSION['mostrar_tela_erros']);
             ?>">
@@ -402,15 +392,13 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
               <i class="fas fa-arrow-right"></i> <?php echo ($progresso_atual >= $total_expressoes_categoria) ? 'Repetir Categoria' : 'Próxima Expressão'; ?>
             </a>
           <?php else: ?>
-            <a href="indexuser.php" class="btn-submeter">
-              <i class="fas fa-home"></i> Voltar ao Início
+            <a href="exercicio.php?id=<?php echo $id_expressao; ?>" class="btn-submeter">
+              <i class="fas fa-redo"></i> Repetir Categoria
             </a>
           <?php endif; ?>
         </div>
         
-        <!-- Script para disparar confetti -->
         <script>
-          // Chama a função do ficheiro externo
           window.onload = function() {
             fireConfetti();
           };
