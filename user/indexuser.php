@@ -230,8 +230,7 @@ $categorias_icones = [
                           FROM progresso 
                           WHERE completo = TRUE 
                           GROUP BY username 
-                          ORDER BY score DESC 
-                          LIMIT 5";
+                          ORDER BY score DESC";
         $result_leaderboard = $conn->query($sql_leaderboard);
         
         if ($result_leaderboard->num_rows > 0) {

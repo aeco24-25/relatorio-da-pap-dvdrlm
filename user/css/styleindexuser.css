@@ -300,6 +300,7 @@ text-align: left;
 }
 
 .leaderboard ol {
+color: #7b6ada;
 padding-left: 20px;
 }
 
@@ -380,4 +381,3 @@ pointer-events: none;
 .badge.earned:hover .badge-tooltip {
 opacity: 1;
 }
-

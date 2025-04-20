@@ -164,10 +164,6 @@ transition: all 0.3s;
 text-decoration: none;
 }
 
-.btn-sair:hover {
-background-color: rgba(123, 106, 218, 0.2);
-}
-
 .progress-container {
 display: flex;
 justify-content: space-between;
@@ -176,7 +172,7 @@ margin-bottom: 23px;
 }
 
 .progress-bar {
-margin-left: 63px;
+margin-left: 50px;
 flex-grow: 1;
 height: 20px;
 background-color: rgba(55, 70, 79, 0.3);
