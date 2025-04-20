@@ -197,6 +197,63 @@ $categorias_icones = [
                     <?= ($completas_hoje_visual >= 10) ? '🎉 Meta concluída!' : '' ?>
                 </div>
             </div>
+
+            <!-- Adicionar esta seção após o daily-goal -->
+<div class="gamification-panel">
+    <h3>Conquistas</h3>
+    <div class="badge-container">
+        <?php
+        // Badges baseadas no progresso
+        $badges = [
+            ['icon' => 'fa-medal', 'title' => 'Iniciante', 'earned' => $total_completo > 0],
+            ['icon' => 'fa-trophy', 'title' => 'Aprendiz', 'earned' => $total_completo >= 10],
+            ['icon' => 'fa-star', 'title' => 'Intermediário', 'earned' => $total_completo >= 30],
+            ['icon' => 'fa-crown', 'title' => 'Avançado', 'earned' => $total_completo >= 50],
+            ['icon' => 'fa-gem', 'title' => 'Mestre', 'earned' => $total_completo >= 100],
+        ];
+        
+        foreach ($badges as $badge) {
+            echo '<div class="badge' . ($badge['earned'] ? ' earned' : '') . '">';
+            echo '<i class="fas ' . $badge['icon'] . '"></i>';
+            if ($badge['earned']) {
+                echo '<span class="badge-tooltip">' . $badge['title'] . '</span>';
+            }
+            echo '</div>';
+        }
+        ?>
+    </div>
+    
+    <div class="leaderboard">
+        <h3>Classificação</h3>
+        <?php
+        // Obter top 5 usuários
+        $sql_leaderboard = "SELECT username, COUNT(*) as score 
+                          FROM progresso 
+                          WHERE completo = TRUE 
+                          GROUP BY username 
+                          ORDER BY score DESC 
+                          LIMIT 5";
+        $result_leaderboard = $conn->query($sql_leaderboard);
+        
+        if ($result_leaderboard->num_rows > 0) {
+            echo '<ol>';
+            $position = 1;
+            while ($row = $result_leaderboard->fetch_assoc()) {
+                $highlight = ($row['username'] == $_SESSION['username']) ? 'highlight' : '';
+                echo '<li class="' . $highlight . '">';
+                echo '<span class="position">' . $position . '</span>';
+                echo '<span class="username">' . htmlspecialchars($row['username']) . '</span>';
+                echo '<span class="score">' . $row['score'] . ' pts</span>';
+                echo '</li>';
+                $position++;
+            }
+            echo '</ol>';
+        } else {
+            echo '<p>Ainda não há classificações disponíveis.</p>';
+        }
+        ?>
+    </div>
+</div>
           </div>
           
           <div class="_3MT-S">
