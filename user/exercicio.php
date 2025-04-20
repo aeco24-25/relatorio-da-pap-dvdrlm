@@ -149,7 +149,7 @@ if (!$proxima_expressao) {
     } else {
         // Mostrar opção para repetir a categoria
         echo '<script>
-                if (confirm("Você completou todas as expressões desta categoria. Deseja repetir?")) {
+                if (confirm("Completou todas as expressões desta categoria. Deseja repetir?")) {
                     window.location.href = "exercicio.php?id=' . $id_expressao . '&repetir_categoria=1";
                 } else {
                     window.location.href = "indexuser.php";
@@ -295,9 +295,9 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
 </head>
 
 <body>
-  <div class="exercicio-container">
-    <a href="exercicio.php?id=<?php echo $id_expressao; ?>&sair=1" class="btn-sair" title="Voltar" onclick="return confirm('Tem a certeza que deseja sair?');">
-      <i class="fas fa-times"></i>
+<div class="exercicio-container">
+    <a href="#" class="btn-sair" title="Voltar" onclick="confirmarSaida(); return false;">
+      <i class="fas fa-times" style="margin-right: -2px"></i>
     </a>
     
     <div class="exercicio-card">
@@ -499,6 +499,25 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
     </div>
   </div>
   
+                        <!-- Diálogo de confirmação de saída -->
+  <script>
+  function confirmarSaida() {
+      const dialogo = document.createElement('div');
+      dialogo.className = 'dialogo-confirmacao';
+      dialogo.innerHTML = `
+          <div class="dialogo-conteudo">
+              <div class="dialogo-titulo">Tem a certeza que deseja sair?</div>
+              <div class="dialogo-botoes">
+                  <button class="dialogo-btn dialogo-btn-confirmar" onclick="window.location.href='exercicio.php?id=<?php echo $id_expressao; ?>&sair=1'">Sim</button>
+                  <button class="dialogo-btn dialogo-btn-cancelar" onclick="this.parentNode.parentNode.parentNode.remove()">Cancelar</button>
+              </div>
+          </div>
+      `;
+      document.body.appendChild(dialogo);
+      return false;
+  }
+  </script>
+
   <script src="../assets/js/fontawesome.js"></script>
 </body>
 </html>
