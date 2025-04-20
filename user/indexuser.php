@@ -198,7 +198,6 @@ $categorias_icones = [
                 </div>
             </div>
 
-            <!-- Adicionar esta seção após o daily-goal -->
 <div class="gamification-panel">
     <h3>Conquistas</h3>
     <div class="badge-container">
