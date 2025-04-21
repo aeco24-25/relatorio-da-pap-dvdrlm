@@ -12,8 +12,6 @@ $mensagem_sucesso = '';
 // Definir a mensagem de sucesso
 if ($sucesso == 'conta_criada') {
     $mensagem_sucesso = "Conta criada com sucesso! Faça login para continuar.";
-} else if ($sucesso == 'email_enviado') {
-  $mensagem_sucesso = "Email de recuperação enviado com sucesso!";
 }
 ?>
 
