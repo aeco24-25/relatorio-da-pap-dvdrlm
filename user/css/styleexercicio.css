@@ -544,3 +544,116 @@ justify-content: center;
 transition: all 0.3s;
 z-index: 10;
 }
+
+.opcao-escolha {
+padding: 18px;
+background-color: rgba(55, 70, 79, 0.3);
+border-radius: 12px;
+cursor: pointer;
+text-align: center;
+transition: all 0.3s ease;
+border: 2px solid rgba(123, 106, 218, 0.3);
+color: #f5f4ff;
+font-size: 1.2rem;
+backdrop-filter: blur(5px);
+}
+
+.opcao-escolha:hover {
+background-color: rgba(123, 106, 218, 0.2);
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.opcao-radio:checked + .opcao-escolha {
+border-color: #7b6ada;
+background-color: rgba(123, 106, 218, 0.3);
+font-weight: 600;
+box-shadow: 0 0 0 2px #7b6ada;
+}
+
+.lacuna-input {
+background-color: rgba(55, 70, 79, 0.3);
+border: 2px solid #7b6ada;
+border-radius: 8px;
+padding: 12px 15px;
+font-size: 1.1rem;
+color: #ffffff;
+text-align: center;
+width: 140px;
+margin: 0 5px;
+transition: all 0.3s;
+}
+
+.lacuna-input::placeholder {
+color: rgba(245, 244, 255, 0.5);
+}
+
+.associacao-select {
+background-color: rgba(55, 70, 79, 0.3);
+border: 2px solid #7b6ada;
+border-radius: 8px;
+padding: 12px 15px;
+font-size: 1.1rem;
+color: #ffffff;
+min-width: 220px;
+cursor: pointer;
+transition: all 0.3s;
+appearance: none;
+background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237b6ada'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+background-repeat: no-repeat;
+background-position: right 12px center;
+background-size: 20px;
+}
+
+.resposta-correta, .resposta-incorreta {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+padding: 15px;
+border-radius: 8px;
+margin: 20px 0;
+}
+
+.resposta-correta {
+background-color: rgba(46, 204, 113, 0.15);
+border-left: 4px solid #2ecc71;
+}
+
+.resposta-incorreta {
+background-color: rgba(231, 76, 60, 0.15);
+border-left: 4px solid #e74c3c;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.exercicio-questao, .opcoes-container, .associacao-container, .texto-com-lacunas {
+animation: fadeIn 0.4s ease-out forwards;
+}
+
+.btn-submeter {
+color: white;
+border: none;
+border-radius: 12px;
+padding: 16px;
+font-size: 1.2rem;
+font-weight: 600;
+cursor: pointer;
+width: 100%;
+margin-top: 30px;
+transition: all 0.3s;
+box-shadow: 0 4px 12px rgba(123, 106, 218, 0.3);
+position: relative;
+overflow: hidden;
+}
+
+.btn-submeter:hover {
+box-shadow: 0 6px 16px rgba(123, 106, 218, 0.4);
+}
+
+.btn-submeter:active {
+transform: translateY(0);
+}
