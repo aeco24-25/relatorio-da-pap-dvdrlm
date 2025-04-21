@@ -21,7 +21,7 @@ CREATE TABLE expressoes (
     id_expressao INT PRIMARY KEY AUTO_INCREMENT,
     versao_ingles TEXT NOT NULL,
     traducao_portugues TEXT NOT NULL,
-    explicacao TEXT NOT NULL, -- Explicação obrigatória para todos os tipos de exercício
+    explicacao TEXT NOT NULL, 
     id_categoria INT NOT NULL,
     tipo_exercicio ENUM('traducao', 'preenchimento', 'associacao') DEFAULT 'traducao',
     FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
@@ -51,7 +51,7 @@ CREATE TABLE exercicio_preenchimento (
     id_exercicio INT PRIMARY KEY AUTO_INCREMENT,
     id_expressao INT NOT NULL,
     texto_com_lacunas TEXT NOT NULL,
-    palavras_chave TEXT NOT NULL, -- JSON array com palavras para preencher
+    palavras_chave TEXT NOT NULL, 
     FOREIGN KEY (id_expressao) REFERENCES expressoes(id_expressao)
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE exercicio_preenchimento (
 CREATE TABLE exercicio_associacao (
     id_exercicio INT PRIMARY KEY AUTO_INCREMENT,
     id_expressao INT NOT NULL,
-    itens_ingles TEXT NOT NULL, -- JSON array com itens em inglês
-    itens_portugues TEXT NOT NULL, -- JSON array com itens em português
+    itens_ingles TEXT NOT NULL, -
+    itens_portugues TEXT NOT NULL, 
     FOREIGN KEY (id_expressao) REFERENCES expressoes(id_expressao)
 );
