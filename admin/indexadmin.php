@@ -6,7 +6,6 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Verificar se o usuário é admin (você precisaria adicionar esta coluna na tabela users)
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
@@ -70,13 +69,48 @@ $result_categorias = $conn->query($sql_categorias);
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 
   <style>
+    :root {
+      --primary-color: #7b6ada;
+      --secondary-color: #5a4fcf;
+      --success-color: #4CAF50;
+      --light-gray: #e2e2e2;
+      --dark-gray: #333;
+      --error-color: #c62828;
+    }
+
+    .admin-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .admin-main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .stats-panel {
+      background: #7b6ada;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 0;
+    }
+
+    .stats-panel h2 {
+      text-align: center;
+      color: #ffffff;
+      margin-top: 0;
+    }
+
     .admin-stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
       margin-bottom: 30px;
     }
-    
+
     .stat-card {
       background: #fcfcff;
       border-radius: 12px;
@@ -84,62 +118,63 @@ $result_categorias = $conn->query($sql_categorias);
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
-    
+
     .stat-card h3 {
       color: #7b6ada;
       margin-top: 0;
       margin-bottom: 10px;
       font-size: 1.1rem;
     }
-    
+
     .stat-number {
       font-size: 2rem;
       font-weight: bold;
       color: #434343;
       margin: 10px 0;
     }
-    
+
     .admin-section {
       background: #fcfcff;
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 100%;
     }
-    
+
     .admin-section h2 {
       color: #7b6ada;
       margin-top: 0;
       border-bottom: 1px solid #eee;
       padding-bottom: 10px;
     }
-    
+
     .user-table, .category-table {
       width: 100%;
       border-collapse: collapse;
     }
-    
+
     .user-table th, .category-table th {
       background: #7b6ada;
       color: white;
       padding: 10px;
       text-align: left;
     }
-    
+
     .user-table td, .category-table td {
       padding: 10px;
       border-bottom: 1px solid #eee;
     }
-    
+
     .user-table tr:hover, .category-table tr:hover {
       background: #f5f5ff;
     }
-    
+
     .admin-actions {
       display: flex;
       gap: 10px;
     }
-    
+
     .admin-btn {
       padding: 5px 10px;
       border-radius: 5px;
@@ -149,25 +184,25 @@ $result_categorias = $conn->query($sql_categorias);
       display: inline-flex;
       align-items: center;
     }
-    
+
     .edit-btn {
       background: #4CAF50;
     }
-    
+
     .delete-btn {
       background: #c62828;
     }
-    
+
     .add-btn {
       background: #7b6ada;
       margin-bottom: 15px;
       padding: 8px 15px;
     }
-    
+
     .admin-btn i {
       margin-right: 5px;
     }
-    
+
     .nav-admin {
       display: flex;
       background: #7b6ada;
@@ -175,7 +210,7 @@ $result_categorias = $conn->query($sql_categorias);
       margin-bottom: 20px;
       border-radius: 8px;
     }
-    
+
     .nav-admin a {
       color: white;
       text-decoration: none;
@@ -183,14 +218,32 @@ $result_categorias = $conn->query($sql_categorias);
       padding: 5px 10px;
       border-radius: 5px;
     }
-    
+
     .nav-admin a:hover {
       background: rgba(255,255,255,0.2);
     }
-    
+
     .nav-admin a.active {
       background: white;
       color: #7b6ada;
+    }
+
+    /* Ajustes para o header */
+    .NbGcm {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    ._3vDrO {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      margin: 16px 0;
+      display: inline-block;
     }
   </style>
 </head>
@@ -229,109 +282,114 @@ $result_categorias = $conn->query($sql_categorias);
       </div>
       
       <div class="LFfrA _3MLiB">
-        <div class="nav-admin">
-          <a href="indexadmin.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-          <a href="gerir_utilizadores.php"><i class="fas fa-users"></i> Gerir Utilizadores</a>
-          <a href="gerir_categorias.php"><i class="fas fa-folder"></i> Gerir Categorias</a>
-          <a href="gerir_expressoes.php"><i class="fas fa-language"></i> Gerir Expressões</a>
-          <a href="relatorios.php"><i class="fas fa-chart-bar"></i> Relatórios</a>
-        </div>
-        
-        <div class="_2_lzu" style="line-height:0.75;">
-          <div class="_21w25 _1E3L7" style="background:#7b6ada;">
-            <h2 style="text-align: center; color:#ffffff">Estatísticas Gerais</h2>
-            <div class="admin-stats">
-              <div class="stat-card">
-                <h3>Utilizadores Registados</h3>
-                <div class="stat-number"><?php echo $stats['total_users']; ?></div>
-                <i class="fas fa-users fa-2x" style="color: #7b6ada;"></i>
-              </div>
-              
-              <div class="stat-card">
-                <h3>Expressões no Sistema</h3>
-                <div class="stat-number"><?php echo $stats['total_expressoes']; ?></div>
-                <i class="fas fa-language fa-2x" style="color: #7b6ada;"></i>
-              </div>
-              
-              <div class="stat-card">
-                <h3>Exercícios Completos</h3>
-                <div class="stat-number"><?php echo $stats['total_completas']; ?></div>
-                <i class="fas fa-check-circle fa-2x" style="color: #7b6ada;"></i>
-              </div>
-              
-              <div class="stat-card">
-                <h3>Utilizadores Ativos</h3>
-                <div class="stat-number"><?php echo $stats['usuarios_ativos']; ?></div>
-                <i class="fas fa-user-check fa-2x" style="color: #7b6ada;"></i>
+        <div class="admin-container">
+          <div class="nav-admin">
+            <a href="indexadmin.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="gerir_utilizadores.php"><i class="fas fa-users"></i> Gerir Utilizadores</a>
+            <a href="gerir_categorias.php"><i class="fas fa-folder"></i> Gerir Categorias</a>
+            <a href="gerir_expressoes.php"><i class="fas fa-language"></i> Gerir Expressões</a>
+            <a href="relatorios.php"><i class="fas fa-chart-bar"></i> Relatórios</a>
+          </div>
+          
+          <div class="admin-main-content">
+            <!-- Painel de Estatísticas Gerais -->
+            <div class="stats-panel">
+              <h2>Estatísticas Gerais</h2>
+              <div class="admin-stats">
+                <div class="stat-card">
+                  <h3>Utilizadores Registados</h3>
+                  <div class="stat-number"><?php echo $stats['total_users']; ?></div>
+                  <i class="fas fa-users fa-2x" style="color: #7b6ada;"></i>
+                </div>
+                
+                <div class="stat-card">
+                  <h3>Expressões no Sistema</h3>
+                  <div class="stat-number"><?php echo $stats['total_expressoes']; ?></div>
+                  <i class="fas fa-language fa-2x" style="color: #7b6ada;"></i>
+                </div>
+                
+                <div class="stat-card">
+                  <h3>Exercícios Completos</h3>
+                  <div class="stat-number"><?php echo $stats['total_completas']; ?></div>
+                  <i class="fas fa-check-circle fa-2x" style="color: #7b6ada;"></i>
+                </div>
+                
+                <div class="stat-card">
+                  <h3>Utilizadores Ativos</h3>
+                  <div class="stat-number"><?php echo $stats['usuarios_ativos']; ?></div>
+                  <i class="fas fa-user-check fa-2x" style="color: #7b6ada;"></i>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div class="admin-section">
-            <h2><i class="fas fa-users"></i> Últimos Utilizadores Registados</h2>
-            <a href="adicionar_utilizador.php" class="admin-btn add-btn"><i class="fas fa-plus"></i> Adicionar Utilizador</a>
-            <table class="user-table">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Data de Registo</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php while($user = $result_last_users->fetch_assoc()): ?>
-                <tr>
-                  <td><?php echo htmlspecialchars($user['username']); ?></td>
-                  <td><?php echo htmlspecialchars($user['email']); ?></td>
-                  <td><?php echo date('d/m/Y H:i', strtotime($user['data_criacao'])); ?></td>
-                  <td class="admin-actions">
-                    <a href="editar_utilizador.php?username=<?php echo $user['username']; ?>" class="admin-btn edit-btn"><i class="fas fa-edit"></i> Editar</a>
-                    <a href="eliminar_utilizador.php?username=<?php echo $user['username']; ?>" class="admin-btn delete-btn" onclick="return confirm('Tem a certeza que deseja eliminar este utilizador?')"><i class="fas fa-trash"></i> Eliminar</a>
-                  </td>
-                </tr>
-                <?php endwhile; ?>
-              </tbody>
-            </table>
-          </div>
-          
-          <div class="admin-section">
-            <h2><i class="fas fa-folder"></i> Categorias</h2>
-            <a href="adicionar_categoria.php" class="admin-btn add-btn"><i class="fas fa-plus"></i> Adicionar Categoria</a>
-            <table class="category-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Título</th>
-                  <th>Expressões</th>
-                  <th>Completas</th>
-                  <th>Progresso</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php while($categoria = $result_categorias->fetch_assoc()): 
-                  $percent = ($categoria['total_expressoes'] > 0) ? round(($categoria['completas'] / $categoria['total_expressoes']) * 100) : 0;
-                ?>
-                <tr>
-                  <td><?php echo $categoria['id_categoria']; ?></td>
-                  <td><?php echo htmlspecialchars($categoria['titulo']); ?></td>
-                  <td><?php echo $categoria['total_expressoes']; ?></td>
-                  <td><?php echo $categoria['completas']; ?></td>
-                  <td>
-                    <div style="background:#e2e2e2; height:10px; border-radius:5px;">
-                      <div style="background:#7b6ada; height:10px; border-radius:5px; width:<?php echo $percent; ?>%"></div>
-                    </div>
-                    <small><?php echo $percent; ?>%</small>
-                  </td>
-                  <td class="admin-actions">
-                    <a href="editar_categoria.php?id=<?php echo $categoria['id_categoria']; ?>" class="admin-btn edit-btn"><i class="fas fa-edit"></i> Editar</a>
-                    <a href="eliminar_categoria.php?id=<?php echo $categoria['id_categoria']; ?>" class="admin-btn delete-btn" onclick="return confirm('Tem a certeza que deseja eliminar esta categoria?')"><i class="fas fa-trash"></i> Eliminar</a>
-                  </td>
-                </tr>
-                <?php endwhile; ?>
-              </tbody>
-            </table>
+            
+            <!-- Últimos Utilizadores Registados -->
+            <div class="admin-section">
+              <h2><i class="fas fa-users"></i> Últimos Utilizadores Registados</h2>
+              <a href="adicionar_utilizador.php" class="admin-btn add-btn"><i class="fas fa-plus"></i> Adicionar Utilizador</a>
+              <table class="user-table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Data de Registo</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php while($user = $result_last_users->fetch_assoc()): ?>
+                  <tr>
+                    <td><?php echo htmlspecialchars($user['username']); ?></td>
+                    <td><?php echo htmlspecialchars($user['email']); ?></td>
+                    <td><?php echo date('d/m/Y H:i', strtotime($user['data_criacao'])); ?></td>
+                    <td class="admin-actions">
+                      <a href="editar_utilizador.php?username=<?php echo $user['username']; ?>" class="admin-btn edit-btn"><i class="fas fa-edit"></i> Editar</a>
+                      <a href="eliminar_utilizador.php?username=<?php echo $user['username']; ?>" class="admin-btn delete-btn" onclick="return confirm('Tem a certeza que deseja eliminar este utilizador?')"><i class="fas fa-trash"></i> Eliminar</a>
+                    </td>
+                  </tr>
+                  <?php endwhile; ?>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Categorias -->
+            <div class="admin-section">
+              <h2><i class="fas fa-folder"></i> Categorias</h2>
+              <a href="adicionar_categoria.php" class="admin-btn add-btn"><i class="fas fa-plus"></i> Adicionar Categoria</a>
+              <table class="category-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Expressões</th>
+                    <th>Completas</th>
+                    <th>Progresso</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php while($categoria = $result_categorias->fetch_assoc()): 
+                    $percent = ($categoria['total_expressoes'] > 0) ? round(($categoria['completas'] / $categoria['total_expressoes']) * 100) : 0;
+                  ?>
+                  <tr>
+                    <td><?php echo $categoria['id_categoria']; ?></td>
+                    <td><?php echo htmlspecialchars($categoria['titulo']); ?></td>
+                    <td><?php echo $categoria['total_expressoes']; ?></td>
+                    <td><?php echo $categoria['completas']; ?></td>
+                    <td>
+                      <div style="background:#e2e2e2; height:10px; border-radius:5px;">
+                        <div style="background:#7b6ada; height:10px; border-radius:5px; width:<?php echo $percent; ?>%"></div>
+                      </div>
+                      <small><?php echo $percent; ?>%</small>
+                    </td>
+                    <td class="admin-actions">
+                      <a href="editar_categoria.php?id=<?php echo $categoria['id_categoria']; ?>" class="admin-btn edit-btn"><i class="fas fa-edit"></i> Editar</a>
+                      <a href="eliminar_categoria.php?id=<?php echo $categoria['id_categoria']; ?>" class="admin-btn delete-btn" onclick="return confirm('Tem a certeza que deseja eliminar esta categoria?')"><i class="fas fa-trash"></i> Eliminar</a>
+                    </td>
+                  </tr>
+                  <?php endwhile; ?>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
