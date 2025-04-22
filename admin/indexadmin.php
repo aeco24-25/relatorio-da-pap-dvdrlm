@@ -18,6 +18,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
+// if (!$user || !$user['is_admin']) {
+//     header('Location: ../user/indexuser.php');
+//     exit();
+// }
+
 // Obter estatísticas
 $sql_stats = "SELECT 
     (SELECT COUNT(*) FROM users) as total_users,
@@ -228,7 +233,6 @@ $result_categorias = $conn->query($sql_categorias);
 <body style="background:#f2f0ff;">
   <div id="root">
     <div data-reactroot="">
-      <!-- CABEÇALHO ORIGINAL (SEM ALTERAÇÕES) -->
       <div class="_6t5Uh" style="height: 78px;">
         <div class="NbGcm">
           <div class="_3vDrO">
@@ -259,7 +263,6 @@ $result_categorias = $conn->query($sql_categorias);
         </div>
       </div>
       
-      <!-- CONTEÚDO PRINCIPAL REORGANIZADO -->
       <div class="LFfrA _3MLiB">
         <div class="admin-container">
           <!-- Menu de navegação admin -->
