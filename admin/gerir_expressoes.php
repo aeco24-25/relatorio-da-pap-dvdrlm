@@ -11,29 +11,19 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// Processar formulário
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $titulo = $conn->real_escape_string($_POST['titulo']);
-    
-    $sql = "INSERT INTO categoria (titulo) VALUES (?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $titulo);
-    
-    if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Categoria adicionada com sucesso!";
-        header('Location: gerir_categorias.php');
-        exit();
-    } else {
-        $error = "Erro ao adicionar categoria: " . $conn->error;
-    }
-}
+// Obter todas as expressões com info da categoria
+$sql = "SELECT e.id_expressao, e.versao_ingles, e.traducao_portugues, c.titulo as categoria 
+        FROM expressoes e 
+        JOIN categoria c ON e.id_categoria = c.id_categoria
+        ORDER BY e.id_expressao";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-pt">
 <head>
   <meta charset="utf-8">
-  <title>DTeaches - Adicionar Categoria</title>
+  <title>DTeaches - Gerir Expressões</title>
   <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport">
   <meta content="yes" name="mobile-web-app-capable">
   <link rel="shortcut icon" href="../assets/images/logo.png">
@@ -45,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../assets/css/owl.css">
   <link rel="stylesheet" href="../assets/css/animate.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-  
+
   <style>
     .form-container {
       margin-top: 0px !important;
@@ -76,6 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       font-size: 16px;
     }
     
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+    }
+    
+    .checkbox-group input {
+      margin-right: 10px;
+    }
+    
     .btn-submit {
       background: #7b6ada;
       color: white;
@@ -85,11 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       cursor: pointer;
       font-size: 16px;
     }
-    
-    .btn-submit:hover {
-      background: #5a4fcf;
-    }
-    
+
     .alert {
       padding: 10px;
       margin-bottom: 20px;
@@ -116,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .admin-container {
+      color:black;
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
@@ -171,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .admin-section {
-      margin-top: 20px;
+      margin-top: 0px;
       background: #fcfcff;
       border-radius: 12px;
       padding: 20px;
@@ -274,22 +271,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php include 'header_admin.php'; ?>
   
   <div class="admin-container">
-    <div class="form-container">
-      <h2 style="margin-bottom: 10px;"><i class="fas fa-plus-circle"></i> Adicionar Nova Categoria</h2>
+    <div class="admin-section">
+      <h2><i class="fas fa-language"></i> Gerir Expressões</h2>
       
-      <?php if (isset($error)): ?>
-        <div class="alert alert-danger"><?php echo $error; ?></div>
+      <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success"><?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?></div>
       <?php endif; ?>
       
-      <form method="POST">
-        <div class="form-group">
-          <label for="titulo">Título da Categoria</label>
-          <input type="text" id="titulo" name="titulo" class="form-control" required>
-        </div>
-        
-        <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Guardar Categoria</button>
-        <a href="gerir_categorias.php" class="admin-btn" style="margin-left: 10px;"><i class="fas fa-arrow-left"></i> Voltar</a>
-      </form>
+      <?php if (isset($_SESSION['error_message'])): ?>
+        <div class="alert alert-danger"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
+      <?php endif; ?>
+      
+      <a href="adicionar_expressao.php" class="admin-btn add-btn"><i class="fas fa-plus"></i> Adicionar Expressão</a>
+      
+      <table class="category-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Inglês</th>
+            <th>Português</th>
+            <th>Categoria</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php while($row = $result->fetch_assoc()): ?>
+          <tr>
+            <td><?php echo $row['id_expressao']; ?></td>
+            <td><?php echo htmlspecialchars($row['versao_ingles']); ?></td>
+            <td><?php echo htmlspecialchars($row['traducao_portugues']); ?></td>
+            <td><?php echo htmlspecialchars($row['categoria']); ?></td>
+            <td class="admin-actions">
+              <a href="editar_expressao.php?id=<?php echo $row['id_expressao']; ?>" class="admin-btn edit-btn"><i class="fas fa-edit"></i> Editar</a>
+              <a href="eliminar_expressao.php?id=<?php echo $row['id_expressao']; ?>" class="admin-btn delete-btn" onclick="return confirm('Tem a certeza que deseja eliminar esta expressão?')"><i class="fas fa-trash"></i> Eliminar</a>
+            </td>
+          </tr>
+          <?php endwhile; ?>
+        </tbody>
+      </table>
     </div>
   </div>
 </body>

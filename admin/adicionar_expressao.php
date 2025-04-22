@@ -11,20 +11,43 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// Processar formulário
+// Obter categorias para o dropdown
+$categorias = $conn->query("SELECT id_categoria, titulo FROM categoria ORDER BY titulo");
+
+$error = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $titulo = $conn->real_escape_string($_POST['titulo']);
-    
-    $sql = "INSERT INTO categoria (titulo) VALUES (?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $titulo);
+    $ingles = $conn->real_escape_string($_POST['ingles']);
+    $portugues = $conn->real_escape_string($_POST['portugues']);
+    $explicacao = $conn->real_escape_string($_POST['explicacao']);
+    $categoria_id = intval($_POST['categoria_id']);
+    $tipo_exercicio = $conn->real_escape_string($_POST['tipo_exercicio']);
+
+    // Inserir a expressão
+    $stmt = $conn->prepare("INSERT INTO expressoes (versao_ingles, traducao_portugues, explicacao, id_categoria, tipo_exercicio) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssis", $ingles, $portugues, $explicacao, $categoria_id, $tipo_exercicio);
     
     if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Categoria adicionada com sucesso!";
-        header('Location: gerir_categorias.php');
+        $id_expressao = $conn->insert_id;
+        
+        // Processar exemplos se existirem
+        if (!empty($_POST['exemplos'])) {
+            $stmt_ex = $conn->prepare("INSERT INTO exemplos (id_expressao, exemplo) VALUES (?, ?)");
+            
+            foreach ($_POST['exemplos'] as $exemplo) {
+                if (!empty(trim($exemplo))) {
+                    $exemplo_clean = $conn->real_escape_string(trim($exemplo));
+                    $stmt_ex->bind_param("is", $id_expressao, $exemplo_clean);
+                    $stmt_ex->execute();
+                }
+            }
+        }
+        
+        $_SESSION['success_message'] = "Expressão adicionada com sucesso!";
+        header('Location: gerir_expressoes.php');
         exit();
     } else {
-        $error = "Erro ao adicionar categoria: " . $conn->error;
+        $error = "Erro ao adicionar expressão: " . $conn->error;
     }
 }
 ?>
@@ -33,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt-pt">
 <head>
   <meta charset="utf-8">
-  <title>DTeaches - Adicionar Categoria</title>
+  <title>DTeaches - Adicionar Expressão</title>
   <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport">
   <meta content="yes" name="mobile-web-app-capable">
   <link rel="shortcut icon" href="../assets/images/logo.png">
@@ -47,6 +70,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
   
   <style>
+    .form-container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fcfcff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    textarea.form-control {
+      min-height: 100px;
+    }
+    
+    .exemplo-item {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .exemplo-item input {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+    
+    #exemplos-container {
+      margin-bottom: 20px;
+    }
+
     .form-container {
       margin-top: 0px !important;
       max-width: 600px;
@@ -275,22 +329,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   <div class="admin-container">
     <div class="form-container">
-      <h2 style="margin-bottom: 10px;"><i class="fas fa-plus-circle"></i> Adicionar Nova Categoria</h2>
+      <h2 style="margin-bottom: 10px;"><i class="fas fa-plus-circle"></i> Adicionar Nova Expressão</h2>
       
-      <?php if (isset($error)): ?>
+      <?php if (!empty($error)): ?>
         <div class="alert alert-danger"><?php echo $error; ?></div>
       <?php endif; ?>
       
       <form method="POST">
         <div class="form-group">
-          <label for="titulo">Título da Categoria</label>
-          <input type="text" id="titulo" name="titulo" class="form-control" required>
+          <label for="ingles">Expressão em Inglês</label>
+          <input type="text" id="ingles" name="ingles" class="form-control" required>
         </div>
         
-        <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Guardar Categoria</button>
-        <a href="gerir_categorias.php" class="admin-btn" style="margin-left: 10px;"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <div class="form-group">
+          <label for="portugues">Tradução em Português</label>
+          <input type="text" id="portugues" name="portugues" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="explicacao">Explicação</label>
+          <textarea id="explicacao" name="explicacao" class="form-control" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="categoria_id">Categoria</label>
+          <select id="categoria_id" name="categoria_id" class="form-control" required>
+            <?php while($cat = $categorias->fetch_assoc()): ?>
+              <option value="<?php echo $cat['id_categoria']; ?>"><?php echo htmlspecialchars($cat['titulo']); ?></option>
+            <?php endwhile; ?>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="tipo_exercicio">Tipo de Exercício</label>
+          <select id="tipo_exercicio" name="tipo_exercicio" class="form-control" required>
+            <option value="traducao">Tradução</option>
+            <option value="preenchimento">Preenchimento</option>
+            <option value="associacao">Associação</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Exemplos (opcional)</label>
+          <div id="exemplos-container">
+            <div class="exemplo-item">
+              <input type="text" name="exemplos[]" class="form-control" placeholder="Exemplo de uso">
+              <button type="button" class="admin-btn delete-btn remove-exemplo"><i class="fas fa-times"></i></button>
+            </div>
+          </div>
+          <button type="button" id="add-exemplo" class="admin-btn"><i class="fas fa-plus"></i> Adicionar Exemplo</button>
+        </div>
+        
+        <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Guardar Expressão</button>
+        <a href="gerir_expressoes.php" class="admin-btn" style="margin-left: 10px;"><i class="fas fa-arrow-left"></i> Voltar</a>
       </form>
     </div>
   </div>
+
+  <script>
+    document.getElementById('add-exemplo').addEventListener('click', function() {
+      const container = document.getElementById('exemplos-container');
+      const newItem = document.createElement('div');
+      newItem.className = 'exemplo-item';
+      newItem.innerHTML = `
+        <input type="text" name="exemplos[]" class="form-control" placeholder="Exemplo de uso">
+        <button type="button" class="admin-btn delete-btn remove-exemplo"><i class="fas fa-times"></i></button>
+      `;
+      container.appendChild(newItem);
+    });
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('remove-exemplo')) {
+        e.target.parentElement.remove();
+      }
+    });
+  </script>
 </body>
 </html>
