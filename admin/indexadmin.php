@@ -18,10 +18,10 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-// if (!$user || !$user['is_admin']) {
-//     header('Location: ../user/indexuser.php');
-//     exit();
-// }
+if (!$user || !$user['is_admin']) {
+    header('Location: ../user/indexuser.php');
+    exit();
+}
 
 // Obter estatísticas
 $sql_stats = "SELECT 
