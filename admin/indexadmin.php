@@ -18,12 +18,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-// if (!$user || !$user['is_admin']) {
-//     header('Location: ../user/indexuser.php');
-//     exit();
-// }
-
-// Obter estatísticas para o painel admin
+// Obter estatísticas
 $sql_stats = "SELECT 
     (SELECT COUNT(*) FROM users) as total_users,
     (SELECT COUNT(*) FROM expressoes) as total_expressoes,
@@ -32,11 +27,11 @@ $sql_stats = "SELECT
 $result_stats = $conn->query($sql_stats);
 $stats = $result_stats->fetch_assoc();
 
-// Obter últimos usuários registrados
+// Obter últimos utilizadores
 $sql_last_users = "SELECT username, email, data_criacao FROM users ORDER BY data_criacao DESC LIMIT 5";
 $result_last_users = $conn->query($sql_last_users);
 
-// Obter categorias com estatísticas
+// Obter categorias
 $sql_categorias = "SELECT 
     c.id_categoria, 
     c.titulo,
@@ -227,30 +222,13 @@ $result_categorias = $conn->query($sql_categorias);
       background: white;
       color: #7b6ada;
     }
-
-    /* Ajustes para o header */
-    .NbGcm {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-    }
-
-    ._3vDrO {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo {
-      margin: 16px 0;
-      display: inline-block;
-    }
   </style>
 </head>
 
 <body style="background:#f2f0ff;">
   <div id="root">
     <div data-reactroot="">
+      <!-- CABEÇALHO ORIGINAL (SEM ALTERAÇÕES) -->
       <div class="_6t5Uh" style="height: 78px;">
         <div class="NbGcm">
           <div class="_3vDrO">
@@ -276,13 +254,15 @@ $result_categorias = $conn->query($sql_categorias);
             </div>
           </div>
           <a href="indexadmin.php" class="logo">
-          <h1>D<span style="line-height: 1.2; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
+            <h1>D<span style="line-height: 1.2; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
           </a>
         </div>
       </div>
       
+      <!-- CONTEÚDO PRINCIPAL REORGANIZADO -->
       <div class="LFfrA _3MLiB">
         <div class="admin-container">
+          <!-- Menu de navegação admin -->
           <div class="nav-admin">
             <a href="indexadmin.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             <a href="gerir_utilizadores.php"><i class="fas fa-users"></i> Gerir Utilizadores</a>
@@ -292,7 +272,7 @@ $result_categorias = $conn->query($sql_categorias);
           </div>
           
           <div class="admin-main-content">
-            <!-- Painel de Estatísticas Gerais -->
+            <!-- Painel de Estatísticas -->
             <div class="stats-panel">
               <h2>Estatísticas Gerais</h2>
               <div class="admin-stats">
@@ -322,7 +302,7 @@ $result_categorias = $conn->query($sql_categorias);
               </div>
             </div>
             
-            <!-- Últimos Utilizadores Registados -->
+            <!-- Últimos Utilizadores -->
             <div class="admin-section">
               <h2><i class="fas fa-users"></i> Últimos Utilizadores Registados</h2>
               <a href="adicionar_utilizador.php" class="admin-btn add-btn"><i class="fas fa-plus"></i> Adicionar Utilizador</a>
