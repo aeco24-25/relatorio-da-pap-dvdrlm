@@ -1,0 +1,385 @@
+:root {
+--primary-color: #7b6ada;
+--secondary-color: #5a4fcf;
+--success-color: #4CAF50;
+--light-gray: #e2e2e2;
+--dark-gray: #333;
+--error-color: #c62828;
+}
+
+body {
+background: #fcfcff;
+font-family: 'Poppins', sans-serif;
+}
+
+.logo {
+margin-top: 16px;
+margin-left: 50px;
+display: inline-block;
+}
+
+h1 {
+margin-top: -5px;
+margin-bottom: 0px;
+font-size: 46px;
+text-transform: uppercase;
+color: #fff !important;
+font-weight: 700;
+margin-right: 20px;
+padding-right: 20px;
+}
+
+.progress-container {
+padding-bottom: 1.65rem !important;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 2rem;
+background: #fcfcff;
+border-radius: 12px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+margin-bottom: 2rem;
+max-width: 800px;
+margin: 20px auto;
+}
+
+.progress-stats {
+display: flex;
+justify-content: space-around;
+width: 100%;
+text-align: center;
+}
+
+.stat-item {
+flex: 1;
+padding: 0.5rem;
+}
+
+.stat-number {
+margin-top: -10px;
+margin-bottom: 10px;
+font-size: 1.6rem;
+font-weight: bold;
+color: #434343;
+}
+
+.stat-label {
+font-size: 0.95rem;
+color: var(--dark-gray);
+line-height: 1 !important
+}
+
+.perfil-container {
+max-width: 800px;
+margin: 0 auto;
+margin-top: 110px;
+}
+
+.perfil-titulo {
+font-size: 24px;
+font-weight: bold;
+margin-bottom: 30px;
+color: #333;
+text-align: center;
+}
+
+.logo {
+margin-top: 16px;
+margin-left: 50px;
+display: inline-block;
+}
+
+.progress-circle {
+position: relative;
+width: 150px;
+height: 150px;
+margin-bottom: 1.5rem;
+}
+
+.progress-circle-bg {
+fill: #fcfcff;
+}
+
+.progress-circle-fill {
+fill: #7b6ada;
+transition: all 0.3s ease;
+}
+
+.progress-circle-text {
+font-size: 24px;
+font-weight: bold;
+fill: #333;
+text-anchor: middle;
+dominant-baseline: central;
+}
+
+.categoria-card {
+background-color: #fcfcff;
+border-radius: 12px;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+padding: 20px;
+margin-bottom: 15px;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+position: relative;
+}
+
+.categoria-card:hover {
+margin-bottom: 30px;
+transform: translateY(-5px);
+box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.categoria-icon {
+width: 50px;
+height: 50px;
+background-color: #7b6ada;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+margin-right: 15px;
+color: #fcfcff;
+font-weight: bold;
+font-size: 20px;
+transition: all 0.3s ease;
+}
+
+.categoria-card:hover .categoria-icon {
+transform: scale(1.1);
+background-color: var(--secondary-color);
+}
+
+.categoria-info {
+flex: 1;
+}
+
+.categoria-titulo {
+font-size: 18px;
+font-weight: bold;
+margin-bottom: 5px;
+color: #494949;
+transition: all 0.3s ease;
+}
+
+.categoria-card:hover .categoria-titulo {
+color: var(--primary-color);
+}
+
+.categoria-progress {
+background-color: #e2e2e2;
+height: 10px;
+border-radius: 5px;
+overflow: hidden;
+margin-top: 11px;
+}
+
+.categoria-progress-fill {
+height: 100%;
+background-color: #7b6ada;
+border-radius: 5px;
+transition: width 0.3s ease;
+}
+
+.categoria-bloqueada {
+opacity: 0.6;
+background-color: #f5f5f5;
+}
+
+.categoria-bloqueada .categoria-icon {
+background-color: #999;
+}
+
+.categoria-bloqueada .categoria-progress-fill {
+background-color: #999;
+}
+
+.bloqueio-mensagem {
+background-color: #c62828;
+padding: 3px 8px;
+border-radius: 10px;
+font-size: 0.8rem;
+display: inline-block;
+color: white;
+font-style: italic;
+margin-bottom: -5px;
+}
+
+.categoria-bloqueada::after {
+content: "Complete a categoria anterior para desbloquear";
+position: absolute;
+bottom: -30px;
+left: 0;
+background: #c62828;
+color: white;
+padding: 5px 10px;
+border-radius: 5px;
+font-size: 12px;
+opacity: 0;
+transition: opacity 0.3s;
+pointer-events: none;
+}
+
+.categoria-bloqueada:hover::after {
+opacity: 1;
+}
+
+.categoria-completa .categoria-icon {
+background-color: #66BB6A;
+}
+
+.categoria-completa .categoria-progress-fill {
+background-color: #66BB6A !important;
+}
+
+.categoria-completa:hover .categoria-icon {
+background-color: #57A85A; 
+}
+
+.categoria-completa {
+border-left: 5px solid #4CAF50 !important;
+}
+
+.categoria-completa:hover .categoria-titulo {
+color: #66BB6A !important; /* Verde para concluídas */
+}
+.daily-goal {
+margin-top: -10px !important;
+background-color: #fcfcff;
+border-radius: 12px;
+padding: 20px;
+margin: 40px 40px;
+max-width: 800px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+text-align: center;
+}
+
+.daily-goal h3 {
+color: var(--primary-color);
+margin-bottom: 15px;
+}
+
+.goal-progress {
+height: 10px;
+background-color: #e2e2e2;
+border-radius: 5px;
+margin-bottom: 10px;
+overflow: hidden;
+}
+
+.goal-progress-fill {
+height: 100%;
+background-color: var(--primary-color);
+border-radius: 5px;
+transition: width 0.5s ease;
+}
+
+.goal-text {
+font-size: 14px;
+color: var(--dark-gray);
+}
+
+.gamification-panel {
+background-color: #fcfcff;
+border-radius: 12px;
+padding: 20px;
+margin: 20px 40px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+text-align: center;
+}
+
+.gamification-panel h3 {
+color: var(--primary-color);
+margin-bottom: 15px;
+}
+
+.leaderboard {
+margin-top: 30px;
+text-align: left;
+}
+
+.leaderboard ol {
+color: #7b6ada;
+padding-left: 20px;
+}
+
+.leaderboard li {
+display: flex;
+justify-content: space-between;
+padding: 8px 0;
+border-bottom: 1px solid #eee;
+}
+
+.leaderboard li.highlight {
+font-weight: bold;
+color: var(--primary-color);
+}
+
+.leaderboard .position {
+width: 30px;
+font-weight: bold;
+}
+
+.leaderboard .username {
+flex-grow: 1;
+}
+
+.leaderboard .score {
+width: 80px;
+text-align: right;
+}
+
+/* Badges */
+.badge-container {
+display: flex;
+justify-content: center;
+gap: 15px;
+margin-top: 15px;
+}
+
+.badge {
+width: 50px;
+height: 48px;
+border-radius: 50%;
+background-color: #e2e2e2;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+}
+
+.badge.earned {
+background-color: #ffc700;
+}
+
+.badge i {
+margin-top: -1px;
+font-size: 1.2rem;
+color: #7b6ada;
+}
+
+.badge.earned i {
+margin-top: -1px;
+color: #333;
+}
+
+.badge-tooltip {
+position: absolute;
+bottom: -20px;
+left: 50%;
+transform: translateX(-50%);
+background: #333;
+color: white;
+padding: 4px 8px;
+border-radius: 5px;
+font-size: 0.7rem;
+white-space: nowrap;
+opacity: 0;
+transition: opacity 0.3s;
+pointer-events: none;
+}
+
+.badge.earned:hover .badge-tooltip {
+opacity: 1;
+}
