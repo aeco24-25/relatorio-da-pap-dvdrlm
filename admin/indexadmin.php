@@ -113,8 +113,8 @@ $result_categorias = $conn->query($sql_categorias);
 
     .stat-card {
       background: #fcfcff;
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 22px;
+      padding: 17px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
@@ -134,10 +134,11 @@ $result_categorias = $conn->query($sql_categorias);
     }
 
     .admin-section {
+      margin-top: 20px;
       background: #fcfcff;
       border-radius: 12px;
       padding: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       width: 100%;
     }
@@ -204,6 +205,7 @@ $result_categorias = $conn->query($sql_categorias);
     }
 
     .nav-admin {
+      justify-content: space-around;
       margin-top: -30px;
       display: flex;
       background: #7b6ada;
