@@ -29,9 +29,12 @@
     <div class="LFfrA _3MLiB">
       <div class="admin-container">
         <div class="nav-admin">
-          <a href="indexadmin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-          <a href="gerir_utilizadores.php"><i class="fas fa-users"></i> Gerir Utilizadores</a>
-          <a href="gerir_categorias.php" class="active"><i class="fas fa-folder"></i> Gerir Categorias</a>
-          <a href="gerir_expressoes.php"><i class="fas fa-language"></i> Gerir Expressões</a>
-          <a href="relatorios.php"><i class="fas fa-chart-bar"></i> Relatórios</a>
+          <?php
+          $current_page = basename($_SERVER['PHP_SELF']);
+          ?>
+          <a href="indexadmin.php" class="<?= ($current_page == 'indexadmin.php') ? 'active' : '' ?>"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+          <a href="gerir_utilizadores.php" class="<?= ($current_page == 'gerir_utilizadores.php') ? 'active' : '' ?>"><i class="fas fa-users"></i> Gerir Utilizadores</a>
+          <a href="gerir_categorias.php" class="<?= ($current_page == 'gerir_categorias.php') ? 'active' : '' ?>"><i class="fas fa-folder"></i> Gerir Categorias</a>
+          <a href="gerir_expressoes.php" class="<?= ($current_page == 'gerir_expressoes.php') ? 'active' : '' ?>"><i class="fas fa-language"></i> Gerir Expressões</a>
+          <a href="relatorios.php" class="<?= ($current_page == 'relatorios.php') ? 'active' : '' ?>"><i class="fas fa-chart-bar"></i> Relatórios</a>
         </div>
