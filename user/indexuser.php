@@ -64,8 +64,8 @@ function getProgressCoordinates($percent, $radius) {
     return round($x, 1) . ' ' . round($y, 1);
 }
 
-// Verificar categorias liberadas e completas
-$categorias_liberadas = array();
+// Verificar categorias disponibilizadas e completas
+$categorias_disponibilizadas = array();
 $categorias_completas = array();
 
 $sql_categorias_progresso = "SELECT 
@@ -89,7 +89,7 @@ $categoria_anterior_completa = true;
 while ($row = $result_categorias_progresso->fetch_assoc()) {
     $completa = ($row['completas'] == $row['total']);
     $categorias_completas[$row['id_categoria']] = $completa;
-    $categorias_liberadas[$row['id_categoria']] = $categoria_anterior_completa;
+    $categorias_disponibilizadas[$row['id_categoria']] = $categoria_anterior_completa;
     $categoria_anterior_completa = $completa;
 }
 
@@ -263,7 +263,7 @@ $categorias_icones = [
                   if ($result_categorias->num_rows > 0) {
                       while($row = $result_categorias->fetch_assoc()) {
                           $cat_id = $row['id_categoria'];
-                          $liberada = isset($categorias_liberadas[$cat_id]) && $categorias_liberadas[$cat_id];
+                          $disponibilizada = isset($categorias_disponibilizadas[$cat_id]) && $categorias_disponibilizadas[$cat_id];
                           $completa = isset($categorias_completas[$cat_id]) && $categorias_completas[$cat_id];
                           
                           // Obter progresso da categoria
@@ -281,9 +281,9 @@ $categorias_icones = [
                           
                           $cat_percent = ($total_cat > 0) ? round(($completo_cat / $total_cat) * 100) : 0;
                           
-                          echo '<div class="categoria-card' . (!$liberada ? ' categoria-bloqueada' : '') . ($completa ? ' categoria-completa' : '') . '">';                        
+                          echo '<div class="categoria-card' . (!$disponibilizada ? ' categoria-bloqueada' : '') . ($completa ? ' categoria-completa' : '') . '">';                        
                                                 
-                          if ($liberada || $completa) {
+                          if ($disponibilizada || $completa) {
                             $sql_primeira = "SELECT e.id_expressao 
                                             FROM expressoes e
                                             LEFT JOIN progresso p ON e.id_expressao = p.id_expressao AND p.username = '$username' AND p.completo = TRUE
@@ -315,7 +315,7 @@ $categorias_icones = [
                           echo '<div class="categoria-info">
                                   <div class="categoria-titulo">' . htmlspecialchars($row['titulo']) . '</div>';
                           
-                          if (!$liberada) {
+                          if (!$disponibilizada) {
                               echo '<div class="bloqueio-mensagem">Bloqueado</div>';
                           }
                           
@@ -324,7 +324,7 @@ $categorias_icones = [
                                 </div>
                               </div>';
                           
-                          if (($liberada || $completa) && isset($primeira_row)) {
+                          if (($disponibilizada || $completa) && isset($primeira_row)) {
                               echo '</a>';
                           } else {
                               echo '</div>';
