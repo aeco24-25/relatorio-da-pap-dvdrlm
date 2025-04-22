@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </ul>
             </div>
           </div>
-          <a href="indexuser.php" class="logo">
+          <a href="indexadmin.php" class="logo">
                 <h1>D<span style="line-height: 1.2; color: rgba(255, 255, 255, 0.75);">Teaches</span></h1>
             </a>
         </div>
