@@ -26,10 +26,16 @@ $result = $conn->query($sql);
   <meta charset="utf-8">
   <title>DTeaches - Gerir Categorias</title>
   <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport">
+  <meta content="yes" name="mobile-web-app-capable">
   <link rel="shortcut icon" href="../assets/images/logo.png">
   
-  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="css/ltr-6a8f5d2e.css">
   <link rel="stylesheet" href="css/styleindexadmin.css">
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
+  <link rel="stylesheet" href="../assets/css/owl.css">
+  <link rel="stylesheet" href="../assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 </head>
 
 <body style="background:#f2f0ff;">
