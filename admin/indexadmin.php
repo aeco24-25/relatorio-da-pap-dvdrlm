@@ -105,10 +105,10 @@ $result_categorias = $conn->query($sql_categorias);
     }
 
     .admin-stats {
+      margin-top: 18px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      margin-bottom: 30px;
     }
 
     .stat-card {
@@ -204,6 +204,7 @@ $result_categorias = $conn->query($sql_categorias);
     }
 
     .nav-admin {
+      margin-top: -30px;
       display: flex;
       background: #7b6ada;
       padding: 10px 20px;
@@ -298,7 +299,7 @@ $result_categorias = $conn->query($sql_categorias);
                 </div>
                 
                 <div class="stat-card">
-                  <h3>Utilizadores Ativos</h3>
+                  <h3>Utilizadores<br>Ativos</h3>
                   <div class="stat-number"><?php echo $stats['usuarios_ativos']; ?></div>
                   <i class="fas fa-user-check fa-2x" style="color: #7b6ada;"></i>
                 </div>
@@ -306,7 +307,7 @@ $result_categorias = $conn->query($sql_categorias);
             </div>
             
             <!-- Últimos Utilizadores -->
-            <div class="admin-section">
+            <div class="admin-section" style="color: black !important;">
               <h2><i class="fas fa-users"></i> Últimos Utilizadores Registados</h2>
               <a href="adicionar_utilizador.php" class="admin-btn add-btn"><i class="fas fa-plus"></i> Adicionar Utilizador</a>
               <table class="user-table">
@@ -335,7 +336,7 @@ $result_categorias = $conn->query($sql_categorias);
             </div>
             
             <!-- Categorias -->
-            <div class="admin-section">
+            <div class="admin-section" style="color: black !important;">
               <h2><i class="fas fa-folder"></i> Categorias</h2>
               <a href="adicionar_categoria.php" class="admin-btn add-btn"><i class="fas fa-plus"></i> Adicionar Categoria</a>
               <table class="category-table">
