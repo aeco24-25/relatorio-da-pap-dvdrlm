@@ -1,5 +1,8 @@
 USE dteaches;
 
+INSERT INTO users (username, email, pass, is_admin) 
+VALUES ('david', 'david@gmail.com', 'admin', TRUE);
+
 -- Inserir categorias
 INSERT INTO categoria (titulo) VALUES 
 ('Saudações e Apresentações'),
