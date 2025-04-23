@@ -11,7 +11,6 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// META DIÁRIA - Sempre mostrar no máximo 10, mesmo que tenha completado mais
 $sql_hoje = "SELECT COUNT(*) as hoje FROM progresso 
             WHERE username = ? AND completo = TRUE 
             AND DATE(data_conclusao) = CURDATE()";
@@ -21,10 +20,10 @@ $stmt_hoje->execute();
 $result_hoje = $stmt_hoje->get_result();
 $hoje_row = $result_hoje->fetch_assoc();
 
-// Sempre mostrar no máximo 10 na interface
+// Mostrar no máximo 10 na interface
 $completas_hoje_visual = min(10, $hoje_row['hoje']);
 
-// Atualiza a sessão (pode armazenar o valor real também se necessário)
+// Atualiza a sessão 
 $_SESSION['meta_diaria'] = [
     'data' => date('Y-m-d'),
     'completas' => $completas_hoje_visual,

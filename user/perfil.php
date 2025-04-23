@@ -1,5 +1,4 @@
 <?php
-// Iniciar sessão
 session_start();
 
 // Verificar autenticação do utilizador
@@ -10,7 +9,6 @@ if (!isset($_SESSION['username'])) {
 
 $username = $_SESSION['username'];
 
-// Estabelecer ligação à base de dados
 $conn = new mysqli('localhost', 'root', '', 'dteaches');
 if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
@@ -52,7 +50,7 @@ $result = $stmt->get_result();
 $categorias_row = $result->fetch_assoc();
 $categorias_estudadas = $categorias_row['categorias_estudadas'];
 
-// Obter progresso por categoria (apenas para categorias que o utilizador está estudando)
+// Obter progresso por categoria (apenas para categorias que o utilizador está a estudar)
 $sql = "SELECT c.id_categoria, c.titulo, 
         COUNT(e.id_expressao) as total_categoria,
         COUNT(p.id_expressao) as completo_categoria

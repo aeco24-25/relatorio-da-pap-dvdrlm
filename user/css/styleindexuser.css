@@ -242,10 +242,10 @@ border-left: 5px solid #4CAF50 !important;
 }
 
 .categoria-completa:hover .categoria-titulo {
-color: #66BB6A !important; /* Verde para concluídas */
+color: #66BB6A !important; 
 }
 .daily-goal {
-margin-top: -10px !important;
+margin-top: -5px !important;
 background-color: #fcfcff;
 border-radius: 12px;
 padding: 20px;
