@@ -11,6 +11,7 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
+// Quantas completou no dia
 $sql_hoje = "SELECT COUNT(*) as hoje FROM progresso 
             WHERE username = ? AND completo = TRUE 
             AND DATE(data_conclusao) = CURDATE()";
@@ -34,7 +35,7 @@ $_SESSION['meta_diaria'] = [
 $sql_categorias = "SELECT id_categoria, titulo FROM categoria ORDER BY id_categoria";
 $result_categorias = $conn->query($sql_categorias);
 
-// Obter progresso geral do usuário
+// Obter progresso geral do utilizador (PARA A %)
 $username = $_SESSION['username'];
 $sql_progresso = "SELECT COUNT(*) as total_completo FROM progresso WHERE username = ? AND completo = TRUE";
 $stmt = $conn->prepare($sql_progresso);
@@ -224,7 +225,7 @@ $categorias_icones = [
     <div class="leaderboard">
         <h3>Classificação</h3>
         <?php
-        // Obter top 5 usuários
+        // Obter top 5 utilizadores
         $sql_leaderboard = "SELECT username, COUNT(*) as score 
                           FROM progresso 
                           WHERE completo = TRUE 
