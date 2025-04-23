@@ -349,9 +349,11 @@ $result_categorias = $conn->query($sql_categorias);
                   </tr>
                 </thead>
                 <tbody>
-                  <?php while($categoria = $result_categorias->fetch_assoc()): 
-                    $percent = ($categoria['total_expressoes'] > 0) ? round(($categoria['completas'] / $categoria['total_expressoes']) * 100) : 0;
-                  ?>
+                <?php while($categoria = $result_categorias->fetch_assoc()): 
+                  $percent = ($categoria['total_expressoes'] > 0) 
+                  ? min(round(($categoria['completas'] / $categoria['total_expressoes']) * 100), 100) 
+                  : 0;
+                ?>
                   <tr>
                     <td><?php echo $categoria['id_categoria']; ?></td>
                     <td><?php echo htmlspecialchars($categoria['titulo']); ?></td>
