@@ -178,7 +178,7 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
             }
         } else {
           echo 'Ainda não completaste nenhuma expressão.';
-          }
+        }
         ?>
       </div>
     </div>
