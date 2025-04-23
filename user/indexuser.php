@@ -35,7 +35,7 @@ $_SESSION['meta_diaria'] = [
 $sql_categorias = "SELECT id_categoria, titulo FROM categoria ORDER BY id_categoria";
 $result_categorias = $conn->query($sql_categorias);
 
-// Obter progresso geral do utilizador (PARA A %)
+// Obter progresso geral (completas) do utilizador
 $username = $_SESSION['username'];
 $sql_progresso = "SELECT COUNT(*) as total_completo FROM progresso WHERE username = ? AND completo = TRUE";
 $stmt = $conn->prepare($sql_progresso);
