@@ -50,7 +50,7 @@ $result = $stmt->get_result();
 $categorias_row = $result->fetch_assoc();
 $categorias_estudadas = $categorias_row['categorias_estudadas'];
 
-// Obter progresso por categoria (apenas para categorias que o utilizador está a estudar)
+// Obter progresso por categoria (só para categorias que o utilizador está a estudar)
 $sql = "SELECT c.id_categoria, c.titulo, 
         COUNT(e.id_expressao) as total_categoria,
         COUNT(p.id_expressao) as completo_categoria
@@ -177,7 +177,6 @@ $data_criacao_formatada = $data_criacao->format('d/m/Y');
         <?php
             }
         } else {
-          // Mensagem quando não há progresso em nenhuma categoria
           echo 'Ainda não completaste nenhuma expressão.';
           }
         ?>
