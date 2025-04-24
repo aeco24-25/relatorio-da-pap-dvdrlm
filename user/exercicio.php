@@ -146,15 +146,15 @@ $categoria_completa = ($completa_row['completas'] == $completa_row['total']);
 if ($categoria_completa || !$proxima_expressao) {
     // Verificar se o utilizador quer repetir a categoria
     if (isset($_GET['repetir_categoria'])) {
-        // Resetar o progresso da categoria no banco de dados
+        // Reseta o progresso da categoria na BD
         $stmt_reset = $conn->prepare("DELETE FROM progresso WHERE username = ? AND id_expressao IN (SELECT id_expressao FROM expressoes WHERE id_categoria = ?)");
         $stmt_reset->bind_param("si", $username, $id_categoria);
         $stmt_reset->execute();
         
-        // Resetar o progresso da categoria na sessão
+        // Reseta o progresso da categoria na sessão
         $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'] = array();
         
-        // Buscar a primeira expressão da categoria
+        // Procura a primeira expressão da categoria
         $stmt_primeira = $conn->prepare("SELECT id_expressao FROM expressoes WHERE id_categoria = ? ORDER BY id_expressao ASC LIMIT 1");
         $stmt_primeira->bind_param("i", $id_categoria);
         $stmt_primeira->execute();
@@ -163,10 +163,6 @@ if ($categoria_completa || !$proxima_expressao) {
         if ($result_primeira->num_rows > 0) {
             $expressao_inicial = $result_primeira->fetch_assoc();
             header("Location: exercicio.php?id=" . $expressao_inicial['id_expressao']);
-            exit();
-        } else {
-            // Caso não encontre expressões (não deveria acontecer)
-            header("Location: indexuser.php");
             exit();
         }
     } elseif (!$first_view) {
@@ -190,11 +186,11 @@ $result_exemplos = $stmt_exemplos->get_result();
 
 $mensagem = '';
 $resposta_correta = false;
-$mostrar_explicacao = $first_view && !isset($_POST['pular_explicacao']);
+$mostrar_explicacao = $first_view && !isset($_POST['saltar_explicacao']);
 $mostrar_feedback = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['pular_explicacao'])) {
+    if (isset($_POST['saltar_explicacao'])) {
         $mostrar_explicacao = false;
     } 
     else {
@@ -391,7 +387,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
           <?php endif; ?>
           
           <form method="POST">
-            <button type="submit" name="pular_explicacao" class="btn-submeter">
+            <button type="submit" name="saltar_explicacao" class="btn-submeter">
               <i class="fas fa-arrow-right"></i> Praticar agora
             </button>
           </form>
