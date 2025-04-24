@@ -70,6 +70,7 @@ function getProgressCoordinates($percent, $radius) {
 }
 //
 
+// CATEGORIAS
 // Verificar categorias disponibilizadas e completas
 $categorias_disponibilizadas = array();
 $categorias_completas = array();
@@ -98,6 +99,7 @@ while ($row = $result_categorias_progresso->fetch_assoc()) {
     $categorias_disponibilizadas[$row['id_categoria']] = $categoria_anterior_completa;
     $categoria_anterior_completa = $completa;
 }
+//
 
 // Inicializar array de progresso por categoria na sessão se não existir
 if (!isset($_SESSION['progresso_categorias'])) {
