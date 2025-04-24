@@ -28,7 +28,7 @@ $completas_hoje_visual = min(10, $hoje_row['hoje']);
 $_SESSION['meta_diaria'] = [
     'data' => date('Y-m-d'),
     'completas' => $completas_hoje_visual,
-    'completas_real' => $hoje_row['hoje'] // Armazena o valor real internamente
+    'completas_real' => $hoje_row['hoje'] 
 ];
 
 // Obter categorias
