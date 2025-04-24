@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 
 $id_expressao = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Obter dados da expressão
+// Obtem dados da expressão
 $sql = "SELECT e.*, c.titulo as categoria_nome 
         FROM expressoes e
         JOIN categoria c ON e.id_categoria = c.id_categoria
@@ -29,10 +29,10 @@ if (!$expressao) {
     exit();
 }
 
-// Obter exemplos
+// Obtem exemplos
 $exemplos = $conn->query("SELECT exemplo FROM exemplos WHERE id_expressao = $id_expressao");
 
-// Obter categorias para dropdown
+// Obtem categorias para dropdown
 $categorias = $conn->query("SELECT id_categoria, titulo FROM categoria ORDER BY titulo");
 
 $error = '';
@@ -85,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   <link rel="stylesheet" href="css/ltr-6a8f5d2e.css">
   <link rel="stylesheet" href="css/styleindexadmin.css">
+  <link rel="stylesheet" href="css/styleeditar_expressao.css">
   <link rel="stylesheet" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" href="../assets/css/templatemo-scholar.css">
   <link rel="stylesheet" href="../assets/css/owl.css">
@@ -174,7 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 
   <script>
-    // Mesmo script do adicionar_expressao.php para gerir exemplos
     document.getElementById('add-exemplo').addEventListener('click', function() {
       const container = document.getElementById('exemplos-container');
       const newItem = document.createElement('div');

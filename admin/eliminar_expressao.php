@@ -27,7 +27,7 @@ try {
     $conn->query("DELETE FROM exercicio_preenchimento WHERE id_expressao = $id_expressao");
     $conn->query("DELETE FROM exercicio_associacao WHERE id_expressao = $id_expressao");
     
-    // Finalmente eliminar a expressão
+    // Eliminar a expressão
     $conn->query("DELETE FROM expressoes WHERE id_expressao = $id_expressao");
     
     $conn->commit();

@@ -1,4 +1,35 @@
 .form-container {
+max-width: 800px;
+margin: 30px auto;
+padding: 20px;
+background: #fcfcff;
+border-radius: 12px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-group {
+margin-bottom: 20px;
+}
+
+textarea.form-control {
+min-height: 100px;
+}
+
+.exemplo-item {
+display: flex;
+margin-bottom: 10px;
+}
+
+.exemplo-item input {
+flex-grow: 1;
+margin-right: 10px;
+}
+
+#exemplos-container {
+margin-bottom: 20px;
+}
+
+.form-container {
 margin-top: 0px !important;
 max-width: 600px;
 margin: 30px auto;
@@ -165,10 +196,9 @@ gap: 10px;
 }
 
 .admin-btn {
-margin-top: 20px;
 padding: 5px 10px;
 border-radius: 5px;
-color: black;
+color: white;
 text-decoration: none;
 font-size: 0.8rem;
 display: inline-flex;
