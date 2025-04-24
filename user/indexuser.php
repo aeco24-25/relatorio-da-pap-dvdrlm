@@ -11,6 +11,7 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
+// META DIÁRIA
 // Quantas completou no dia
 $sql_hoje = "SELECT COUNT(*) as hoje FROM progresso 
             WHERE username = ? AND completo = TRUE 
@@ -30,11 +31,15 @@ $_SESSION['meta_diaria'] = [
     'completas' => $completas_hoje_visual,
     'completas_real' => $hoje_row['hoje'] 
 ];
+//
 
+// CATEGORIAS
 // Obter categorias
 $sql_categorias = "SELECT id_categoria, titulo FROM categoria ORDER BY id_categoria";
 $result_categorias = $conn->query($sql_categorias);
+//
 
+// PROGRESSO GERAL
 // Obter progresso geral (completas) do utilizador
 $username = $_SESSION['username'];
 $sql_progresso = "SELECT COUNT(*) as total_completo FROM progresso WHERE username = ? AND completo = TRUE";
@@ -63,6 +68,7 @@ function getProgressCoordinates($percent, $radius) {
     $y = $radius + ($radius * sin($radians));
     return round($x, 1) . ' ' . round($y, 1);
 }
+//
 
 // Verificar categorias disponibilizadas e completas
 $categorias_disponibilizadas = array();
@@ -207,8 +213,8 @@ $categorias_icones = [
             ['icon' => 'fa-medal', 'title' => 'Iniciante', 'earned' => $total_completo > 0],
             ['icon' => 'fa-trophy', 'title' => 'Aprendiz', 'earned' => $total_completo >= 10],
             ['icon' => 'fa-star', 'title' => 'Intermediário', 'earned' => $total_completo >= 30],
-            ['icon' => 'fa-crown', 'title' => 'Avançado', 'earned' => $total_completo >= 50],
-            ['icon' => 'fa-gem', 'title' => 'Mestre', 'earned' => $total_completo >= 100],
+            ['icon' => 'fa-crown', 'title' => 'Avançado', 'earned' => $total_completo >= 40],
+            ['icon' => 'fa-gem', 'title' => 'Mestre', 'earned' => $total_completo >= 50],
         ];
         
         foreach ($badges as $badge) {
