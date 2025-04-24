@@ -225,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         if ($resposta_correta) {
-            // Atualizar banco de dados
+            // Atualizar BD
             $stmt = $conn->prepare("INSERT INTO progresso (username, id_expressao, completo, data_conclusao) 
                                   VALUES (?, ?, TRUE, NOW()) 
                                   ON DUPLICATE KEY UPDATE completo = TRUE, data_conclusao = NOW()");
@@ -273,7 +273,7 @@ if (isset($_SESSION['mostrar_feedback']) && $_SESSION['mostrar_feedback'] && $_S
     unset($_SESSION['expressao_feedback']);
 }
 
-// Obter alternativas para a questão (apenas para tipo tradução)
+// Obter alternativas para a questão (apenas para o de tipo tradução)
 $alternativas = array();
 if ($tipo_exercicio == 'traducao') {
     $stmt = $conn->prepare("SELECT traducao_portugues FROM expressoes 
@@ -424,7 +424,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
         </script>
 
       <?php elseif (!$resposta_correta && $_SESSION['lives'] > 0): ?>
-        <!-- Tela de exercício - varia conforme o tipo -->
+        <!-- Tela de exercício -->
         <?php if ($tipo_exercicio == 'traducao'): ?>
           <!-- Exercício de tradução -->
           <div class="instrucao">
@@ -518,7 +518,7 @@ $percentagem = ($total_expressoes_categoria > 0) ? round(($progresso_atual / $to
     </div>
   </div>
   
-  <!-- Diálogo de confirmação de saída -->
+  <!-- Para confirmar se quer sair !-->
   <script>
   function confirmarSaida() {
       const dialogo = document.createElement('div');
