@@ -11,7 +11,7 @@ if ($conn->connect_error) {
     die("Falha na ligação: " . $conn->connect_error);
 }
 
-// Obter categorias para o dropdown
+// Obter categorias
 $categorias = $conn->query("SELECT id_categoria, titulo FROM categoria ORDER BY titulo");
 
 $error = '';
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($stmt->execute()) {
         $id_expressao = $conn->insert_id;
         
-        // Processar exemplos se existirem
+        // Mostrar exemplos se existirem
         if (!empty($_POST['exemplos'])) {
             $stmt_ex = $conn->prepare("INSERT INTO exemplos (id_expressao, exemplo) VALUES (?, ?)");
             
