@@ -109,7 +109,7 @@ if (!isset($_SESSION['progresso_categorias'][$id_categoria])) {
     }
 }
 
-// Verificar progresso no banco de dados para esta expressão
+// Verificar progresso na BD para esta expressão
 $stmt_first_view = $conn->prepare("SELECT completo FROM progresso 
                                  WHERE username = ? AND id_expressao = ?");
 $stmt_first_view->bind_param("si", $username, $id_expressao);
