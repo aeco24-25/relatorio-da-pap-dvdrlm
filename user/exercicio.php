@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Atualizar progresso na sessão
             $_SESSION['progresso_categorias'][$id_categoria]['expressoes_completas'][$id_expressao] = true;
             
-            // Redirecionar para feedback
+            // Redirecionar para mostrar o feedback
             $_SESSION['mostrar_feedback'] = true;
             $_SESSION['expressao_feedback'] = $id_expressao;
             header("Location: exercicio.php?id=$id_expressao");
