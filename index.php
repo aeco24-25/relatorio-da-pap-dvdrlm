@@ -174,29 +174,29 @@ switch($tipo_erro) {
                 <div class="col-lg-12">
                   <fieldset>
                     <input 
-                        style="width: 100%;" 
-                        type="email" 
-                        name="email" 
-                        id="email" 
-                        placeholder="E-mail" 
-                        required 
-                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
-                        title="Insira um endereço de e-mail válido (exemplo: david@gmail.com)."
+                      style="width: 100%;" 
+                      type="email" 
+                      name="email" 
+                      id="email" 
+                      placeholder="E-mail" 
+                      required 
+                      pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                      title="Insira um endereço de e-mail válido (exemplo: david@gmail.com)."
                     >
                   </fieldset>
                 </div>
                 <div class="col-lg-12">
                   <fieldset>
                       <input 
-                          style="width: 100%;" 
-                          type="password" 
-                          name="pass" 
-                          id="pass" 
-                          autocomplete="on"
-                          placeholder="Password" 
-                          required 
-                          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$" 
-                          title="Deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, letras minúsculas e números." 
+                        style="width: 100%;" 
+                        type="password" 
+                        name="pass" 
+                        id="pass" 
+                        autocomplete="on"
+                        placeholder="Password" 
+                        required 
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$" 
+                        title="Deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, letras minúsculas e números." 
                       >
                       <label class="container" style="--color: #d6d1f3; height: 25px; --size: 30px; display: flex;justify-content: right; margin-top: -67px; margin-left: -6px; font-size: var(--size); fill: var(--color);">
                         <input style="height:25px; width:8%; opacity:0;"type="checkbox" id="togglePassword">
