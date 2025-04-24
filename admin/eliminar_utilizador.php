@@ -13,9 +13,8 @@ if ($conn->connect_error) {
 
 $username = $_GET['username'] ?? '';
 
-// Não permitir que o admin atual se elimine
 if ($username === $_SESSION['username']) {
-    $_SESSION['error_message'] = "Não pode eliminar a sua própria conta!";
+    $_SESSION['error_message'] = "Não pode eliminar a sua própria conta.";
     header('Location: gerir_utilizadores.php');
     exit();
 }
@@ -25,7 +24,7 @@ $stmt = $conn->prepare("DELETE FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 
 if ($stmt->execute()) {
-    // Também eliminar o progresso associado
+    // Eliminar o progresso associado
     $conn->query("DELETE FROM progresso WHERE username = '$username'");
     $_SESSION['success_message'] = "Utilizador eliminado com sucesso!";
 } else {
