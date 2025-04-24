@@ -194,19 +194,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mostrar_explicacao = false;
     } 
     else {
-        $resposta_usuario = isset($_POST['resposta']) ? trim($_POST['resposta']) : '';
+        $resposta_utilizador = isset($_POST['resposta']) ? trim($_POST['resposta']) : '';
         $resposta_correta_db = strtolower(trim($expressao['traducao_portugues']));
-        $resposta_usuario_normalized = strtolower(trim($resposta_usuario));
+        $resposta_utilizador_normalized = strtolower(trim($resposta_utilizador));
         
         if ($tipo_exercicio == 'traducao') {
-            $resposta_correta = ($resposta_usuario_normalized === $resposta_correta_db);
+            $resposta_correta = ($resposta_utilizador_normalized === $resposta_correta_db);
         } elseif ($tipo_exercicio == 'preenchimento') {
             $respostas_corretas = json_decode($preenchimento_data['palavras_chave'], true);
-            $respostas_usuario = isset($_POST['respostas_lacunas']) ? $_POST['respostas_lacunas'] : [];
+            $respostas_utilizador = isset($_POST['respostas_lacunas']) ? $_POST['respostas_lacunas'] : [];
             $resposta_correta = true;
             
             foreach ($respostas_corretas as $index => $correta) {
-                if (!isset($respostas_usuario[$index]) || strtolower(trim($respostas_usuario[$index])) !== strtolower($correta)) {
+                if (!isset($respostas_utilizador[$index]) || strtolower(trim($respostas_utilizador[$index])) !== strtolower($correta)) {
                     $resposta_correta = false;
                     break;
                 }
