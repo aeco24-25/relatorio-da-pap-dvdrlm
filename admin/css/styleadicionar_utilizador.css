@@ -27,6 +27,16 @@ border-radius: 5px;
 font-size: 16px;
 }
 
+.checkbox-group {
+display: flex;
+align-items: center;
+margin: 15px 0;
+}
+
+.checkbox-group input {
+margin-right: 10px;
+}
+
 .btn-submit {
 background: #7b6ada;
 color: white;
@@ -35,10 +45,6 @@ padding: 10px 20px;
 border-radius: 5px;
 cursor: pointer;
 font-size: 16px;
-}
-
-.btn-submit:hover {
-background: #5a4fcf;
 }
 
 .alert {
