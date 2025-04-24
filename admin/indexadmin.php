@@ -23,19 +23,24 @@ if (!$user || !$user['is_admin']) {
     exit();
 }
 
+// ESTATÍSTICAS GERAIS
 // Obter estatísticas
 $sql_stats = "SELECT 
     (SELECT COUNT(*) FROM users) as total_users,
     (SELECT COUNT(*) FROM expressoes) as total_expressoes,
     (SELECT COUNT(*) FROM progresso WHERE completo = TRUE) as total_completas,
-    (SELECT COUNT(DISTINCT username) FROM progresso WHERE completo = TRUE) as usuarios_ativos";
+    (SELECT COUNT(DISTINCT username) FROM progresso WHERE completo = TRUE) as utilizadores_ativos";
 $result_stats = $conn->query($sql_stats);
 $stats = $result_stats->fetch_assoc();
+//
 
+// ÚLTIMOS UTILIZADORES  REGISTADOS
 // Obter últimos utilizadores
 $sql_last_users = "SELECT username, email, data_criacao FROM users ORDER BY data_criacao DESC LIMIT 5";
 $result_last_users = $conn->query($sql_last_users);
+//
 
+// CATEGORIAS
 // Obter categorias
 $sql_categorias = "SELECT 
     c.id_categoria, 
@@ -298,7 +303,7 @@ $result_categorias = $conn->query($sql_categorias);
                 
                 <div class="stat-card">
                   <h3>Utilizadores<br>Ativos</h3>
-                  <div class="stat-number"><?php echo $stats['usuarios_ativos']; ?></div>
+                  <div class="stat-number"><?php echo $stats['utilizadores_ativos']; ?></div>
                   <i class="fas fa-user-check fa-2x" style="color: #7b6ada;"></i>
                 </div>
               </div>
